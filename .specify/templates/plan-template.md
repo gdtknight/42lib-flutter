@@ -9,7 +9,7 @@
 
 [Extract from feature spec: primary requirement + technical approach from research]
 
-## Technical Context
+**Technical Context**
 
 <!--
   ACTION REQUIRED: Replace the content in this section with the technical details
@@ -17,21 +17,60 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: Flutter [version] (e.g., Flutter 3.16.0 or NEEDS CLARIFICATION)
+**Primary Dependencies**: [e.g., flutter_bloc, dio, provider or NEEDS CLARIFICATION]
+**Storage**: [if applicable, e.g., SQLite, Hive, SharedPreferences or N/A]
+**Testing**: [e.g., flutter_test, integration_test, mockito or NEEDS CLARIFICATION]
+**Target Platform**: iOS, Android, Web (all three required per Constitution IX)
+**iOS Support**: [Latest-1 + 3 previous versions, e.g., iOS 16, 15, 14, 13]
+**Android Support**: [Latest-1 + 3 previous versions, e.g., Android 13, 12, 11, 10]
+**Web Support**: [Modern browsers: Chrome, Safari, Firefox, Edge]
+**Development Environment**: Docker-based (per Constitution VIII)
+**Project Type**: Flutter mobile/web cross-platform application
+**Performance Goals**: [domain-specific, e.g., 60fps animations, <100ms API response or NEEDS CLARIFICATION]
+**Constraints**: [domain-specific, e.g., offline-capable, <50MB app size, <2s cold start or NEEDS CLARIFICATION]
+**Scale/Scope**: [domain-specific, e.g., 10k users, 50 screens, 20 API endpoints or NEEDS CLARIFICATION]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+**Required Validations**:
+- [ ] Git workflow: Issue created, branch from `dev`, commits reference issue
+- [ ] Issue metadata: **Specific** Labels (type:subtype format), Projects, Milestones properly configured on GitHub Issue
+- [ ] **Issue Branch Assignment**: Development section linked to appropriate branch (e.g., `feature/123-description`)
+- [ ] **Descriptive Titles**: Issue and PR titles clearly and comprehensively represent the complete content (avoid vague titles)
+- [ ] **Issue/PR/Commit Synchronization**: Issue title, PR title, and commit messages maintain consistency and traceability throughout development lifecycle
+- [ ] Documentation: Korean language for user-facing content
+- [ ] Logging: Follows `logs/YYYY-MM-DD/YYYYMMDD-HHmmss-<descriptor>.log` format
+- [ ] 42 Identity: Color scheme reflects 42 brand identity
+- [ ] UX Priority: Design prioritizes user convenience and pursues simple UI
+- [ ] Docker Environment: All development dependencies in Docker, no local pollution
+- [ ] Flutter Platform Support: iOS/Android/Web builds validated, version compatibility checked
+- [ ] Platform Versions: iOS (latest-1 + 3 prev), Android (latest-1 + 3 prev), Web (modern browsers)
+- [ ] Testing: Quality gates defined (if applicable)
+- [ ] **Compliance Verification**: Constitution compliance check performed after command completion
+- [ ] **PR Review Gate**: After commit, create PR to `dev` with linked branch, specific labels, and STOP until review approval
+- [ ] **CI & Sharing**: Verification process in place; non-code changes pushed immediately to GitHub
+
+[Additional domain-specific gates from constitution file]
+
+**Post-Command Compliance Check** (Constitution X):
+After completing this plan command, verify:
+- All constitution principles applicable to this feature are addressed
+- Any non-compliance is explicitly documented with justification
+- Compliance status recorded in this document or related artifacts
+
+**PR Review Workflow** (Constitution XI):
+1. Complete implementation and commit with issue reference
+2. Create PR to `dev` with Korean description, linked issues, testing evidence
+3. **STOP and WAIT for review approval**
+4. After approval, proceed with testing/deployment steps
+
+**CI & Sharing Workflow** (Constitution XII):
+- Changes affecting code: Validate locally before push, wait for CI checks
+- Changes NOT affecting code (docs, configs): Push immediately to GitHub
+- All changes: Must pass CI/CD pipeline checks before merge
 
 ## Project Structure
 
@@ -89,6 +128,28 @@ api/
 
 ios/ or android/
 └── [platform-specific structure: feature modules, UI flows, platform tests]
+
+# Flutter Cross-Platform (iOS + Android + Web per Constitution IX)
+lib/
+├── main.dart
+├── screens/          # UI screens
+├── widgets/          # Reusable widgets
+├── models/           # Data models
+├── services/         # Business logic
+├── utils/            # Utilities
+└── platform/         # Platform-specific code (minimal per Constitution IX)
+    ├── ios/
+    ├── android/
+    └── web/
+
+test/
+├── widget_test/      # Widget tests
+├── integration_test/ # Integration tests
+└── unit_test/        # Unit tests
+
+ios/                  # iOS platform files
+android/              # Android platform files
+web/                  # Web platform files
 ```
 
 **Structure Decision**: [Document the selected structure and reference the real
