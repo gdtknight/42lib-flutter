@@ -1,14 +1,21 @@
 # 42lib-flutter
 
-Flutter 기반 라이브러리 프로젝트
+42 러닝 스페이스 도서 관리 시스템
 
 ## 프로젝트 개요
 
-이 프로젝트는 Git 기반 협업 워크플로우와 GitHub 통합을 통해 관리되는 Flutter 크로스플랫폼 라이브러리 개발 프로젝트입니다.
+42 러닝 스페이스 사용자를 위한 도서 대출 및 관리 시스템입니다. 학생들은 42 OAuth로 로그인하여 도서를 검색하고 대출 신청할 수 있으며, 관리자는 웹 대시보드에서 도서 및 대출을 관리합니다.
+
+**주요 기능**:
+- 📚 도서 검색 및 대출 신청 (학생 앱)
+- 🔐 42 OAuth 인증
+- ⏰ 예약 대기열 및 알림
+- 📊 관리자 대시보드 (웹)
+- 💡 도서 추천 시스템
 
 **플랫폼 지원**: iOS, Android, Web  
 **개발 환경**: Docker 기반 (로컬 머신 환경 보호)  
-**호환성**: 각 플랫폼의 최신 버전-1 및 이전 3개 버전 지원
+**호환성**: iOS 14-17, Android 11-14, 모던 웹 브라우저
 
 ## 주요 원칙
 
@@ -36,16 +43,27 @@ Flutter 기반 라이브러리 프로젝트
 
 ```
 42lib-flutter/
-├── .github/           # GitHub Actions, 이슈/PR 템플릿
-├── .specify/          # SpecKit 구성 및 템플릿
-├── docs/              # 프로젝트 문서 (한글)
-│   ├── architecture/  # 아키텍처 문서
-│   ├── api/           # API 문서
-│   ├── guides/        # 가이드 및 튜토리얼
-│   ├── processes/     # 개발 프로세스
-│   └── decisions/     # 의사결정 기록 (ADR)
-├── logs/              # 실행 로그 (일자별 구분)
-└── specs/             # 기능 명세 및 계획 (SpecKit)
+├── .github/              # GitHub Actions, 이슈/PR 템플릿
+├── .specify/             # SpecKit 구성 및 템플릿
+├── backend/              # Node.js/Express API 서버
+│   ├── prisma/           # Prisma 스키마 및 마이그레이션
+│   ├── src/              # 백엔드 소스 코드
+│   └── tests/            # 백엔드 테스트
+├── docs/                 # 프로젝트 문서 (한글)
+│   ├── architecture/     # 아키텍처 문서
+│   ├── api/              # API 문서
+│   ├── guides/           # 가이드 및 튜토리얼
+│   ├── processes/        # 개발 프로세스
+│   │   ├── constitution-compliance-guide.md
+│   │   └── constitution-compliance-report-2025-12-17.md
+│   └── decisions/        # 의사결정 기록 (ADR)
+├── lib/                  # Flutter 앱 소스 코드
+├── logs/                 # 실행 로그 (일자별 구분)
+├── scripts/              # 유틸리티 스크립트
+│   └── check-constitution.sh  # Constitution 자동 검증
+├── specs/                # 기능 명세 및 계획 (SpecKit)
+│   └── 001-library-management/  # 도서 관리 시스템 명세
+└── test/                 # Flutter 테스트
 ```
 
 ## 시작하기
@@ -66,19 +84,33 @@ cd 42lib-flutter
 ### Docker 개발 환경 설정
 
 ```bash
-# Docker 컨테이너 빌드 및 시작
+# 1. Docker 컨테이너 빌드 및 시작
 docker-compose up -d
 
-# 컨테이너 내부 접속
-docker-compose exec flutter bash
+# 2. 서비스 확인
+docker-compose ps
+# flutter-dev (포트 8080), backend-api (포트 3000), postgres-db (포트 5432)
 
-# Flutter 의존성 설치
+# 3. Flutter 컨테이너 접속
+docker-compose exec flutter-dev bash
+
+# 4. Flutter 의존성 설치
 flutter pub get
 
-# 플랫폼별 빌드 확인
-flutter build ios    # iOS 빌드
-flutter build apk    # Android 빌드
-flutter build web    # Web 빌드
+# 5. Backend 컨테이너 접속 (별도 터미널)
+docker-compose exec backend-api sh
+
+# 6. Prisma 마이그레이션 실행
+npm run migrate
+
+# 7. 개발 서버 시작
+# Backend: npm run dev (자동 시작됨)
+# Flutter Web: flutter run -d web-server --web-port=8080
+
+# 8. 접속 확인
+# Flutter Web: http://localhost:8080
+# Backend API: http://localhost:3000
+# PostgreSQL: localhost:5432
 ```
 
 ### 개발 워크플로우
@@ -140,7 +172,21 @@ GitHub Actions를 통한 자동화:
 
 ## 문서
 
-- [프로젝트 헌법](.specify/memory/constitution.md) - 프로젝트 거버넌스 및 핵심 원칙
+### 프로젝트 관리
+- [프로젝트 헌법](.specify/memory/constitution.md) - 프로젝트 거버넌스 및 핵심 원칙 (v1.7.0)
+- [Constitution 준수 가이드](docs/processes/constitution-compliance-guide.md) - 실무 체크리스트
+- [Constitution 준수 보고서](docs/processes/constitution-compliance-report-2025-12-17.md) - 분석 결과
+
+### 기술 문서
+- [기능 명세](specs/001-library-management/spec.md) - 도서 관리 시스템 요구사항
+- [데이터 모델](specs/001-library-management/data-model.md) - 8개 엔티티 정의
+- [API 명세](specs/001-library-management/contracts/openapi.yaml) - REST API 문서
+- [구현 계획](specs/001-library-management/plan.md) - 기술 스택 및 아키텍처
+- [작업 목록](specs/001-library-management/tasks.md) - 268개 구현 작업
+
+### 개발 가이드
+- [빠른 시작](specs/001-library-management/quickstart.md) - 개발자 온보딩
+- [기술 조사](specs/001-library-management/research.md) - 기술 스택 결정 근거
 - [문서 디렉토리](docs/) - 모든 프로젝트 문서 (한글)
 - [GitHub Wiki](../../wiki) - 문서 검색 및 탐색
 
