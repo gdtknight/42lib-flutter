@@ -10,6 +10,7 @@ Templates Status:
   ✅ plan-template.md - Constitution Check updated with title descriptiveness validation
   ✅ spec-template.md - No changes required (scope unchanged)
   ✅ tasks-template.md - Constitution compliance updated with new principle
+  ✅ README.md - Updated to include Principle XIII in summary (13th principle added to list)
 Follow-up TODOs: None
 ==================
 -->
