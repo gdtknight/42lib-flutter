@@ -27,6 +27,7 @@ Flutter 기반 라이브러리 프로젝트
 11. **Pull Request 리뷰 게이트**: dev 통합 PR은 반드시 승인 확인 후 다음 단계 진행
 12. **지속적 통합 & 즉시 공유**: 오류 검증 프로세스를 갖추며, 코드에 영향 없는 변경사항은 즉시 GitHub에 푸시합니다
 13. **명확한 Issue & PR 제목**: GitHub Issue와 Pull Request 제목은 전체 내용을 포괄적으로 나타내야 합니다
+14. **Issue/PR/커밋 메시지 동기화**: Issue 제목, PR 제목, 커밋 메시지가 개발 생명주기 전반에 걸쳐 일관성과 추적가능성을 유지해야 합니다
 
 자세한 내용은 [프로젝트 헌법](.specify/memory/constitution.md)을 참조하세요.
 

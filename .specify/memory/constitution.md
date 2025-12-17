@@ -1,16 +1,16 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.5.0 → 1.6.0 (GitHub Issue/PR Title Descriptiveness)
+Version: 1.6.0 → 1.7.0 (Issue/PR/Commit Synchronization)
 Modified Principles: None
 Added Sections:
-  - XIII. Descriptive Issue and Pull Request Titles (NEW)
+  - XIV. Issue, Pull Request, and Commit Message Synchronization (NEW)
 Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Constitution Check updated with title descriptiveness validation
+  ✅ plan-template.md - Constitution Check updated with synchronization validation
   ✅ spec-template.md - No changes required (scope unchanged)
   ✅ tasks-template.md - Constitution compliance updated with new principle
-  ✅ README.md - Updated to include Principle XIII in summary (13th principle added to list)
+  ✅ README.md - Updated to include Principle XIV in summary (14th principle added to list)
 Follow-up TODOs: None
 ==================
 -->
@@ -221,6 +221,54 @@ accurate progress tracking, and improve team coordination. Clear titles are
 essential for maintaining project visibility and enabling effective collaboration
 across distributed teams and AI agents.
 
+### XIV. Issue, Pull Request, and Commit Message Synchronization
+GitHub Issue titles, Pull Request titles, and commit messages MUST maintain
+consistency and synchronization throughout the development lifecycle:
+- Issue title establishes the canonical description of work scope
+- PR title MUST accurately reflect the Issue title while incorporating
+  implementation-specific details when scope expands
+- Commit messages MUST reference the Issue number and describe specific changes
+- Synchronization requirements:
+  - **Issue → PR Alignment**: PR title should extend Issue title with
+    implementation details, not contradict it
+    - Example: Issue "[#1] 사용자 인증 구현" → PR "[#1] 사용자 인증 구현 - JWT 토큰
+      기반 로그인/로그아웃 및 세션 관리"
+  - **Issue → Commits Alignment**: All commits MUST reference Issue number with
+    format `[#N]` and describe incremental progress toward Issue goal
+    - Example commits for Issue #1:
+      - `[#1] feat: JWT 인증 미들웨어 추가`
+      - `[#1] feat: 로그인 API 엔드포인트 구현`
+      - `[#1] test: 인증 플로우 단위 테스트 추가`
+  - **PR → Commits Consistency**: PR body MUST summarize all commit changes and
+    explain how they collectively address the linked Issue
+- Synchronization verification checklist:
+  - [ ] Issue title clearly describes the problem/feature
+  - [ ] PR title extends (not contradicts) Issue title
+  - [ ] All commits reference correct Issue number
+  - [ ] Commit messages describe logical increments toward Issue goal
+  - [ ] PR body explains relationship between commits and Issue resolution
+  - [ ] If scope changed during implementation, Issue title updated before PR merge
+- Breaking synchronization (forbidden patterns):
+  - PR title contradicts or is unrelated to linked Issue title
+  - Commits reference wrong Issue number
+  - PR includes changes unrelated to linked Issue without explanation
+  - Issue title outdated but not updated before merge
+- Multi-Issue PRs:
+  - When PR addresses multiple related Issues, list all Issue numbers in title
+    and body
+  - Each commit should still reference primary Issue, with secondary Issues noted
+    in commit body if applicable
+  - Example: `[#15][#22] 사용자 프로필 및 설정 화면 UI 구현`
+
+**Rationale**: Consistent synchronization across Issue/PR/Commits creates clear
+audit trail, enables automated traceability, simplifies code review by maintaining
+narrative coherence, and prevents confusion when multiple team members or AI agents
+collaborate. Synchronized titles and messages allow anyone to understand the full
+context of changes from Issue creation through merge without hunting across multiple
+artifacts. This principle is critical for maintaining project transparency, enabling
+effective collaboration, and supporting automated workflows like release note
+generation and impact analysis.
+
 ## Git Workflow & Branching Strategy
 
 **Branch Lifecycle**:
@@ -297,4 +345,4 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.6.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
+**Version**: 1.7.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17

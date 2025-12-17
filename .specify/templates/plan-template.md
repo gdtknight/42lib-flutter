@@ -40,6 +40,7 @@
 - [ ] Issue metadata: **Specific** Labels (type:subtype format), Projects, Milestones properly configured on GitHub Issue
 - [ ] **Issue Branch Assignment**: Development section linked to appropriate branch (e.g., `feature/123-description`)
 - [ ] **Descriptive Titles**: Issue and PR titles clearly and comprehensively represent the complete content (avoid vague titles)
+- [ ] **Issue/PR/Commit Synchronization**: Issue title, PR title, and commit messages maintain consistency and traceability throughout development lifecycle
 - [ ] Documentation: Korean language for user-facing content
 - [ ] Logging: Follows `logs/YYYY-MM-DD/YYYYMMDD-HHmmss-<descriptor>.log` format
 - [ ] 42 Identity: Color scheme reflects 42 brand identity

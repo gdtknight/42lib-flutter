@@ -196,6 +196,7 @@ Review compliance with all applicable principles:
 - [ ] Pull Request Review Gate (XI): PR created to dev, approval received before proceeding
 - [ ] CI & Immediate Sharing (XII): Verification process in place, non-code changes shared immediately
 - [ ] Descriptive Issue/PR Titles (XIII): Titles comprehensively represent complete content, avoid vague descriptions
+- [ ] Issue/PR/Commit Synchronization (XIV): Issue title, PR title, and commit messages maintain consistency and traceability
 
 **Non-Compliance Documentation**:
 [If any principle cannot be met, document here with justification and remediation plan]
