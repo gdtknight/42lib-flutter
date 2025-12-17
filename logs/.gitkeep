@@ -1,0 +1,11 @@
+# 이 디렉토리는 실행 로그 파일을 저장합니다
+#
+# 구조:
+#   logs/
+#   └── YYYY-MM-DD/
+#       ├── YYYYMMDD-HHmmss-descriptor1.log
+#       └── YYYYMMDD-HHmmss-descriptor2.log
+#
+# 로그 파일 명명 규칙:
+# - 날짜별 하위 디렉토리 (YYYY-MM-DD)
+# - 파일명 형식: YYYYMMDD-HHmmss-<설명>.log
