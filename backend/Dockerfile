@@ -6,7 +6,7 @@ WORKDIR /app
 
 # 패키지 파일 복사 및 의존성 설치
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # TypeScript 및 개발 도구 글로벌 설치
 RUN npm install -g typescript ts-node prisma
