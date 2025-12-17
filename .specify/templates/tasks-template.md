@@ -18,12 +18,13 @@ description: "Task list template for feature implementation"
 - **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
 - Include exact file paths in descriptions
 
-## Path Conventions
+**Path Conventions**
 
+- **Flutter cross-platform**: `lib/`, `test/` at repository root, plus `ios/`, `android/`, `web/` platform directories
 - **Single project**: `src/`, `tests/` at repository root
 - **Web app**: `backend/src/`, `frontend/src/`
 - **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- Paths shown below assume Flutter structure - adjust based on plan.md structure
 
 <!-- 
   ============================================================================
@@ -49,8 +50,12 @@ description: "Task list template for feature implementation"
 **Purpose**: Project initialization and basic structure
 
 - [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T002 Initialize Flutter project with required dependencies in pubspec.yaml
+- [ ] T003 [P] Configure Docker development environment (Dockerfile, docker-compose.yml)
+- [ ] T004 [P] Configure linting and formatting tools (analysis_options.yaml)
+- [ ] T005 [P] Verify iOS build configuration (ios/ directory, Info.plist, version support)
+- [ ] T006 [P] Verify Android build configuration (android/ directory, build.gradle, version support)
+- [ ] T007 [P] Verify Web build configuration (web/ directory, index.html)
 
 ---
 
@@ -62,12 +67,17 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
+- [ ] T008 Setup data persistence layer (SQLite/Hive/SharedPreferences)
+- [ ] T009 [P] Implement navigation/routing framework
+- [ ] T010 [P] Setup state management solution (Provider/Bloc/Riverpod)
+- [ ] T011 Create base models/entities that all stories depend on
+- [ ] T012 Configure error handling and logging infrastructure
+- [ ] T013 Setup environment configuration management
+- [ ] T014 [P] Define 42 brand identity color palette and theme data (Theme, ColorScheme)
+- [ ] T015 [P] Setup widget library with 42 identity standards (custom widgets in lib/widgets/)
+- [ ] T016 [P] Create platform detection utility (lib/platform/)
+- [ ] T017 [P] Setup Docker-based Flutter development environment validation
+- [ ] T018 [P] Validate cross-platform builds (iOS, Android, Web) in Docker
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -150,11 +160,17 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] TXXX [P] Documentation updates in docs/
+- [ ] TXXX [P] Documentation updates in docs/ (Korean)
 - [ ] TXXX Code cleanup and refactoring
-- [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
+- [ ] TXXX Performance optimization across all stories (60fps target)
+- [ ] TXXX [P] Additional unit tests (if requested) in test/unit_test/
+- [ ] TXXX [P] Additional widget tests (if requested) in test/widget_test/
 - [ ] TXXX Security hardening
+- [ ] TXXX Platform compatibility validation (iOS/Android/Web)
+- [ ] TXXX [P] iOS version compatibility testing (4 versions)
+- [ ] TXXX [P] Android version compatibility testing (4 versions)
+- [ ] TXXX [P] Web browser compatibility testing
+- [ ] TXXX Docker environment cleanup and optimization
 - [ ] TXXX Run quickstart.md validation
 
 ---

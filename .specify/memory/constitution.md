@@ -1,18 +1,17 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: NEW → 1.0.0 (Initial constitution ratification)
-Modified Principles: N/A (initial creation)
+Version: 1.1.0 → 1.2.0 (New platform and environment principles added)
+Modified Principles: N/A
 Added Sections:
-  - Core Principles (5 principles)
-  - Git Workflow & Branching Strategy
-  - Documentation & Communication Standards
-  - Governance
+  - VIII. Docker-Based Development Environment (new principle)
+  - IX. Flutter Cross-Platform Compatibility (new principle)
+Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Constitution Check section ready for principle enforcement
-  ✅ spec-template.md - Aligns with traceability and testing requirements
-  ✅ tasks-template.md - Supports commit-per-task and issue tracking pattern
-Follow-up TODOs: None - all placeholders resolved
+  ✅ plan-template.md - Technical Context updated with Flutter/Docker requirements
+  ✅ spec-template.md - Platform compatibility checks added to requirements
+  ✅ tasks-template.md - Docker setup and platform validation tasks included
+Follow-up TODOs: None - all platform and environment requirements specified
 ==================
 -->
 
@@ -75,6 +74,55 @@ Project documentation and logs MUST follow hierarchical organization:
 
 **Rationale**: Structured organization enables quick retrieval, prevents information
 loss, and supports long-term project maintainability.
+
+### VI. 42 Identity Design Standard
+All application design and visual elements MUST reflect 42's identity:
+- Color schemes MUST represent 42's brand identity as primary design element
+- Visual consistency across all screens and components
+- Design choices prioritize brand recognition and cohesive identity
+- Color palette decisions require alignment with 42 identity guidelines
+
+**Rationale**: Consistent visual identity strengthens brand recognition, creates
+unified user experience, and differentiates the product in the market.
+
+### VII. User-Centric UX Priority
+User experience design MUST prioritize convenience and simplicity:
+- User convenience is the PRIMARY consideration in all UX decisions
+- Interface simplicity MUST be pursued whenever feasible
+- Reduce cognitive load through clear information hierarchy
+- Minimize required user actions to complete core tasks
+- Complex features MUST maintain intuitive interaction patterns
+
+**Rationale**: User-centric design reduces friction, increases adoption, and ensures
+accessibility. Simple UI minimizes learning curve and support overhead.
+
+### VIII. Docker-Based Development Environment
+All development activities MUST be conducted within Docker containers:
+- Development environment setup and dependencies managed exclusively via Docker
+- Local machine environment MUST NOT be modified or polluted with project dependencies
+- All build, test, and development tools run inside Docker containers
+- Docker Compose used for orchestrating multi-container development setups
+- Dockerfile and docker-compose.yml MUST be maintained in repository root
+
+**Rationale**: Docker isolation ensures reproducible development environments across
+all contributors, eliminates "works on my machine" issues, prevents dependency
+conflicts with local system, and enables consistent CI/CD execution.
+
+### IX. Flutter Cross-Platform Compatibility
+Flutter application MUST support iOS, Android, and Web platforms with strict
+version compatibility requirements:
+- **Target Platforms**: iOS, Android, Web (all three MUST be supported)
+- **iOS Compatibility**: Latest version minus 1, plus 3 previous versions (4 versions total)
+- **Android Compatibility**: Latest version minus 1, plus 3 previous versions (4 versions total)
+- Version compatibility MUST NOT break across supported version range
+- Platform-specific code MUST be minimized and isolated
+- Cross-platform behavior parity MUST be maintained wherever feasible
+- CI/CD pipeline MUST validate builds for all three platforms
+- Breaking changes to platform compatibility require explicit constitution amendment
+
+**Rationale**: Wide platform version support maximizes user reach, prevents
+premature obsolescence, and ensures accessibility. Cross-platform consistency
+reduces maintenance burden and testing complexity.
 
 ## Git Workflow & Branching Strategy
 
@@ -152,4 +200,4 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.0.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
+**Version**: 1.2.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
