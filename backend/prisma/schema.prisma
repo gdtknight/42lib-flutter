@@ -32,7 +32,6 @@ model Book {
   loanRequests       LoanRequest[]
   reservations       Reservation[]
   loans              Loan[]
-  suggestions        BookSuggestion[]
 
   // Indexes for performance (FR-027, SC-009)
   @@index([title, author], name: "idx_book_search")

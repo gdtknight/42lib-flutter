@@ -1,6 +1,9 @@
 # Backend API Container
 FROM node:20-alpine
 
+# Install OpenSSL for Prisma
+RUN apk add --no-cache openssl openssl-dev
+
 # 작업 디렉토리 설정
 WORKDIR /app
 
