@@ -45,8 +45,15 @@
 - [ ] Flutter Platform Support: iOS/Android/Web builds validated, version compatibility checked
 - [ ] Platform Versions: iOS (latest-1 + 3 prev), Android (latest-1 + 3 prev), Web (modern browsers)
 - [ ] Testing: Quality gates defined (if applicable)
+- [ ] **Compliance Verification**: Constitution compliance check performed after command completion
 
 [Additional domain-specific gates from constitution file]
+
+**Post-Command Compliance Check** (Constitution X):
+After completing this plan command, verify:
+- All constitution principles applicable to this feature are addressed
+- Any non-compliance is explicitly documented with justification
+- Compliance status recorded in this document or related artifacts
 
 ## Project Structure
 

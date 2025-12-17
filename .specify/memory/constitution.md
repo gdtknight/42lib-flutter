@@ -1,17 +1,18 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.1.0 → 1.2.0 (New platform and environment principles added)
+Version: 1.2.0 → 1.3.0 (Constitution compliance verification principle added)
 Modified Principles: N/A
 Added Sections:
-  - VIII. Docker-Based Development Environment (new principle)
-  - IX. Flutter Cross-Platform Compatibility (new principle)
+  - X. Constitution Compliance Verification (new principle)
 Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Technical Context updated with Flutter/Docker requirements
-  ✅ spec-template.md - Platform compatibility checks added to requirements
-  ✅ tasks-template.md - Docker setup and platform validation tasks included
-Follow-up TODOs: None - all platform and environment requirements specified
+  ✅ plan-template.md - Constitution Check section already includes verification step
+  ✅ spec-template.md - Constitution compliance remains implicit in requirements
+  ✅ tasks-template.md - Constitution compliance task added to Polish phase
+  ✅ checklist-template.md - No changes required (checklist is context-specific)
+  ✅ agent-file-template.md - No changes required (generated file)
+Follow-up TODOs: None - constitution compliance verification now mandated
 ==================
 -->
 
@@ -124,6 +125,19 @@ version compatibility requirements:
 premature obsolescence, and ensures accessibility. Cross-platform consistency
 reduces maintenance burden and testing complexity.
 
+### X. Constitution Compliance Verification
+Every command execution MUST include constitution compliance verification:
+- Constitution compliance MUST be checked after every SpecKit command completion
+- Compliance verification includes all applicable principles from this constitution
+- Non-compliance MUST be documented with explicit justification or remediation plan
+- Compliance status MUST be recorded in command output or related artifacts
+- Automated compliance checks MUST be integrated into CI/CD pipeline where feasible
+- Manual review gates MUST verify constitution adherence before PR approval
+
+**Rationale**: Continuous compliance verification prevents governance drift, ensures
+principles are consistently applied, and maintains project integrity across all
+activities. Early detection of violations reduces technical debt and rework.
+
 ## Git Workflow & Branching Strategy
 
 **Branch Lifecycle**:
@@ -200,4 +214,4 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.2.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
+**Version**: 1.3.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17

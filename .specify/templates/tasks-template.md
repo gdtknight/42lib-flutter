@@ -172,6 +172,32 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] TXXX [P] Web browser compatibility testing
 - [ ] TXXX Docker environment cleanup and optimization
 - [ ] TXXX Run quickstart.md validation
+- [ ] TXXX **Constitution compliance verification**: Review all principles, document compliance status
+
+---
+
+## Final Constitution Compliance Check
+
+**Required Before Feature Completion** (Constitution X):
+
+Review compliance with all applicable principles:
+- [ ] Git-Based Project Management (I): All work tracked in Git/GitHub
+- [ ] Branch Strategy (II): Proper branching followed, PRs used
+- [ ] Issue-Driven Commits (III): All commits reference issues
+- [ ] Korean Documentation (IV): User-facing docs in Korean
+- [ ] Structured Documentation & Logging (V): Proper organization followed
+- [ ] 42 Identity Design (VI): Brand colors/identity implemented
+- [ ] User-Centric UX (VII): Convenience and simplicity prioritized
+- [ ] Docker-Based Environment (VIII): No local environment pollution
+- [ ] Flutter Cross-Platform (IX): iOS/Android/Web compatibility verified
+- [ ] Compliance Verification (X): This checklist completed
+
+**Non-Compliance Documentation**:
+[If any principle cannot be met, document here with justification and remediation plan]
+
+**Compliance Status**: [COMPLIANT / NON-COMPLIANT WITH JUSTIFICATION]  
+**Verified By**: [Name/Agent]  
+**Verification Date**: [YYYY-MM-DD]
 
 ---
 

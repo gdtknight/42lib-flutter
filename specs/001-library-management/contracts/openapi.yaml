@@ -1,0 +1,1228 @@
+openapi: 3.0.3
+info:
+  title: 42 Library Management System API
+  description: REST API for library management system serving mobile app and web dashboard
+  version: 1.0.0
+  contact:
+    name: 42 Library Team
+    email: library@42seoul.kr
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Development server
+  - url: https://api.42library.kr/api/v1
+    description: Production server
+
+tags:
+  - name: Books
+    description: Book catalog management
+  - name: Loans
+    description: Loan request and management
+  - name: Reservations
+    description: Book reservation queue management
+  - name: Suggestions
+    description: Book suggestions and collection periods
+  - name: Auth
+    description: Authentication and authorization
+  - name: Admin
+    description: Administrator-only endpoints
+
+paths:
+  # ==================== BOOKS ====================
+  /books:
+    get:
+      tags: [Books]
+      summary: List all books with pagination and filters
+      operationId: listBooks
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+        - name: search
+          in: query
+          description: Search by title or author
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Filter by category
+          schema:
+            type: string
+        - name: available
+          in: query
+          description: Filter by availability
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Book'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags: [Books, Admin]
+      summary: Add a new book to catalog (Admin only)
+      operationId: createBook
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookCreateRequest'
+      responses:
+        '201':
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: Duplicate ISBN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /books/{bookId}:
+    get:
+      tags: [Books]
+      summary: Get book details by ID
+      operationId: getBook
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDetail'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags: [Books, Admin]
+      summary: Update book information (Admin only)
+      operationId: updateBook
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookUpdateRequest'
+      responses:
+        '200':
+          description: Book updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags: [Books, Admin]
+      summary: Remove book from catalog (Admin only)
+      operationId: deleteBook
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+        - name: force
+          in: query
+          description: Force delete even with active loans
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '204':
+          description: Book deleted successfully
+        '400':
+          description: Cannot delete book with active loans (unless force=true)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  activeLoans:
+                    type: integer
+                  activeReservations:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ==================== LOAN REQUESTS ====================
+  /loan-requests:
+    get:
+      tags: [Loans]
+      summary: List loan requests (student sees own, admin sees all)
+      operationId: listLoanRequests
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, approved, rejected, cancelled]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LoanRequest'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags: [Loans]
+      summary: Submit a new loan request (Student)
+      operationId: createLoanRequest
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bookId]
+              properties:
+                bookId:
+                  type: string
+                  format: uuid
+                notes:
+                  type: string
+                  maxLength: 1000
+      responses:
+        '201':
+          description: Loan request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoanRequest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Duplicate pending request for this book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /loan-requests/{requestId}/approve:
+    post:
+      tags: [Loans, Admin]
+      summary: Approve a loan request (Admin only)
+      operationId: approveLoanRequest
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Loan request approved, loan created or reservation made
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  loanRequest:
+                    $ref: '#/components/schemas/LoanRequest'
+                  loan:
+                    $ref: '#/components/schemas/Loan'
+                  reservation:
+                    $ref: '#/components/schemas/Reservation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /loan-requests/{requestId}/reject:
+    post:
+      tags: [Loans, Admin]
+      summary: Reject a loan request (Admin only)
+      operationId: rejectLoanRequest
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  maxLength: 500
+      responses:
+        '200':
+          description: Loan request rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoanRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ==================== LOANS ====================
+  /loans:
+    get:
+      tags: [Loans]
+      summary: List loans (student sees own, admin sees all)
+      operationId: listLoans
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, returned, overdue]
+        - name: studentId
+          in: query
+          description: Filter by student (admin only)
+          schema:
+            type: string
+            format: uuid
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Loan'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /loans/{loanId}/return:
+    post:
+      tags: [Loans, Admin]
+      summary: Mark a loan as returned (Admin only)
+      operationId: returnLoan
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: loanId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Loan marked as returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ==================== RESERVATIONS ====================
+  /reservations:
+    get:
+      tags: [Reservations]
+      summary: List reservations (student sees own, admin sees all)
+      operationId: listReservations
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [waiting, notified, expired, fulfilled, cancelled]
+        - name: bookId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Reservation'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /reservations/{reservationId}/cancel:
+    post:
+      tags: [Reservations]
+      summary: Cancel a reservation (Student)
+      operationId: cancelReservation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Reservation cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ==================== BOOK SUGGESTIONS ====================
+  /suggestions:
+    get:
+      tags: [Suggestions]
+      summary: List book suggestions (admin sees all, student sees own)
+      operationId: listSuggestions
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: collectionPeriodId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [submitted, approved, rejected, under_review]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BookSuggestion'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags: [Suggestions]
+      summary: Submit a book suggestion (Student)
+      operationId: createSuggestion
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuggestionCreateRequest'
+      responses:
+        '201':
+          description: Suggestion submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookSuggestion'
+        '400':
+          description: No active collection period or invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /suggestions/{suggestionId}/review:
+    post:
+      tags: [Suggestions, Admin]
+      summary: Review a book suggestion (Admin only)
+      operationId: reviewSuggestion
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: suggestionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [approved, rejected, under_review]
+                adminNotes:
+                  type: string
+                  maxLength: 500
+      responses:
+        '200':
+          description: Suggestion reviewed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookSuggestion'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ==================== COLLECTION PERIODS ====================
+  /collection-periods:
+    get:
+      tags: [Suggestions]
+      summary: List collection periods
+      operationId: listCollectionPeriods
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [upcoming, active, closed]
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollectionPeriod'
+
+    post:
+      tags: [Suggestions, Admin]
+      summary: Create a new collection period (Admin only)
+      operationId: createCollectionPeriod
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionPeriodCreateRequest'
+      responses:
+        '201':
+          description: Collection period created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionPeriod'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ==================== AUTHENTICATION ====================
+  /auth/42/login:
+    get:
+      tags: [Auth]
+      summary: Initiate 42 OAuth login (redirects to 42 API)
+      operationId: oauth42Login
+      responses:
+        '302':
+          description: Redirect to 42 OAuth authorization page
+
+  /auth/42/callback:
+    get:
+      tags: [Auth]
+      summary: 42 OAuth callback handler
+      operationId: oauth42Callback
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT access token
+                  refreshToken:
+                    type: string
+                  expiresIn:
+                    type: integer
+                    description: Token expiry in seconds
+                  student:
+                    $ref: '#/components/schemas/Student'
+
+  /auth/admin/login:
+    post:
+      tags: [Auth, Admin]
+      summary: Admin login with username/password
+      operationId: adminLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  refreshToken:
+                    type: string
+                  expiresIn:
+                    type: integer
+                  admin:
+                    $ref: '#/components/schemas/Administrator'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh access token
+      operationId: refreshToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  expiresIn:
+                    type: integer
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Get current user profile
+      operationId: getCurrentUser
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user details
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Student'
+                  - $ref: '#/components/schemas/Administrator'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    BookId:
+      name: bookId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    Book:
+      type: object
+      required: [id, title, author, category, quantity, availableQuantity]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          maxLength: 500
+        author:
+          type: string
+          maxLength: 200
+        isbn:
+          type: string
+          nullable: true
+        category:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 2000
+          nullable: true
+        publicationYear:
+          type: integer
+          minimum: 1000
+          maximum: 2100
+          nullable: true
+        quantity:
+          type: integer
+          minimum: 1
+        availableQuantity:
+          type: integer
+          minimum: 0
+        coverImageUrl:
+          type: string
+          format: uri
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    BookDetail:
+      allOf:
+        - $ref: '#/components/schemas/Book'
+        - type: object
+          properties:
+            activeLoans:
+              type: integer
+              description: Number of active loans
+            activeReservations:
+              type: integer
+              description: Number of students in reservation queue
+
+    BookCreateRequest:
+      type: object
+      required: [title, author, category, quantity]
+      properties:
+        title:
+          type: string
+          maxLength: 500
+        author:
+          type: string
+          maxLength: 200
+        isbn:
+          type: string
+          nullable: true
+        category:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 2000
+        publicationYear:
+          type: integer
+          minimum: 1000
+          maximum: 2100
+        quantity:
+          type: integer
+          minimum: 1
+          maximum: 100
+        coverImageUrl:
+          type: string
+          format: uri
+
+    BookUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 500
+        author:
+          type: string
+          maxLength: 200
+        isbn:
+          type: string
+          nullable: true
+        category:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 2000
+        publicationYear:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 1
+        coverImageUrl:
+          type: string
+          format: uri
+
+    LoanRequest:
+      type: object
+      required: [id, studentId, bookId, status, requestDate]
+      properties:
+        id:
+          type: string
+          format: uuid
+        studentId:
+          type: string
+          format: uuid
+        bookId:
+          type: string
+          format: uuid
+        student:
+          $ref: '#/components/schemas/Student'
+        book:
+          $ref: '#/components/schemas/Book'
+        status:
+          type: string
+          enum: [pending, approved, rejected, cancelled]
+        requestDate:
+          type: string
+          format: date-time
+        reviewedAt:
+          type: string
+          format: date-time
+          nullable: true
+        reviewedBy:
+          type: string
+          format: uuid
+          nullable: true
+        rejectionReason:
+          type: string
+          maxLength: 500
+          nullable: true
+        notes:
+          type: string
+          maxLength: 1000
+          nullable: true
+
+    Loan:
+      type: object
+      required: [id, studentId, bookId, status, checkoutDate, dueDate]
+      properties:
+        id:
+          type: string
+          format: uuid
+        studentId:
+          type: string
+          format: uuid
+        bookId:
+          type: string
+          format: uuid
+        student:
+          $ref: '#/components/schemas/Student'
+        book:
+          $ref: '#/components/schemas/Book'
+        loanRequestId:
+          type: string
+          format: uuid
+          nullable: true
+        reservationId:
+          type: string
+          format: uuid
+          nullable: true
+        status:
+          type: string
+          enum: [active, returned, overdue]
+        checkoutDate:
+          type: string
+          format: date-time
+        dueDate:
+          type: string
+          format: date-time
+        returnedDate:
+          type: string
+          format: date-time
+          nullable: true
+        approvedBy:
+          type: string
+          format: uuid
+        notes:
+          type: string
+          maxLength: 1000
+          nullable: true
+
+    Reservation:
+      type: object
+      required: [id, studentId, bookId, queuePosition, status, createdAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        studentId:
+          type: string
+          format: uuid
+        bookId:
+          type: string
+          format: uuid
+        student:
+          $ref: '#/components/schemas/Student'
+        book:
+          $ref: '#/components/schemas/Book'
+        queuePosition:
+          type: integer
+          minimum: 1
+        status:
+          type: string
+          enum: [waiting, notified, expired, fulfilled, cancelled]
+        createdAt:
+          type: string
+          format: date-time
+        notifiedAt:
+          type: string
+          format: date-time
+          nullable: true
+        expiresAt:
+          type: string
+          format: date-time
+          nullable: true
+        fulfilledAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    BookSuggestion:
+      type: object
+      required: [id, studentId, suggestedTitle, suggestedAuthor, collectionPeriodId, status, submittedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        studentId:
+          type: string
+          format: uuid
+        student:
+          $ref: '#/components/schemas/Student'
+        suggestedTitle:
+          type: string
+          maxLength: 500
+        suggestedAuthor:
+          type: string
+          maxLength: 200
+        reason:
+          type: string
+          maxLength: 1000
+          nullable: true
+        collectionPeriodId:
+          type: string
+          format: uuid
+        collectionPeriod:
+          $ref: '#/components/schemas/CollectionPeriod'
+        status:
+          type: string
+          enum: [submitted, approved, rejected, under_review]
+        submittedAt:
+          type: string
+          format: date-time
+        reviewedAt:
+          type: string
+          format: date-time
+          nullable: true
+        reviewedBy:
+          type: string
+          format: uuid
+          nullable: true
+        adminNotes:
+          type: string
+          maxLength: 500
+          nullable: true
+        duplicateCount:
+          type: integer
+          description: Number of times this book was suggested (grouped)
+
+    SuggestionCreateRequest:
+      type: object
+      required: [suggestedTitle, suggestedAuthor]
+      properties:
+        suggestedTitle:
+          type: string
+          maxLength: 500
+        suggestedAuthor:
+          type: string
+          maxLength: 200
+        reason:
+          type: string
+          maxLength: 1000
+
+    CollectionPeriod:
+      type: object
+      required: [id, name, startDate, endDate, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 100
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [upcoming, active, closed]
+        createdAt:
+          type: string
+          format: date-time
+
+    CollectionPeriodCreateRequest:
+      type: object
+      required: [name, startDate, endDate]
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+
+    Student:
+      type: object
+      required: [id, fortytwoUserId, username, email, fullName]
+      properties:
+        id:
+          type: string
+          format: uuid
+        fortytwoUserId:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        lastLoginAt:
+          type: string
+          format: date-time
+
+    Administrator:
+      type: object
+      required: [id, username, email, fullName, role]
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+        role:
+          type: string
+          enum: [admin, super_admin]
+        createdAt:
+          type: string
+          format: date-time
+        lastLoginAt:
+          type: string
+          format: date-time
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        totalPages:
+          type: integer
+        totalItems:
+          type: integer
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
