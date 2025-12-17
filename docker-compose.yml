@@ -1,30 +1,70 @@
 version: '3.8'
 
 services:
+  # Flutter 개발 컨테이너
   flutter-dev:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.flutter
     container_name: 42lib-flutter-dev
     volumes:
-      - .:/workspace
+      - .:/app
       - flutter-pub-cache:/root/.pub-cache
-      - flutter-gradle-cache:/root/.gradle
-    working_dir: /workspace
+    ports:
+      - "8080:8080"
+    networks:
+      - library-network
     stdin_open: true
     tty: true
     environment:
-      - FLUTTER_ROOT=/opt/flutter
-      - PUB_CACHE=/root/.pub-cache
+      - FLUTTER_WEB_PORT=8080
+
+  # Backend API 컨테이너
+  backend-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: 42lib-backend-api
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
     ports:
-      # Flutter Web 개발 서버
-      - "8080:8080"
-      # Flutter DevTools
-      - "9100:9100"
-    command: /bin/bash
+      - "3000:3000"
+    networks:
+      - library-network
+    depends_on:
+      - postgres-db
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://library_user:library_pass@postgres-db:5432/library_db?schema=public
+      - JWT_SECRET=dev-secret-change-in-production
+      - PORT=3000
+    command: npm run dev
+
+  # PostgreSQL 데이터베이스
+  postgres-db:
+    image: postgres:14-alpine
+    container_name: 42lib-postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - library-network
+    environment:
+      - POSTGRES_USER=library_user
+      - POSTGRES_PASSWORD=library_pass
+      - POSTGRES_DB=library_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U library_user -d library_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  library-network:
+    driver: bridge
 
 volumes:
   flutter-pub-cache:
-    name: 42lib-flutter-pub-cache
-  flutter-gradle-cache:
-    name: 42lib-flutter-gradle-cache
+  db-data:
