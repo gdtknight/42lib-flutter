@@ -1,17 +1,16 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.3.0 → 1.4.0 (GitHub workflow governance enhancements)
+Version: 1.4.0 → 1.5.0 (GitHub Issue/PR branch assignment and label specificity)
 Modified Principles:
-  - III. Issue-Driven Commits → Enhanced to include mandatory metadata (Labels, Projects, Milestones)
-Added Sections:
-  - XI. Pull Request Review Gate (new principle)
-  - XII. Continuous Integration & Immediate Sharing (new principle)
+  - III. Issue-Driven Commits & Metadata → Enhanced with branch assignment requirements and specific labeling rules
+  - XI. Pull Request Review Gate → Enhanced with branch assignment and specific label requirements
+Added Sections: None
 Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Constitution Check updated with PR review gate and CI workflow
+  ✅ plan-template.md - Constitution Check updated with branch assignment validation
   ✅ spec-template.md - No changes required (scope unchanged)
-  ✅ tasks-template.md - Final Constitution Compliance Check updated with new principles
+  ✅ tasks-template.md - No changes required (scope unchanged)
 Follow-up TODOs: None
 ==================
 -->
@@ -49,15 +48,24 @@ Every commit message MUST reference related GitHub Issue number, and every issue
 MUST have proper metadata configured:
 - Commit format: `[#ISSUE_NO] Brief description` or conventional commits with issue footer
 - Every GitHub Issue MUST have:
-  - Appropriate Labels assigned (e.g., bug, enhancement, documentation)
+  - Appropriate **specific** Labels assigned that accurately describe the issue type
+    (e.g., `bug:critical`, `enhancement:feature`, `docs:api`, not generic `bug` or `feature`)
   - Associated Project board for workflow tracking
   - Assigned Milestone for release planning
+  - **Development section linked to the appropriate branch** (e.g., `feature/123-user-auth`,
+    `fix/456-login-crash`) matching the actual working branch
 - Issues without proper metadata MUST NOT be worked on until corrected
 - No commits without associated issue except project setup commits
+- Label specificity rules:
+  - Use hierarchical labels with categories (type:subtype format preferred)
+  - Avoid ambiguous generic labels; each label should provide clear context
+  - Maintain consistent label taxonomy across repository
 
 **Rationale**: Commit-to-issue linkage provides full audit trail, connects
 implementation to requirements, and powers automated project dashboards. Issue
 metadata enables proper workflow management, release planning, and team coordination.
+Branch assignment in Development section creates explicit traceability between issues
+and code changes. Specific labels improve filtering, reporting, and automated workflows.
 
 ### IV. Korean Documentation Standard
 All user-facing documentation MUST be in Korean:
@@ -148,15 +156,27 @@ activities. Early detection of violations reduces technical debt and rework.
 All Pull Requests to `dev` branch MUST receive explicit approval confirmation
 before proceeding with subsequent workflow steps:
 - After commit completion, create PR to `dev` branch immediately
-- PR MUST include Korean description, linked issues, and testing evidence
+- PR MUST include:
+  - Korean description with clear context
+  - Linked GitHub Issues in the PR description
+  - **Development section linked to source branch** matching the feature/fix branch
+  - **Specific Labels** mirroring the linked issue labels (e.g., `enhancement:ui`,
+    `bug:security`, `refactor:performance`)
+  - Testing evidence or test plan
 - Implementation work MUST STOP until PR receives review approval
 - After PR approval, proceed with subsequent steps (e.g., testing, deployment)
 - No direct push to `dev` or `main` branches - all changes via approved PRs
 - Self-merge without approval is strictly forbidden
+- PR label specificity rules:
+  - Use same hierarchical label taxonomy as Issues
+  - Labels MUST reflect actual changes, not just issue labels
+  - Multiple labels acceptable when PR addresses multiple concerns
 
 **Rationale**: Mandatory review gate ensures code quality, catches errors early,
 facilitates knowledge sharing, and prevents unauthorized changes from propagating
 downstream. Explicit approval requirement creates accountability and traceability.
+Branch linking in Development section and specific labels enable automated workflows,
+release note generation, and proper change tracking.
 
 ### XII. Continuous Integration & Immediate Sharing
 Error detection and non-code-affecting changes MUST follow rapid sharing workflow:
@@ -250,4 +270,4 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.4.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
+**Version**: 1.5.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17

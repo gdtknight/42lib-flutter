@@ -37,7 +37,8 @@
 
 **Required Validations**:
 - [ ] Git workflow: Issue created, branch from `dev`, commits reference issue
-- [ ] Issue metadata: Labels, Projects, Milestones properly configured on GitHub Issue
+- [ ] Issue metadata: **Specific** Labels (type:subtype format), Projects, Milestones properly configured on GitHub Issue
+- [ ] **Issue Branch Assignment**: Development section linked to appropriate branch (e.g., `feature/123-description`)
 - [ ] Documentation: Korean language for user-facing content
 - [ ] Logging: Follows `logs/YYYY-MM-DD/YYYYMMDD-HHmmss-<descriptor>.log` format
 - [ ] 42 Identity: Color scheme reflects 42 brand identity
@@ -47,7 +48,7 @@
 - [ ] Platform Versions: iOS (latest-1 + 3 prev), Android (latest-1 + 3 prev), Web (modern browsers)
 - [ ] Testing: Quality gates defined (if applicable)
 - [ ] **Compliance Verification**: Constitution compliance check performed after command completion
-- [ ] **PR Review Gate**: After commit, create PR to `dev` and STOP until review approval received
+- [ ] **PR Review Gate**: After commit, create PR to `dev` with linked branch, specific labels, and STOP until review approval
 - [ ] **CI & Sharing**: Verification process in place; non-code changes pushed immediately to GitHub
 
 [Additional domain-specific gates from constitution file]
