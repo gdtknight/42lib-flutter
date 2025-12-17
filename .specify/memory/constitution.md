@@ -1,16 +1,15 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.4.0 → 1.5.0 (GitHub Issue/PR branch assignment and label specificity)
-Modified Principles:
-  - III. Issue-Driven Commits & Metadata → Enhanced with branch assignment requirements and specific labeling rules
-  - XI. Pull Request Review Gate → Enhanced with branch assignment and specific label requirements
-Added Sections: None
+Version: 1.5.0 → 1.6.0 (GitHub Issue/PR Title Descriptiveness)
+Modified Principles: None
+Added Sections:
+  - XIII. Descriptive Issue and Pull Request Titles (NEW)
 Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Constitution Check updated with branch assignment validation
+  ✅ plan-template.md - Constitution Check updated with title descriptiveness validation
   ✅ spec-template.md - No changes required (scope unchanged)
-  ✅ tasks-template.md - No changes required (scope unchanged)
+  ✅ tasks-template.md - Constitution compliance updated with new principle
 Follow-up TODOs: None
 ==================
 -->
@@ -194,6 +193,33 @@ enables parallel work, and keeps team synchronized. Systematic error detection
 prevents defects from propagating. Separating code-affecting vs non-code-affecting
 changes optimizes team velocity while maintaining quality gates.
 
+### XIII. Descriptive Issue and Pull Request Titles
+GitHub Issue and Pull Request titles MUST comprehensively represent the complete
+content and purpose:
+- Issue titles MUST clearly describe the problem, feature, or task being addressed
+- PR titles MUST accurately summarize all changes included in the pull request
+- Titles MUST be self-explanatory without needing to read the full description
+- Avoid vague titles like "Fix bug", "Update", "Changes" - be specific
+- Use Korean language for clarity and consistency (per Constitution IV)
+- Title format guidelines:
+  - Issues: `[Type] Specific description of problem/feature`
+    (e.g., `[Bug] 로그인 시 세션 만료 오류`, `[Feature] 사용자 프로필 편집 기능 추가`)
+  - PRs: `Brief summary of all changes made`
+    (e.g., `로그인 세션 만료 오류 수정 및 타임아웃 설정 추가`, `사용자 프로필 편집 UI 구현`)
+- Titles should enable quick understanding for:
+  - Team members reviewing Issues/PRs
+  - Automated tools generating release notes
+  - Future searches and audit trails
+  - Project managers tracking progress
+- Update title if scope changes during implementation
+
+**Rationale**: Descriptive titles improve project transparency, enable efficient
+review workflows, support automated documentation generation, and create searchable
+history. Well-crafted titles reduce time spent understanding context, facilitate
+accurate progress tracking, and improve team coordination. Clear titles are
+essential for maintaining project visibility and enabling effective collaboration
+across distributed teams and AI agents.
+
 ## Git Workflow & Branching Strategy
 
 **Branch Lifecycle**:
@@ -270,4 +296,4 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.5.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
+**Version**: 1.6.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
