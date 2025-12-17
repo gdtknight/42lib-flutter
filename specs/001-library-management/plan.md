@@ -2,6 +2,8 @@
 
 **Branch**: `001-library-management` | **Date**: 2025-12-17 | **Spec**: [spec.md](./spec.md)
 **Input**: Feature specification from `/specs/001-library-management/spec.md`
+**Project Duration**: 2025-12-17 ~ 2026-01-17 (1 month)
+**Milestone**: v0.1.0 - 기초 설정 (Due: 2026-01-17)
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
