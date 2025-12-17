@@ -1,0 +1,28 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Error rules
+    avoid_print: true
+    avoid_relative_lib_imports: true
+    avoid_types_as_parameter_names: true
+    
+    # Style rules
+    always_declare_return_types: true
+    always_require_non_null_named_parameters: true
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    require_trailing_commas: true
+    
+    # Documentation
+    public_member_api_docs: false
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
