@@ -172,6 +172,8 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] TXXX [P] Web browser compatibility testing
 - [ ] TXXX Docker environment cleanup and optimization
 - [ ] TXXX Run quickstart.md validation
+- [ ] TXXX **Create PR to dev branch** with Korean description, linked issues, testing evidence
+- [ ] TXXX **STOP and WAIT for PR review approval** before proceeding
 - [ ] TXXX **Constitution compliance verification**: Review all principles, document compliance status
 
 ---
@@ -183,7 +185,7 @@ Examples of foundational tasks (adjust based on your project):
 Review compliance with all applicable principles:
 - [ ] Git-Based Project Management (I): All work tracked in Git/GitHub
 - [ ] Branch Strategy (II): Proper branching followed, PRs used
-- [ ] Issue-Driven Commits (III): All commits reference issues
+- [ ] Issue-Driven Commits & Metadata (III): All commits reference issues; Labels, Projects, Milestones configured
 - [ ] Korean Documentation (IV): User-facing docs in Korean
 - [ ] Structured Documentation & Logging (V): Proper organization followed
 - [ ] 42 Identity Design (VI): Brand colors/identity implemented
@@ -191,6 +193,8 @@ Review compliance with all applicable principles:
 - [ ] Docker-Based Environment (VIII): No local environment pollution
 - [ ] Flutter Cross-Platform (IX): iOS/Android/Web compatibility verified
 - [ ] Compliance Verification (X): This checklist completed
+- [ ] Pull Request Review Gate (XI): PR created to dev, approval received before proceeding
+- [ ] CI & Immediate Sharing (XII): Verification process in place, non-code changes shared immediately
 
 **Non-Compliance Documentation**:
 [If any principle cannot be met, document here with justification and remediation plan]

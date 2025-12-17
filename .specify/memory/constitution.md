@@ -1,18 +1,18 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.2.0 → 1.3.0 (Constitution compliance verification principle added)
-Modified Principles: N/A
+Version: 1.3.0 → 1.4.0 (GitHub workflow governance enhancements)
+Modified Principles:
+  - III. Issue-Driven Commits → Enhanced to include mandatory metadata (Labels, Projects, Milestones)
 Added Sections:
-  - X. Constitution Compliance Verification (new principle)
+  - XI. Pull Request Review Gate (new principle)
+  - XII. Continuous Integration & Immediate Sharing (new principle)
 Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Constitution Check section already includes verification step
-  ✅ spec-template.md - Constitution compliance remains implicit in requirements
-  ✅ tasks-template.md - Constitution compliance task added to Polish phase
-  ✅ checklist-template.md - No changes required (checklist is context-specific)
-  ✅ agent-file-template.md - No changes required (generated file)
-Follow-up TODOs: None - constitution compliance verification now mandated
+  ✅ plan-template.md - Constitution Check updated with PR review gate and CI workflow
+  ✅ spec-template.md - No changes required (scope unchanged)
+  ✅ tasks-template.md - Final Constitution Compliance Check updated with new principles
+Follow-up TODOs: None
 ==================
 -->
 
@@ -44,14 +44,20 @@ All changes merged via Pull Requests; direct commits to `main` and `dev` forbidd
 **Rationale**: Structured branching prevents conflicts, isolates work-in-progress,
 and enforces code review gates before integration.
 
-### III. Issue-Driven Commits
-Every commit message MUST reference related GitHub Issue number:
-- Format: `[#ISSUE_NO] Brief description` or conventional commits with issue footer
-- Enables automated tracking of work items to code changes
+### III. Issue-Driven Commits & Metadata
+Every commit message MUST reference related GitHub Issue number, and every issue
+MUST have proper metadata configured:
+- Commit format: `[#ISSUE_NO] Brief description` or conventional commits with issue footer
+- Every GitHub Issue MUST have:
+  - Appropriate Labels assigned (e.g., bug, enhancement, documentation)
+  - Associated Project board for workflow tracking
+  - Assigned Milestone for release planning
+- Issues without proper metadata MUST NOT be worked on until corrected
 - No commits without associated issue except project setup commits
 
 **Rationale**: Commit-to-issue linkage provides full audit trail, connects
-implementation to requirements, and powers automated project dashboards.
+implementation to requirements, and powers automated project dashboards. Issue
+metadata enables proper workflow management, release planning, and team coordination.
 
 ### IV. Korean Documentation Standard
 All user-facing documentation MUST be in Korean:
@@ -138,6 +144,36 @@ Every command execution MUST include constitution compliance verification:
 principles are consistently applied, and maintains project integrity across all
 activities. Early detection of violations reduces technical debt and rework.
 
+### XI. Pull Request Review Gate
+All Pull Requests to `dev` branch MUST receive explicit approval confirmation
+before proceeding with subsequent workflow steps:
+- After commit completion, create PR to `dev` branch immediately
+- PR MUST include Korean description, linked issues, and testing evidence
+- Implementation work MUST STOP until PR receives review approval
+- After PR approval, proceed with subsequent steps (e.g., testing, deployment)
+- No direct push to `dev` or `main` branches - all changes via approved PRs
+- Self-merge without approval is strictly forbidden
+
+**Rationale**: Mandatory review gate ensures code quality, catches errors early,
+facilitates knowledge sharing, and prevents unauthorized changes from propagating
+downstream. Explicit approval requirement creates accountability and traceability.
+
+### XII. Continuous Integration & Immediate Sharing
+Error detection and non-code-affecting changes MUST follow rapid sharing workflow:
+- Verification process MUST be in place to detect errors after changes
+- Changes that do NOT affect code behavior (docs, configs, comments) MUST be
+  pushed to GitHub immediately for team visibility
+- Code-affecting changes MUST pass local validation before push
+- CI/CD pipeline MUST run automated checks on all pushes
+- Failed CI checks MUST block PR merge until resolved
+- Documentation and configuration changes enable immediate collaboration without
+  waiting for full test cycles
+
+**Rationale**: Immediate sharing of non-code changes reduces coordination overhead,
+enables parallel work, and keeps team synchronized. Systematic error detection
+prevents defects from propagating. Separating code-affecting vs non-code-affecting
+changes optimizes team velocity while maintaining quality gates.
+
 ## Git Workflow & Branching Strategy
 
 **Branch Lifecycle**:
@@ -214,4 +250,4 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.3.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
+**Version**: 1.4.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17

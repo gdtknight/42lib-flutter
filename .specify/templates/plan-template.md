@@ -37,6 +37,7 @@
 
 **Required Validations**:
 - [ ] Git workflow: Issue created, branch from `dev`, commits reference issue
+- [ ] Issue metadata: Labels, Projects, Milestones properly configured on GitHub Issue
 - [ ] Documentation: Korean language for user-facing content
 - [ ] Logging: Follows `logs/YYYY-MM-DD/YYYYMMDD-HHmmss-<descriptor>.log` format
 - [ ] 42 Identity: Color scheme reflects 42 brand identity
@@ -46,6 +47,8 @@
 - [ ] Platform Versions: iOS (latest-1 + 3 prev), Android (latest-1 + 3 prev), Web (modern browsers)
 - [ ] Testing: Quality gates defined (if applicable)
 - [ ] **Compliance Verification**: Constitution compliance check performed after command completion
+- [ ] **PR Review Gate**: After commit, create PR to `dev` and STOP until review approval received
+- [ ] **CI & Sharing**: Verification process in place; non-code changes pushed immediately to GitHub
 
 [Additional domain-specific gates from constitution file]
 
@@ -54,6 +57,17 @@ After completing this plan command, verify:
 - All constitution principles applicable to this feature are addressed
 - Any non-compliance is explicitly documented with justification
 - Compliance status recorded in this document or related artifacts
+
+**PR Review Workflow** (Constitution XI):
+1. Complete implementation and commit with issue reference
+2. Create PR to `dev` with Korean description, linked issues, testing evidence
+3. **STOP and WAIT for review approval**
+4. After approval, proceed with testing/deployment steps
+
+**CI & Sharing Workflow** (Constitution XII):
+- Changes affecting code: Validate locally before push, wait for CI checks
+- Changes NOT affecting code (docs, configs): Push immediately to GitHub
+- All changes: Must pass CI/CD pipeline checks before merge
 
 ## Project Structure
 
