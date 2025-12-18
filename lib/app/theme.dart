@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// 42 브랜드 색상 (#00BABC teal/cyan)을 주요 디자인 요소로 사용
 class AppTheme {
   // 42 브랜드 색상
-  static const Color primary42 = Color(0x00BABC);
+  static const Color primary42 = Color(0xFF00BABC);
   static const Color primary42Light = Color(0xFFD4F1F4);
   static const Color primary42Dark = Color(0xFF008B8B);
 

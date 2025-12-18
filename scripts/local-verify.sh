@@ -135,7 +135,7 @@ else
 fi
 
 # Step 3: Unit Tests
-print_step "Step 3/4: Running unit tests..."
+print_step "Step 3/5: Running unit tests..."
 if docker-compose exec -T flutter-dev flutter test; then
   print_success "All tests passed"
 else
@@ -143,13 +143,29 @@ else
   exit 1
 fi
 
-# Step 4: Platform Build (MVP mode requires all platforms)
+# Step 4: Design Compliance (Constitution XVII)
+print_step "Step 4/5: Verifying design compliance..."
+if [ -f "${PROJECT_ROOT}/scripts/verify-design.sh" ]; then
+  cd "${PROJECT_ROOT}"
+  if bash scripts/verify-design.sh; then
+    print_success "Design compliance verification passed"
+  else
+    print_error "Design compliance verification failed"
+    print_warning "Check Constitution XVII: Design Compliance Verification"
+    exit 1
+  fi
+  cd "${PROJECT_ROOT}/docker"
+else
+  print_warning "Design verification script not found, skipping..."
+fi
+
+# Step 5: Platform Build (MVP mode requires all platforms)
 if [ "$SKIP_BUILD" = false ]; then
   if [ "$MVP_MODE" = true ]; then
-    print_step "Step 4/6: MVP Mode - Testing ALL platforms..."
+    print_step "Step 5/7: MVP Mode - Testing ALL platforms..."
     
     # Web build
-    print_step "Step 4a: Web 빌드..."
+    print_step "Step 5a: Web 빌드..."
     if docker-compose exec -T flutter-dev flutter build web --release; then
       print_success "Web build succeeded"
     else
@@ -158,7 +174,7 @@ if [ "$SKIP_BUILD" = false ]; then
     fi
     
     # Android build
-    print_step "Step 4b: Android 빌드..."
+    print_step "Step 5b: Android 빌드..."
     if docker-compose exec -T flutter-dev flutter build apk --debug; then
       print_success "Android build succeeded"
     else
@@ -168,7 +184,7 @@ if [ "$SKIP_BUILD" = false ]; then
     fi
     
     # iOS build (macOS only)
-    print_step "Step 4c: iOS 빌드..."
+    print_step "Step 5c: iOS 빌드..."
     if [[ "$OSTYPE" == "darwin"* ]]; then
       if docker-compose exec -T flutter-dev flutter build ios --debug --no-codesign; then
         print_success "iOS build succeeded"
@@ -182,7 +198,7 @@ if [ "$SKIP_BUILD" = false ]; then
     fi
     
   else
-    print_step "Step 4/4: Running ${PLATFORM} build..."
+    print_step "Step 5/5: Running ${PLATFORM} build..."
     
     case $PLATFORM in
       web)
@@ -216,7 +232,7 @@ if [ "$SKIP_BUILD" = false ]; then
     esac
   fi
 else
-  print_warning "Step 4/4: Build verification skipped (--skip-build flag)"
+  print_warning "Step 5/5: Build verification skipped (--skip-build flag)"
   if [ "$MVP_MODE" = true ]; then
     print_error "⚠️ MVP Mode에서는 --skip-build 사용 불가!"
     exit 1

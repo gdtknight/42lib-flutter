@@ -1,22 +1,27 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.9.0 → 1.10.0 (MVP-Based Platform Build Strategy)
+Version: 1.10.0 → 1.11.0 (Design Compliance Verification)
 Modified Principles:
-  - XVI. Mandatory Local Verification Before CI/CD - Extended with MVP-based platform build strategy
+  - XVII. Design Compliance Verification - NEW PRINCIPLE ADDED
 Added Sections: None
 Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Constitution Check section includes local verification
-  ✅ tasks-template.md - Final Constitution Compliance Check references local verification
-  ✅ spec-template.md - No changes required (no local verification reference)
-  ✅ README.md - Updated with MVP build strategy and constitution reference
-  ⚠ .github/workflows/ - NEEDS UPDATE to implement MVP-based CI/CD strategy
+  ✅ plan-template.md - Constitution Check section needs design validation addition
+  ✅ tasks-template.md - Final Constitution Compliance Check needs design reference
+  ⚠ spec-template.md - Design requirements (DR-XXX) section exists, no changes needed
+  ✅ README.md - No changes required
+  ⚠ .github/workflows/ - NEEDS UPDATE to add design verification step
+  ⚠ .github/pull_request_template.md - NEEDS CREATION with design checklist
 Follow-up TODOs:
-  - Modify CI/CD workflows to run Web-only builds before MVP v0.1.0
-  - Add Android/iOS builds to CI/CD after MVP v0.1.0 release
-  - Document MVP completion milestone in project roadmap (GitHub milestone)
-  - Update scripts/local-verify.sh to support --mvp-mode flag
+  - Create scripts/verify-design.sh with color validation logic
+  - Integrate design verification into scripts/local-verify.sh
+  - Add design verification step to CI/CD workflows
+  - Create .github/pull_request_template.md with design checklist
+  - Update plan-template.md to include design validation gates
+  - Create specs/001-library-management/checklists/design-compliance.md
+  - Document 42 Brand Guidelines reference URL
+  - Assign Design Owner for the project
 ==================
 -->
 
@@ -538,4 +543,56 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.10.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
+**Version**: 1.11.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
+
+---
+
+### XVII. Design Compliance Verification
+All visual design changes MUST be verified against 42 brand identity guidelines
+before PR approval:
+
+**Design Review Requirements**:
+1. **Color Validation**:
+   - Primary color MUST be #00BABC (teal/cyan) with full opacity (0xFF00BABC in Flutter)
+   - Dark theme background MUST use approved dark palette (#121212 or equivalent)
+   - No arbitrary color additions without design approval
+   - Automated color extraction test MUST validate theme files
+
+2. **Design Authority**:
+   - Visual design changes require approval from designated Design Owner
+   - Design Owner: Project Lead or designated 42 Brand Manager
+   - For solo projects: Self-review with documented rationale required
+
+3. **PR Design Checklist** (required for UI changes):
+   - [ ] Screenshots attached for visual changes
+   - [ ] 42 brand colors verified (primary #00BABC present and correct)
+   - [ ] Dark theme compatibility tested
+   - [ ] No hardcoded colors outside theme.dart
+   - [ ] Accessibility contrast ratios meet WCAG AA standards (≥4.5:1)
+
+4. **Automated Verification**:
+   - `scripts/verify-design.sh` MUST validate:
+     - theme.dart contains correct 42 primary color (0xFF00BABC)
+     - No inline color definitions in widget files
+     - All colors reference AppTheme constants
+   - Design verification runs in CI/CD pipeline
+   - Design verification integrated in `scripts/local-verify.sh`
+
+5. **Official Brand Guidelines**:
+   - Reference document: 42 Brand Guidelines (to be documented)
+   - When guidelines conflict with implementation, guidelines take precedence
+   - Escalate guideline interpretation questions to Design Owner
+
+**Exceptions**:
+- Backend-only changes: Design checks skipped
+- Test files: May use mock colors for testing purposes
+- Third-party library default colors: Document override necessity in code comments
+
+**Rationale**: Design consistency is a core brand asset. The color bug (0x00BABC
+→ 0xFF00BABC) discovered in theme.dart demonstrates why automated verification
+prevents color drift and implementation errors. Manual review ensures UX coherence,
+and explicit ownership creates accountability for design decisions. This principle
+complements Constitution VI (42 Identity Design Standard) with enforceable
+verification procedures.
+
+**Version**: 1.11.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
