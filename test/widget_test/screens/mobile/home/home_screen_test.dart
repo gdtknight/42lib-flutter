@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:ft_transcendence/models/book.dart';
-import 'package:ft_transcendence/state/book/book_bloc.dart';
-import 'package:ft_transcendence/state/book/book_event.dart';
-import 'package:ft_transcendence/state/book/book_state.dart';
-import 'package:ft_transcendence/screens/mobile/home/home_screen.dart';
+import 'package:lib_42_flutter/models/book.dart';
+import 'package:lib_42_flutter/state/book/book_bloc.dart';
+import 'package:lib_42_flutter/state/book/book_event.dart';
+import 'package:lib_42_flutter/state/book/book_state.dart';
+import 'package:lib_42_flutter/screens/mobile/home/home_screen.dart';
 
 @GenerateMocks([BookBloc])
 import 'home_screen_test.mocks.dart';

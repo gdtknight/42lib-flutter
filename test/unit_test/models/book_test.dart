@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ft_transcendence/models/book.dart';
+import 'package:lib_42_flutter/models/book.dart';
 
 void main() {
   group('Book Model', () {

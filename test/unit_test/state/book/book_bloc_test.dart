@@ -2,11 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:ft_transcendence/models/book.dart';
-import 'package:ft_transcendence/repositories/book_repository.dart';
-import 'package:ft_transcendence/state/book/book_bloc.dart';
-import 'package:ft_transcendence/state/book/book_event.dart';
-import 'package:ft_transcendence/state/book/book_state.dart';
+import 'package:lib_42_flutter/models/book.dart';
+import 'package:lib_42_flutter/repositories/book_repository.dart';
+import 'package:lib_42_flutter/state/book/book_bloc.dart';
+import 'package:lib_42_flutter/state/book/book_event.dart';
+import 'package:lib_42_flutter/state/book/book_state.dart';
 
 @GenerateMocks([BookRepository])
 import 'book_bloc_test.mocks.dart';

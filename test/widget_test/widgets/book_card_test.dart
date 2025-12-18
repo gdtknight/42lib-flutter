@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ft_transcendence/models/book.dart';
-import 'package:ft_transcendence/widgets/book_card.dart';
+import 'package:lib_42_flutter/models/book.dart';
+import 'package:lib_42_flutter/widgets/book_card.dart';
 
 void main() {
   testWidgets('BookCard displays book information correctly',

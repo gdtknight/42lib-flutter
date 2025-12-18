@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ft_transcendence/widgets/search_bar.dart';
+import 'package:lib_42_flutter/widgets/search_bar.dart';
 
 void main() {
   testWidgets('SearchBar displays correctly', (WidgetTester tester) async {

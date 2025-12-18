@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:ft_transcendence/models/book.dart';
-import 'package:ft_transcendence/repositories/book_repository.dart';
-import 'package:ft_transcendence/repositories/book_repository_impl.dart';
-import 'package:ft_transcendence/services/api/base_api_client.dart';
+import 'package:lib_42_flutter/models/book.dart';
+import 'package:lib_42_flutter/repositories/book_repository.dart';
+import 'package:lib_42_flutter/repositories/book_repository_impl.dart';
+import 'package:lib_42_flutter/services/api/base_api_client.dart';
 import 'package:sqflite/sqflite.dart';
 
 @GenerateMocks([Database, BaseApiClient])
