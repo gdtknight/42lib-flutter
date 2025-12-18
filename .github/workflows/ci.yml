@@ -27,7 +27,14 @@ jobs:
         run: flutter analyze --no-fatal-infos
       
       - name: 포맷 검사
-        run: dart format --set-exit-if-changed .
+        run: |
+          dart format . > /tmp/format-output.txt 2>&1 || true
+          if ! dart format --set-exit-if-changed . ; then
+            echo "❌ 포맷 오류 발생. 다음 파일들이 수정되었습니다:"
+            dart format --set-exit-if-changed . 2>&1 | grep "Formatted" || true
+            git diff
+            exit 1
+          fi
 
   test:
     name: 테스트 실행
