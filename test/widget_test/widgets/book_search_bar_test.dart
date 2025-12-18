@@ -103,11 +103,11 @@ void main() {
 
     // Enter text
     await tester.enterText(find.byType(TextField), 'Clean Code');
-    await tester.pump();
+    await tester.pumpAndSettle(); // Wait for rebuild to show clear button
 
     // Tap clear button
     await tester.tap(find.byIcon(Icons.clear));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Clean Code'), findsNothing);
     expect(searchQuery, '');

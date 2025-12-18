@@ -28,6 +28,14 @@ class _BookSearchBarState extends State<BookSearchBar> {
   Timer? _debounceTimer;
 
   @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      setState(() {}); // Rebuild to show/hide clear button
+    });
+  }
+
+  @override
   void dispose() {
     _debounceTimer?.cancel();
     _controller.dispose();
