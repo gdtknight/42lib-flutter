@@ -250,3 +250,59 @@ CI/CD 전략 (Constitution XVI):
 
 검증 결과는 `logs/YYYY-MM-DD/verify-YYYYMMDD-HHmmss.log`에 저장됩니다.
 
+
+## 🌐 Web 애플리케이션 실행
+
+### 빠른 시작
+
+1. **Web 빌드**
+   ```bash
+   cd docker
+   docker-compose exec flutter-dev flutter build web --release
+   ```
+
+2. **로컬 서버 실행**
+   ```bash
+   cd build/web
+   python3 -m http.server 8080
+   ```
+
+3. **브라우저 접속**
+   ```
+   http://localhost:8080
+   ```
+
+### 현재 구현된 기능 (User Story 1)
+
+- ✅ 도서 목록 화면 (Grid/List 레이아웃)
+- ✅ 도서 검색 바 (Debounce 지원)
+- ✅ 도서 카드 (표지, 정보, 대출 가능 여부)
+- ✅ 반응형 레이아웃
+- ✅ 23개 자동화 테스트 (100% 통과)
+
+### 테스트 시나리오
+
+**시나리오 1: 도서 목록 확인**
+- 브라우저에서 초기 화면 로드
+- Grid 레이아웃으로 도서 카드 표시 확인
+- 도서 정보 (제목, 저자, 대출 가능 여부) 표시 확인
+
+**시나리오 2: 검색 기능**
+- 검색 바에 텍스트 입력
+- Debounce 동작 확인 (0.5초 후 반영)
+- 클리어 버튼으로 입력 초기화
+
+**시나리오 3: 반응형 테스트**
+- 브라우저 창 크기 조절
+- 큰 화면: 4열 Grid
+- 중간 화면: 2열 Grid  
+- 작은 화면: 1열 List
+
+### 알려진 제약사항
+
+- **데이터**: 하드코딩된 샘플 데이터 (42 API 연동은 User Story 4)
+- **상세 화면**: 미구현 (User Story 2)
+- **상태 관리**: Riverpod 미적용 (User Story 3)
+
+자세한 내용은 `docs/web-test-guide.md` 참조
+
