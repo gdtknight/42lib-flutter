@@ -9,7 +9,6 @@ linter:
     
     # Style rules
     always_declare_return_types: true
-    always_require_non_null_named_parameters: true
     prefer_const_constructors: true
     prefer_const_declarations: true
     prefer_final_fields: true
