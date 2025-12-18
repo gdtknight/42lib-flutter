@@ -60,8 +60,7 @@ class Book {
 
     // VR-006: availableQuantity must be between 0 and quantity
     if (availableQuantity < 0 || availableQuantity > quantity) {
-      throw ArgumentError(
-          'Available quantity must be between 0 and $quantity');
+      throw ArgumentError('Available quantity must be between 0 and $quantity');
     }
 
     // VR-007: publicationYear if provided, must be between 1000 and current year + 1

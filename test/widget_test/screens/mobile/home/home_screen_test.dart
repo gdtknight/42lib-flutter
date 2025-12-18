@@ -63,9 +63,10 @@ void main() {
 
   testWidgets('HomeScreen displays books when loaded',
       (WidgetTester tester) async {
-    when(mockBookBloc.state).thenReturn(BookLoaded(books: testBooks, hasMore: false));
-    when(mockBookBloc.stream)
-        .thenAnswer((_) => Stream.value(BookLoaded(books: testBooks, hasMore: false)));
+    when(mockBookBloc.state)
+        .thenReturn(BookLoaded(books: testBooks, hasMore: false));
+    when(mockBookBloc.stream).thenAnswer(
+        (_) => Stream.value(BookLoaded(books: testBooks, hasMore: false)));
 
     await tester.pumpWidget(createHomeScreen());
     await tester.pumpAndSettle();
@@ -76,10 +77,9 @@ void main() {
 
   testWidgets('HomeScreen displays error message when error occurs',
       (WidgetTester tester) async {
-    when(mockBookBloc.state)
-        .thenReturn(BookError(message: 'Network error'));
-    when(mockBookBloc.stream).thenAnswer(
-        (_) => Stream.value(BookError(message: 'Network error')));
+    when(mockBookBloc.state).thenReturn(BookError(message: 'Network error'));
+    when(mockBookBloc.stream)
+        .thenAnswer((_) => Stream.value(BookError(message: 'Network error')));
 
     await tester.pumpWidget(createHomeScreen());
     await tester.pumpAndSettle();
@@ -111,8 +111,7 @@ void main() {
     verify(mockBookBloc.add(SearchBooks(query: 'Clean Code'))).called(1);
   });
 
-  testWidgets('HomeScreen shows category filters',
-      (WidgetTester tester) async {
+  testWidgets('HomeScreen shows category filters', (WidgetTester tester) async {
     when(mockBookBloc.state).thenReturn(BookInitial());
     when(mockBookBloc.stream).thenAnswer((_) => Stream.value(BookInitial()));
 

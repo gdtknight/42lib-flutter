@@ -11,22 +11,22 @@ import 'services/storage/sqflite_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Hive 초기화
   await Hive.initFlutter();
-  
+
   // Config 초기화
   await AppConfig.initialize();
-  
+
   // Database 초기화
   final database = await SqfliteService.database;
-  
+
   runApp(Library42App(database: database));
 }
 
 class Library42App extends StatelessWidget {
   final dynamic database;
-  
+
   const Library42App({super.key, required this.database});
 
   @override

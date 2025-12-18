@@ -138,8 +138,7 @@ void main() {
     expect(tapped, true);
   });
 
-  testWidgets('BookCard displays category badge',
-      (WidgetTester tester) async {
+  testWidgets('BookCard displays category badge', (WidgetTester tester) async {
     final book = Book(
       id: '123e4567-e89b-12d3-a456-426614174000',
       title: 'Clean Code',

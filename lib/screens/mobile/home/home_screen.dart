@@ -31,10 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Fetch books on initial load
     context.read<BookBloc>().add(const FetchBooks());
-    
+
     // Setup infinite scroll
     _scrollController.addListener(_onScroll);
   }
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
-          
+
           // Category filter
           BlocBuilder<BookBloc, BookState>(
             builder: (context, state) {
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state is BookLoaded) {
                 selectedCategory = state.activeFilter;
               }
-              
+
               return CategoryFilter(
                 categories: _categories,
                 selectedCategory: selectedCategory,
@@ -93,13 +93,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (category == null) {
                     context.read<BookBloc>().add(const ClearSearch());
                   } else {
-                    context.read<BookBloc>().add(FilterByCategory(category: category));
+                    context
+                        .read<BookBloc>()
+                        .add(FilterByCategory(category: category));
                   }
                 },
               );
             },
           ),
-          
+
           // Book list
           Expanded(
             child: BlocBuilder<BookBloc, BookState>(
@@ -107,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (state is BookLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                
+
                 if (state is BookError) {
                   return Center(
                     child: Column(
@@ -135,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 }
-                
+
                 if (state is BookLoaded) {
                   if (state.books.isEmpty) {
                     return Center(
@@ -159,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   }
-                  
+
                   return RefreshIndicator(
                     onRefresh: () async {
                       context.read<BookBloc>().add(const RefreshBooks());
@@ -176,16 +178,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         }
-                        
+
                         final book = state.books[index];
-                        
+
                         return BookCard(
                           book: book,
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => BookDetailScreen(book: book),
+                                builder: (context) =>
+                                    BookDetailScreen(book: book),
                               ),
                             );
                           },
@@ -194,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 }
-                
+
                 return const SizedBox.shrink();
               },
             ),

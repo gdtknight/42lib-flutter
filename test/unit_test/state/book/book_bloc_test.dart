@@ -55,7 +55,8 @@ void main() {
     blocTest<BookBloc, BookState>(
       'emits [BookLoading, BookLoaded] when FetchBooks succeeds',
       build: () {
-        when(mockRepository.fetchBooks(page: anyNamed('page'), limit: anyNamed('limit')))
+        when(mockRepository.fetchBooks(
+                page: anyNamed('page'), limit: anyNamed('limit')))
             .thenAnswer((_) async => testBooks);
         return bookBloc;
       },
@@ -65,14 +66,17 @@ void main() {
         BookLoaded(books: testBooks, hasMore: true),
       ],
       verify: (_) {
-        verify(mockRepository.fetchBooks(page: anyNamed('page'), limit: anyNamed('limit'))).called(1);
+        verify(mockRepository.fetchBooks(
+                page: anyNamed('page'), limit: anyNamed('limit')))
+            .called(1);
       },
     );
 
     blocTest<BookBloc, BookState>(
       'emits [BookLoading, BookError] when FetchBooks fails',
       build: () {
-        when(mockRepository.fetchBooks(page: anyNamed('page'), limit: anyNamed('limit')))
+        when(mockRepository.fetchBooks(
+                page: anyNamed('page'), limit: anyNamed('limit')))
             .thenThrow(Exception('Network error'));
         return bookBloc;
       },
@@ -184,7 +188,8 @@ void main() {
     blocTest<BookBloc, BookState>(
       'clears search results with ClearSearch',
       build: () {
-        when(mockRepository.fetchBooks(page: anyNamed('page'), limit: anyNamed('limit')))
+        when(mockRepository.fetchBooks(
+                page: anyNamed('page'), limit: anyNamed('limit')))
             .thenAnswer((_) async => testBooks);
         return bookBloc;
       },

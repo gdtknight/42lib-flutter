@@ -38,11 +38,10 @@ void main() {
     );
 
     test('should fetch books from API and cache locally', () async {
-      when(mockApiClient.get('/books'))
-          .thenAnswer((_) async => {
-                'data': [testBook.toJson()],
-                'total': 1,
-              });
+      when(mockApiClient.get('/books')).thenAnswer((_) async => {
+            'data': [testBook.toJson()],
+            'total': 1,
+          });
 
       when(mockDatabase.insert(
         'books',
@@ -71,9 +70,8 @@ void main() {
 
       expect(result, isNotNull);
       expect(result!.id, testBook.id);
-      verify(mockDatabase.query('books',
-              where: 'id = ?', whereArgs: [testBook.id]))
-          .called(1);
+      verify(mockDatabase
+          .query('books', where: 'id = ?', whereArgs: [testBook.id])).called(1);
       verifyNever(mockApiClient.get(any));
     });
 
@@ -104,7 +102,8 @@ void main() {
     });
 
     test('should search books by title', () async {
-      when(mockApiClient.get('/books', queryParameters: anyNamed('queryParameters')))
+      when(mockApiClient.get('/books',
+              queryParameters: anyNamed('queryParameters')))
           .thenAnswer((_) async => {
                 'data': [testBook.toJson()],
                 'total': 1,
@@ -120,7 +119,8 @@ void main() {
     });
 
     test('should search books by author', () async {
-      when(mockApiClient.get('/books', queryParameters: anyNamed('queryParameters')))
+      when(mockApiClient.get('/books',
+              queryParameters: anyNamed('queryParameters')))
           .thenAnswer((_) async => {
                 'data': [testBook.toJson()],
                 'total': 1,
@@ -136,7 +136,8 @@ void main() {
     });
 
     test('should filter books by category', () async {
-      when(mockApiClient.get('/books', queryParameters: anyNamed('queryParameters')))
+      when(mockApiClient.get('/books',
+              queryParameters: anyNamed('queryParameters')))
           .thenAnswer((_) async => {
                 'data': [testBook.toJson()],
                 'total': 1,
@@ -152,7 +153,8 @@ void main() {
     });
 
     test('should support pagination', () async {
-      when(mockApiClient.get('/books', queryParameters: anyNamed('queryParameters')))
+      when(mockApiClient.get('/books',
+              queryParameters: anyNamed('queryParameters')))
           .thenAnswer((_) async => {
                 'data': [testBook.toJson()],
                 'total': 1,
@@ -169,7 +171,8 @@ void main() {
     });
 
     test('should return empty list when no books found', () async {
-      when(mockApiClient.get('/books', queryParameters: anyNamed('queryParameters')))
+      when(mockApiClient.get('/books',
+              queryParameters: anyNamed('queryParameters')))
           .thenAnswer((_) async => {
                 'data': [],
                 'total': 0,

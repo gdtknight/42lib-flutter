@@ -53,10 +53,10 @@ void main() {
 
     await tester.enterText(find.byType(TextField), 'C');
     await tester.pump(const Duration(milliseconds: 100));
-    
+
     await tester.enterText(find.byType(TextField), 'Cl');
     await tester.pump(const Duration(milliseconds: 100));
-    
+
     await tester.enterText(find.byType(TextField), 'Clean');
     await tester.pump(const Duration(milliseconds: 600));
 
@@ -113,7 +113,8 @@ void main() {
     expect(searchQuery, '');
   });
 
-  testWidgets('BookSearchBar has placeholder text', (WidgetTester tester) async {
+  testWidgets('BookSearchBar has placeholder text',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -144,7 +145,8 @@ void main() {
     expect(textField.enabled, false);
   });
 
-  testWidgets('BookSearchBar applies custom styling', (WidgetTester tester) async {
+  testWidgets('BookSearchBar applies custom styling',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -158,10 +160,12 @@ void main() {
     );
 
     final container = tester.widget<Container>(
-      find.descendant(
-        of: find.byType(BookSearchBar),
-        matching: find.byType(Container),
-      ).first,
+      find
+          .descendant(
+            of: find.byType(BookSearchBar),
+            matching: find.byType(Container),
+          )
+          .first,
     );
 
     final decoration = container.decoration as BoxDecoration?;

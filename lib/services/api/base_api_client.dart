@@ -5,7 +5,7 @@ import '../storage/secure_storage_service.dart';
 class BaseApiClient {
   late final Dio _dio;
   final String baseUrl;
-  
+
   BaseApiClient({required this.baseUrl}) {
     _dio = Dio(BaseOptions(
       baseUrl: baseUrl,
@@ -13,7 +13,7 @@ class BaseApiClient {
       receiveTimeout: const Duration(seconds: 30),
       headers: {'Content-Type': 'application/json'},
     ));
-    
+
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         final token = await SecureStorageService.getAccessToken();
@@ -28,22 +28,23 @@ class BaseApiClient {
       },
     ));
   }
-  
-  Future<dynamic> get(String path, {Map<String, dynamic>? queryParameters}) async {
+
+  Future<dynamic> get(String path,
+      {Map<String, dynamic>? queryParameters}) async {
     final response = await _dio.get(path, queryParameters: queryParameters);
     return response.data;
   }
-  
+
   Future<dynamic> post(String path, {dynamic data}) async {
     final response = await _dio.post(path, data: data);
     return response.data;
   }
-  
+
   Future<dynamic> put(String path, {dynamic data}) async {
     final response = await _dio.put(path, data: data);
     return response.data;
   }
-  
+
   Future<dynamic> delete(String path) async {
     final response = await _dio.delete(path);
     return response.data;

@@ -6,7 +6,7 @@ class ErrorHandler {
     }
     return error.toString();
   }
-  
+
   static void handleError(dynamic error, {Function? onError}) {
     final message = getErrorMessage(error);
     print('Error: $message');
