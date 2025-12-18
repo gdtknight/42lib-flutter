@@ -31,3 +31,4 @@ The table `public.books` does not exist in the current database.
     at async Promise.all (index 1)
     at BookService.getBooks (/app/src/services/book_service.ts:56:28)
     at /app/src/routes/books.ts:41:22
+2025-12-18 13:47:23 [INFO]: SIGTERM received, closing server...
