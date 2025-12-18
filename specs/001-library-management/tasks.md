@@ -217,23 +217,23 @@
 
 **Models & Data Layer**
 
-- [ ] T102 [P] [US2] Create Student model in lib/models/student.dart
-- [ ] T103 [P] [US2] Create LoanRequest model in lib/models/loan_request.dart
-- [ ] T104 [P] [US2] Create Reservation model in lib/models/reservation.dart
-- [ ] T105 [US2] Create LoanRequestRepository in lib/repositories/loan_request_repository.dart
-- [ ] T106 [US2] Create ReservationRepository in lib/repositories/reservation_repository.dart
+- [X] T102 [P] [US2] Create Student model in lib/models/student.dart
+- [X] T103 [P] [US2] Create LoanRequest model in lib/models/loan_request.dart
+- [X] T104 [P] [US2] Create Reservation model in lib/models/reservation.dart
+- [X] T105 [US2] Create LoanRequestRepository in lib/repositories/loan_request_repository.dart
+- [X] T106 [US2] Create ReservationRepository in lib/repositories/reservation_repository.dart
 
 **Backend API - Authentication & Loans**
 
-- [ ] T107 [P] [US2] Implement 42 OAuth 2.0 authentication in backend/src/services/auth_42_service.ts
-- [ ] T108 [P] [US2] Create GET /auth/42/login endpoint in backend/src/routes/auth.ts
-- [ ] T109 [P] [US2] Create GET /auth/42/callback endpoint in backend/src/routes/auth.ts
-- [ ] T110 [P] [US2] Implement student JWT token generation in backend/src/utils/jwt.ts
-- [ ] T111 [P] [US2] Create student authentication middleware in backend/src/middleware/auth.ts
-- [ ] T112 [P] [US2] Implement POST /loan-requests endpoint in backend/src/routes/loan_requests.ts
-- [ ] T113 [P] [US2] Implement GET /loan-requests/my endpoint (student's requests) in backend/src/routes/loan_requests.ts
-- [ ] T114 [P] [US2] Implement reservation queue service with FIFO logic in backend/src/services/reservation_service.ts
-- [ ] T115 [US2] Add automatic reservation creation when book unavailable in loan request logic
+- [X] T107 [P] [US2] Implement 42 OAuth 2.0 authentication in backend/src/services/auth_42_service.ts
+- [X] T108 [P] [US2] Create GET /auth/42/login endpoint in backend/src/routes/auth.ts
+- [X] T109 [P] [US2] Create GET /auth/42/callback endpoint in backend/src/routes/auth.ts
+- [X] T110 [P] [US2] Implement student JWT token generation in backend/src/utils/jwt.ts
+- [X] T111 [P] [US2] Create student authentication middleware in backend/src/middleware/auth.ts
+- [X] T112 [P] [US2] Implement POST /loan-requests endpoint in backend/src/routes/loan_requests.ts
+- [X] T113 [P] [US2] Implement GET /loan-requests/my endpoint (student's requests) in backend/src/routes/loan_requests.ts
+- [X] T114 [P] [US2] Implement reservation queue service with FIFO logic in backend/src/services/reservation_service.ts
+- [X] T115 [US2] Add automatic reservation creation when book unavailable in loan request logic
 
 **State Management**
 

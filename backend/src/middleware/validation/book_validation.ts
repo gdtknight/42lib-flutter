@@ -127,8 +127,19 @@ export const validateBookUpdate = (
 ) => {
   try {
     // For updates, all fields are optional
-    const partialSchema = bookCreateWithAvailabilitySchema.partial();
-    partialSchema.parse(req.body);
+    const updateSchema = z.object({
+      title: z.string().min(1).max(500).trim().optional(),
+      author: z.string().min(1).max(200).trim().optional(),
+      isbn: z.string().regex(/^\d{10}$|^\d{13}$/).optional().nullable(),
+      category: z.string().min(1).max(100).trim().optional(),
+      description: z.string().max(2000).optional().nullable(),
+      publicationYear: z.number().int().min(1000).max(new Date().getFullYear() + 1).optional().nullable(),
+      quantity: z.number().int().min(1).max(100).optional(),
+      availableQuantity: z.number().int().min(0).optional(),
+      coverImageUrl: z.string().url().optional().nullable(),
+    });
+    
+    updateSchema.parse(req.body);
     next();
   } catch (error) {
     if (error instanceof z.ZodError) {
