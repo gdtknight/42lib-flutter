@@ -28,6 +28,7 @@ Flutter 기반 라이브러리 프로젝트
 12. **지속적 통합 & 즉시 공유**: 오류 검증 프로세스를 갖추며, 코드에 영향 없는 변경사항은 즉시 GitHub에 푸시합니다
 13. **명확한 Issue & PR 제목**: GitHub Issue와 Pull Request 제목은 전체 내용을 포괄적으로 나타내야 합니다
 14. **Issue/PR/커밋 메시지 동기화**: Issue 제목, PR 제목, 커밋 메시지가 개발 생명주기 전반에 걸쳐 일관성과 추적가능성을 유지해야 합니다
+15. **필수 헌법 사전 확인 및 작업 워크플로우**: 모든 작업 전 헌법 검토 필수, T00x 작업은 개별 Issue 생성 및 feature 브랜치 연결 필수
 
 자세한 내용은 [프로젝트 헌법](.specify/memory/constitution.md)을 참조하세요.
 
@@ -81,6 +82,43 @@ flutter build web    # Web 빌드
 ```
 
 ### 개발 워크플로우
+
+**⚠️ 작업 시작 전 필수 확인사항**:
+1. Constitution 검토 (`.specify/memory/constitution.md`)
+2. T00x 작업은 개별 GitHub Issue 생성
+3. Feature 브랜치 생성 및 Issue 연결
+
+```bash
+# 1. 헌법 확인 (필수!)
+cat .specify/memory/constitution.md
+
+# 2. Issue 생성
+gh issue create --title "[T033] 작업 설명" \
+  --body "..." --label "type:feature" --milestone "v0.1.0"
+# 결과: Issue #14 생성됨
+
+# 3. Feature 브랜치 생성 및 연결
+gh issue develop 14 --name feature/14-short-description
+git checkout feature/14-short-description
+
+# 4. 작업 수행 및 커밋
+git add .
+git commit -m "[#14] feat: 작업 내용"
+
+# 5. PR 생성
+git push origin feature/14-short-description
+gh pr create --title "[#14] 작업 요약" \
+  --body "Closes #14" --label "type:feature"
+
+# 6. ⏸️ PR 승인 대기 (필수!)
+# 7. 승인 후 dev로 병합
+```
+
+자세한 워크플로우는 [개발 워크플로우 가이드](docs/processes/development-workflow.md)를 참조하세요.
+
+---
+
+### 개발 워크플로우 (기존)
 
 1. **이슈 생성**: GitHub에서 작업 이슈 생성 (한글)
 2. **브랜치 생성**: `dev`에서 `feature/<이슈번호>-<설명>` 브랜치 생성
