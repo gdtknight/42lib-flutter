@@ -8,7 +8,7 @@ class PlatformDetector {
   static bool get isAndroid => !kIsWeb && Platform.isAndroid;
   static bool get isMobile => isIOS || isAndroid;
   static bool get isDesktop => !kIsWeb && !isMobile;
-  
+
   static String get platformName {
     if (isWeb) return 'Web';
     if (isIOS) return 'iOS';

@@ -22,7 +22,7 @@ class BookDetailScreen extends StatelessWidget {
           children: [
             // Cover image section
             _buildCoverSection(context),
-            
+
             // Book information
             Padding(
               padding: const EdgeInsets.all(16),
@@ -37,7 +37,7 @@ class BookDetailScreen extends StatelessWidget {
                         ),
                   ),
                   const SizedBox(height: 8),
-                  
+
                   // Author
                   _buildInfoRow(
                     context,
@@ -46,7 +46,7 @@ class BookDetailScreen extends StatelessWidget {
                     value: book.author,
                   ),
                   const SizedBox(height: 8),
-                  
+
                   // Category
                   _buildInfoRow(
                     context,
@@ -54,7 +54,7 @@ class BookDetailScreen extends StatelessWidget {
                     label: '카테고리',
                     value: book.category,
                   ),
-                  
+
                   // ISBN (if available)
                   if (book.isbn != null) ...[
                     const SizedBox(height: 8),
@@ -65,7 +65,7 @@ class BookDetailScreen extends StatelessWidget {
                       value: book.isbn!,
                     ),
                   ],
-                  
+
                   // Publication year (if available)
                   if (book.publicationYear != null) ...[
                     const SizedBox(height: 8),
@@ -76,16 +76,17 @@ class BookDetailScreen extends StatelessWidget {
                       value: book.publicationYear.toString(),
                     ),
                   ],
-                  
+
                   const SizedBox(height: 16),
                   const Divider(),
                   const SizedBox(height: 16),
-                  
+
                   // Availability section
                   _buildAvailabilitySection(context),
-                  
+
                   // Description (if available)
-                  if (book.description != null && book.description!.isNotEmpty) ...[
+                  if (book.description != null &&
+                      book.description!.isNotEmpty) ...[
                     const SizedBox(height: 24),
                     Text(
                       '책 소개',
@@ -165,7 +166,7 @@ class BookDetailScreen extends StatelessWidget {
 
   Widget _buildAvailabilitySection(BuildContext context) {
     final isAvailable = book.isAvailable;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -266,7 +267,8 @@ class BookDetailScreen extends StatelessWidget {
                 );
               },
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

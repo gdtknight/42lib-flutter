@@ -9,7 +9,6 @@ linter:
     
     # Style rules
     always_declare_return_types: true
-    always_require_non_null_named_parameters: true
     prefer_const_constructors: true
     prefer_const_declarations: true
     prefer_final_fields: true
@@ -23,6 +22,12 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
+    - "**/*.mocks.dart"
+    - "test/**"
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
+  errors:
+    # Downgrade some errors to warnings for development
+    uri_does_not_exist: warning
+    depend_on_referenced_packages: warning

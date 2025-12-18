@@ -2,3 +2,33 @@
 2025-12-18 03:43:41 [INFO]: 📚 42lib Backend API v1
 2025-12-18 03:43:41 [INFO]: 🔗 Health: http://localhost:3000/health
 2025-12-18 03:43:41 [INFO]: 🔗 API: http://localhost:3000/api/v1
+2025-12-18 13:34:54 [INFO]: 🚀 Server running on port 3000
+2025-12-18 13:34:54 [INFO]: 📚 42lib Backend API v1
+2025-12-18 13:34:54 [INFO]: 🔗 Health: http://localhost:3000/health
+2025-12-18 13:34:54 [INFO]: 🔗 API: http://localhost:3000/api/v1
+2025-12-18 13:35:15 [ERROR]: Error: 
+Invalid `prisma.book.count()` invocation in
+/app/src/services/book_service.ts:65:19
+
+  62     [sortBy]: sortOrder,
+  63   },
+  64 }),
+→ 65 prisma.book.count(
+The table `public.books` does not exist in the current database.
+PrismaClientKnownRequestError: 
+Invalid `prisma.book.count()` invocation in
+/app/src/services/book_service.ts:65:19
+
+  62     [sortBy]: sortOrder,
+  63   },
+  64 }),
+→ 65 prisma.book.count(
+The table `public.books` does not exist in the current database.
+    at $n.handleRequestError (/app/node_modules/@prisma/client/runtime/library.js:121:7315)
+    at $n.handleAndLogRequestError (/app/node_modules/@prisma/client/runtime/library.js:121:6623)
+    at $n.request (/app/node_modules/@prisma/client/runtime/library.js:121:6307)
+    at l (/app/node_modules/@prisma/client/runtime/library.js:130:9633)
+    at async Promise.all (index 1)
+    at BookService.getBooks (/app/src/services/book_service.ts:56:28)
+    at /app/src/routes/books.ts:41:22
+2025-12-18 13:47:23 [INFO]: SIGTERM received, closing server...

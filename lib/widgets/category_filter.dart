@@ -44,7 +44,7 @@ class _CategoryFilterState extends State<CategoryFilter> {
             isSelected: widget.selectedCategory == null,
           ),
           const SizedBox(width: 8),
-          
+
           // Category chips
           ...widget.categories.map((category) {
             final label = _categoryLabels[category] ?? category;

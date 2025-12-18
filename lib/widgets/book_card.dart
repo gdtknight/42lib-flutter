@@ -30,7 +30,7 @@ class BookCard extends StatelessWidget {
               // Book cover image
               _buildCoverImage(),
               const SizedBox(width: 12),
-              
+
               // Book information
               Expanded(
                 child: Column(
@@ -46,7 +46,7 @@ class BookCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
-                    
+
                     // Author
                     Text(
                       book.author,
@@ -57,19 +57,21 @@ class BookCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 8),
-                    
+
                     // Category badge
                     Chip(
                       label: Text(
                         book.category,
                         style: const TextStyle(fontSize: 12),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 0),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                      backgroundColor:
+                          Theme.of(context).primaryColor.withOpacity(0.1),
                     ),
                     const SizedBox(height: 8),
-                    
+
                     // Availability status
                     _buildAvailabilityStatus(context),
                   ],
@@ -97,7 +99,7 @@ class BookCard extends StatelessWidget {
         ),
       );
     }
-    
+
     return _buildPlaceholderImage();
   }
 
@@ -122,7 +124,7 @@ class BookCard extends StatelessWidget {
     final statusText = isAvailable
         ? '대여 가능 (${book.availableQuantity}/${book.quantity})'
         : '대여 중 (${book.availableQuantity}/${book.quantity})';
-    
+
     final statusColor = isAvailable ? Colors.green : Colors.red;
 
     return Row(

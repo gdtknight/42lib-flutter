@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:ft_transcendence/main.dart' as app;
+import 'package:lib_42_flutter/main.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +22,7 @@ void main() {
       expect(find.byType(Card), findsWidgets);
 
       // 4. Test search functionality
-      await tester.enterText(
-          find.byType(TextField), 'Clean Code');
+      await tester.enterText(find.byType(TextField), 'Clean Code');
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
       // 5. Verify search results
@@ -77,8 +76,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Search for non-existent book
-      await tester.enterText(
-          find.byType(TextField), 'NonExistentBook12345');
+      await tester.enterText(find.byType(TextField), 'NonExistentBook12345');
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
       // Verify empty state message
@@ -127,8 +125,7 @@ void main() {
       expect(find.textContaining('/'), findsOneWidget); // Shows X/Y format
     });
 
-    testWidgets('Navigate between multiple books',
-        (WidgetTester tester) async {
+    testWidgets('Navigate between multiple books', (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -136,7 +133,8 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
       // Get first book title
-      final firstBookTitle = (tester.widget(find.byType(Text).first) as Text).data;
+      final firstBookTitle =
+          (tester.widget(find.byType(Text).first) as Text).data;
 
       // Tap first book
       await tester.tap(find.byType(Card).first);

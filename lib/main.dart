@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/routes/app_router.dart';
 
 void main() {
   runApp(const Library42App());
@@ -9,37 +10,21 @@ class Library42App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '42 도서 관리',
+    return MaterialApp.router(
+      title: '42 Library Management',
       theme: ThemeData(
-        // 42 brand color - teal/cyan
-        primarySwatch: Colors.cyan,
-        primaryColor: const Color(0x00BABC),
-        scaffoldBackgroundColor: const Color(0x1A1D23),
-        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('42 도서관'),
-      ),
-      body: const Center(
-        child: Text(
-          '42 Learning Space\n도서 관리 시스템',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 24),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
+      routerConfig: AppRouter.router,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

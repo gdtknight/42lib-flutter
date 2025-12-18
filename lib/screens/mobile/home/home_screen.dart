@@ -4,7 +4,7 @@ import '../../../state/book/book_bloc.dart';
 import '../../../state/book/book_event.dart';
 import '../../../state/book/book_state.dart';
 import '../../../widgets/book_card.dart';
-import '../../../widgets/search_bar.dart' as custom;
+import '../../../widgets/book_search_bar.dart' as custom;
 import '../../../widgets/category_filter.dart';
 import '../book_detail/book_detail_screen.dart';
 
@@ -31,10 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Fetch books on initial load
     context.read<BookBloc>().add(const FetchBooks());
-    
+
     // Setup infinite scroll
     _scrollController.addListener(_onScroll);
   }
@@ -71,13 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
           // Search bar
           Padding(
             padding: const EdgeInsets.all(16),
-            child: custom.SearchBar(
+            child: custom.BookSearchBar(
               onChanged: (query) {
                 context.read<BookBloc>().add(SearchBooks(query: query));
               },
             ),
           ),
-          
+
           // Category filter
           BlocBuilder<BookBloc, BookState>(
             builder: (context, state) {
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state is BookLoaded) {
                 selectedCategory = state.activeFilter;
               }
-              
+
               return CategoryFilter(
                 categories: _categories,
                 selectedCategory: selectedCategory,
@@ -93,13 +93,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (category == null) {
                     context.read<BookBloc>().add(const ClearSearch());
                   } else {
-                    context.read<BookBloc>().add(FilterByCategory(category: category));
+                    context
+                        .read<BookBloc>()
+                        .add(FilterByCategory(category: category));
                   }
                 },
               );
             },
           ),
-          
+
           // Book list
           Expanded(
             child: BlocBuilder<BookBloc, BookState>(
@@ -107,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (state is BookLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                
+
                 if (state is BookError) {
                   return Center(
                     child: Column(
@@ -135,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 }
-                
+
                 if (state is BookLoaded) {
                   if (state.books.isEmpty) {
                     return Center(
@@ -159,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   }
-                  
+
                   return RefreshIndicator(
                     onRefresh: () async {
                       context.read<BookBloc>().add(const RefreshBooks());
@@ -176,16 +178,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         }
-                        
+
                         final book = state.books[index];
-                        
+
                         return BookCard(
                           book: book,
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => BookDetailScreen(book: book),
+                                builder: (context) =>
+                                    BookDetailScreen(book: book),
                               ),
                             );
                           },
@@ -194,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 }
-                
+
                 return const SizedBox.shrink();
               },
             ),

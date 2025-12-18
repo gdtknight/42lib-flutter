@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ft_transcendence/models/book.dart';
-import 'package:ft_transcendence/widgets/book_card.dart';
+import 'package:lib_42_flutter/models/book.dart';
+import 'package:lib_42_flutter/widgets/book_card.dart';
 
 void main() {
   testWidgets('BookCard displays book information correctly',
@@ -138,8 +138,7 @@ void main() {
     expect(tapped, true);
   });
 
-  testWidgets('BookCard displays category badge',
-      (WidgetTester tester) async {
+  testWidgets('BookCard displays category badge', (WidgetTester tester) async {
     final book = Book(
       id: '123e4567-e89b-12d3-a456-426614174000',
       title: 'Clean Code',

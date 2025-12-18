@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ft_transcendence/models/book.dart';
+import 'package:lib_42_flutter/models/book.dart';
 
 void main() {
   group('Book Model', () {
@@ -142,7 +142,8 @@ void main() {
       );
     });
 
-    test('should validate availableQuantity is between 0 and quantity (VR-006)', () {
+    test('should validate availableQuantity is between 0 and quantity (VR-006)',
+        () {
       expect(
         () => Book(
           id: '123e4567-e89b-12d3-a456-426614174000',

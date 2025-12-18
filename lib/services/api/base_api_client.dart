@@ -4,16 +4,16 @@ import '../storage/secure_storage_service.dart';
 /// Dio 기반 API 클라이언트
 class BaseApiClient {
   late final Dio _dio;
-  static const String baseUrl = 'http://localhost:3000/api/v1';
-  
-  BaseApiClient() {
+  final String baseUrl;
+
+  BaseApiClient({required this.baseUrl}) {
     _dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: Duration(seconds: 30),
-      receiveTimeout: Duration(seconds: 30),
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
       headers: {'Content-Type': 'application/json'},
     ));
-    
+
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         final token = await SecureStorageService.getAccessToken();
@@ -28,20 +28,25 @@ class BaseApiClient {
       },
     ));
   }
-  
-  Future<Response> get(String path, {Map<String, dynamic>? params}) async {
-    return await _dio.get(path, queryParameters: params);
+
+  Future<dynamic> get(String path,
+      {Map<String, dynamic>? queryParameters}) async {
+    final response = await _dio.get(path, queryParameters: queryParameters);
+    return response.data;
   }
-  
-  Future<Response> post(String path, {dynamic data}) async {
-    return await _dio.post(path, data: data);
+
+  Future<dynamic> post(String path, {dynamic data}) async {
+    final response = await _dio.post(path, data: data);
+    return response.data;
   }
-  
-  Future<Response> put(String path, {dynamic data}) async {
-    return await _dio.put(path, data: data);
+
+  Future<dynamic> put(String path, {dynamic data}) async {
+    final response = await _dio.put(path, data: data);
+    return response.data;
   }
-  
-  Future<Response> delete(String path) async {
-    return await _dio.delete(path);
+
+  Future<dynamic> delete(String path) async {
+    final response = await _dio.delete(path);
+    return response.data;
   }
 }

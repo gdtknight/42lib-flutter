@@ -26,8 +26,11 @@ class BookRepositoryImpl implements BookRepository {
         },
       );
 
-      final List<dynamic> booksData = response['data'] as List<dynamic>;
-      final books = booksData.map((json) => Book.fromJson(json as Map<String, dynamic>)).toList();
+      final data = response as Map<String, dynamic>;
+      final List<dynamic> booksData = data['data'] as List<dynamic>;
+      final books = booksData
+          .map((json) => Book.fromJson(json as Map<String, dynamic>))
+          .toList();
 
       // Cache books locally
       for (final book in books) {
@@ -53,10 +56,10 @@ class BookRepositoryImpl implements BookRepository {
     try {
       final response = await apiClient.get('/books/$id');
       final book = Book.fromJson(response as Map<String, dynamic>);
-      
+
       // Cache the book
       await _cacheBook(book);
-      
+
       return book;
     } catch (e) {
       return null;
@@ -87,10 +90,14 @@ class BookRepositoryImpl implements BookRepository {
         queryParams['category'] = category;
       }
 
-      final response = await apiClient.get('/books', queryParameters: queryParams);
-      
-      final List<dynamic> booksData = response['data'] as List<dynamic>;
-      final books = booksData.map((json) => Book.fromJson(json as Map<String, dynamic>)).toList();
+      final response =
+          await apiClient.get('/books', queryParameters: queryParams);
+
+      final data = response as Map<String, dynamic>;
+      final List<dynamic> booksData = data['data'] as List<dynamic>;
+      final books = booksData
+          .map((json) => Book.fromJson(json as Map<String, dynamic>))
+          .toList();
 
       // Cache search results
       for (final book in books) {
@@ -114,7 +121,8 @@ class BookRepositoryImpl implements BookRepository {
   Future<List<String>> getCategories() async {
     try {
       final response = await apiClient.get('/books/categories');
-      return List<String>.from(response['categories'] as List);
+      final data = response as Map<String, dynamic>;
+      return List<String>.from(data['categories'] as List);
     } catch (e) {
       // Fallback to cache
       return _getCategoriesFromCache();
@@ -129,11 +137,12 @@ class BookRepositoryImpl implements BookRepository {
         'limit': 1000, // Get all books
       });
 
-      final List<dynamic> booksData = response['data'] as List<dynamic>;
-      
+      final data = response as Map<String, dynamic>;
+      final List<dynamic> booksData = data['data'] as List<dynamic>;
+
       // Clear cache and reload
       await database.delete(tableName);
-      
+
       for (final json in booksData) {
         final book = Book.fromJson(json as Map<String, dynamic>);
         await _cacheBook(book);
@@ -161,7 +170,7 @@ class BookRepositoryImpl implements BookRepository {
     );
 
     if (results.isEmpty) return null;
-    
+
     return Book.fromJson(results.first);
   }
 

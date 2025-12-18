@@ -1,17 +1,27 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.7.0 → 1.8.0 (Mandatory Workflow Pre-Check & Task-to-Issue Mapping)
-Modified Principles: None
-Added Sections:
-  - XV. Mandatory Constitution Pre-Check and Task-Issue Workflow (NEW)
+Version: 1.10.0 → 1.11.0 (Design Compliance Verification)
+Modified Principles:
+  - XVII. Design Compliance Verification - NEW PRINCIPLE ADDED
+Added Sections: None
 Removed Sections: None
 Templates Status:
-  ⏳ AI Agent prompt - Add constitution reminder at start
-  ⏳ Task workflow - T00x task numbering enforcement
-Follow-up TODOs: 
-  - Create .github/WORKFLOW.md for quick reference
-  - Update AI agent system prompts
+  ✅ plan-template.md - Constitution Check section needs design validation addition
+  ✅ tasks-template.md - Final Constitution Compliance Check needs design reference
+  ⚠ spec-template.md - Design requirements (DR-XXX) section exists, no changes needed
+  ✅ README.md - No changes required
+  ⚠ .github/workflows/ - NEEDS UPDATE to add design verification step
+  ⚠ .github/pull_request_template.md - NEEDS CREATION with design checklist
+Follow-up TODOs:
+  - Create scripts/verify-design.sh with color validation logic
+  - Integrate design verification into scripts/local-verify.sh
+  - Add design verification step to CI/CD workflows
+  - Create .github/pull_request_template.md with design checklist
+  - Update plan-template.md to include design validation gates
+  - Create specs/001-library-management/checklists/design-compliance.md
+  - Document 42 Brand Guidelines reference URL
+  - Assign Design Owner for the project
 ==================
 -->
 
@@ -401,6 +411,62 @@ workflow enforces code review gates and prevents unauthorized direct commits. Th
 principle is the enforcement mechanism for Principles II (Branch Strategy) and XI
 (PR Review Gate), ensuring they are not accidentally bypassed.
 
+### XVI. Mandatory Local Verification Before CI/CD
+Every code change MUST be fully verified in local environment before CI/CD
+pipeline execution:
+
+**Mandatory Local Verification Items**:
+1. **Code Analysis**: Execute and pass `flutter analyze --no-fatal-infos`
+2. **Code Format**: Execute and verify `dart format .`
+3. **Unit Tests**: Execute and pass `flutter test`
+4. **Platform Build Verification**:
+   
+   **MVP 완성 전 (첫 번째 릴리스 v0.1.0 이전)**:
+   - **모든 타겟 플랫폼 빌드가 로컬에서 성공해야 함** (ALL platforms MUST pass):
+     - Android: `flutter build apk --debug`
+     - iOS: `flutter build ios --debug --no-codesign` (macOS 환경에서만)
+     - Web: `flutter build web --release`
+   - **플랫폼 빌드 실패 시 PR 생성 금지**
+   - 목적: MVP 개발 단계에서 플랫폼 호환성 문제를 조기 발견하고 해결
+   
+   **MVP 완성 후 (v0.1.0 릴리스 이후)**:
+   - **최소 1개 플랫폼 빌드 검증으로 완화 가능** (minimum 1 platform):
+     - Web: `flutter build web --release` OR
+     - Android: `flutter build apk --debug` OR
+     - iOS: `flutter build ios --debug --no-codesign` (macOS 환경에서만)
+   - CI/CD가 안정적으로 작동함이 증명된 후 적용
+
+**CI/CD 파이프라인 조정**:
+- **MVP 완성 전**: CI/CD는 Web 빌드만 수행 (빠른 피드백, ~1분)
+  - Android 빌드 (~4분), iOS 빌드 (~2.5분)는 로컬 검증 필수
+  - CI/CD에서 Web 빌드로 기본적인 Flutter 호환성만 확인
+- **MVP 완성 후**: CI/CD에서 전체 플랫폼 빌드 활성화
+  - Android/iOS 빌드를 CI/CD 파이프라인에 추가
+  - 로컬 검증은 1개 플랫폼으로 완화 가능
+
+**Response to Verification Failure**:
+- MUST resolve all issues locally before pushing to CI/CD
+- Git push only allowed after verification passes
+- CI/CD failure is considered local verification omission and workflow violation
+- MVP 완성 전: 모든 플랫폼 빌드 실패는 PR 생성 차단 사유
+
+**Verification Script Provision**:
+- Automate all verification with `scripts/local-verify.sh` script
+- Execute in Docker environment to guarantee identical environment as CI/CD
+- Script supports MVP mode flag: `--mvp-mode` (all platforms) or default (1 platform)
+
+**Exceptions**:
+- Documentation-only changes (docs/, README, etc.): Analysis/tests may be skipped
+- CI/CD configuration files only: Analysis/tests may be skipped
+- However, format checking is MANDATORY in all cases
+- Platform build exceptions do NOT apply during MVP phase - all platforms required
+
+**Rationale**: MVP 개발 단계에서 CI/CD의 긴 빌드 시간(Android 4분, iOS 2.5분)은
+개발 속도를 저하시킵니다. 로컬에서 완전히 검증한 후 Web만 CI/CD에서 확인하여
+피드백 주기를 최소화하고, MVP 완성 후 전체 플랫폼 CI/CD를 활성화합니다.
+이는 개발 효율성을 최대화하면서도 품질을 보장하는 단계적 접근법입니다.
+Docker-based local verification prevents "works on my machine" issues proactively.
+
 ## Git Workflow & Branching Strategy
 
 **Branch Lifecycle**:
@@ -477,4 +543,56 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.8.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
+**Version**: 1.11.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
+
+---
+
+### XVII. Design Compliance Verification
+All visual design changes MUST be verified against 42 brand identity guidelines
+before PR approval:
+
+**Design Review Requirements**:
+1. **Color Validation**:
+   - Primary color MUST be #00BABC (teal/cyan) with full opacity (0xFF00BABC in Flutter)
+   - Dark theme background MUST use approved dark palette (#121212 or equivalent)
+   - No arbitrary color additions without design approval
+   - Automated color extraction test MUST validate theme files
+
+2. **Design Authority**:
+   - Visual design changes require approval from designated Design Owner
+   - Design Owner: Project Lead or designated 42 Brand Manager
+   - For solo projects: Self-review with documented rationale required
+
+3. **PR Design Checklist** (required for UI changes):
+   - [ ] Screenshots attached for visual changes
+   - [ ] 42 brand colors verified (primary #00BABC present and correct)
+   - [ ] Dark theme compatibility tested
+   - [ ] No hardcoded colors outside theme.dart
+   - [ ] Accessibility contrast ratios meet WCAG AA standards (≥4.5:1)
+
+4. **Automated Verification**:
+   - `scripts/verify-design.sh` MUST validate:
+     - theme.dart contains correct 42 primary color (0xFF00BABC)
+     - No inline color definitions in widget files
+     - All colors reference AppTheme constants
+   - Design verification runs in CI/CD pipeline
+   - Design verification integrated in `scripts/local-verify.sh`
+
+5. **Official Brand Guidelines**:
+   - Reference document: 42 Brand Guidelines (to be documented)
+   - When guidelines conflict with implementation, guidelines take precedence
+   - Escalate guideline interpretation questions to Design Owner
+
+**Exceptions**:
+- Backend-only changes: Design checks skipped
+- Test files: May use mock colors for testing purposes
+- Third-party library default colors: Document override necessity in code comments
+
+**Rationale**: Design consistency is a core brand asset. The color bug (0x00BABC
+→ 0xFF00BABC) discovered in theme.dart demonstrates why automated verification
+prevents color drift and implementation errors. Manual review ensures UX coherence,
+and explicit ownership creates accountability for design decisions. This principle
+complements Constitution VI (42 Identity Design Standard) with enforceable
+verification procedures.
+
+**Version**: 1.11.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
