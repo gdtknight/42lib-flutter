@@ -52,6 +52,7 @@
 - [ ] **Compliance Verification**: Constitution compliance check performed after command completion
 - [ ] **PR Review Gate**: After commit, create PR to `dev` with linked branch, specific labels, and STOP until review approval
 - [ ] **CI & Sharing**: Verification process in place; non-code changes pushed immediately to GitHub
+- [ ] **Local Verification**: All code changes verified locally (analyze, format, test, build) before CI/CD push
 
 [Additional domain-specific gates from constitution file]
 

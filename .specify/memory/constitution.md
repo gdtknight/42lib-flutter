@@ -1,17 +1,19 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.7.0 → 1.8.0 (Mandatory Workflow Pre-Check & Task-to-Issue Mapping)
+Version: 1.8.0 → 1.9.0 (Local Verification Before CI/CD)
 Modified Principles: None
 Added Sections:
-  - XV. Mandatory Constitution Pre-Check and Task-Issue Workflow (NEW)
+  - XVI. Mandatory Local Verification Before CI/CD (NEW)
 Removed Sections: None
 Templates Status:
-  ⏳ AI Agent prompt - Add constitution reminder at start
-  ⏳ Task workflow - T00x task numbering enforcement
-Follow-up TODOs: 
-  - Create .github/WORKFLOW.md for quick reference
-  - Update AI agent system prompts
+  ✅ plan-template.md - Updated Constitution Check section
+  ✅ tasks-template.md - Updated Final Constitution Compliance Check
+  ⚠ local-verify.sh script - NEEDS CREATION (referenced in XVI but doesn't exist yet)
+Follow-up TODOs:
+  - Create scripts/local-verify.sh for automated local verification
+  - Update CI/CD workflows to reference local verification requirement
+  - Add Docker-based verification instructions to developer guide
 ==================
 -->
 
@@ -401,6 +403,38 @@ workflow enforces code review gates and prevents unauthorized direct commits. Th
 principle is the enforcement mechanism for Principles II (Branch Strategy) and XI
 (PR Review Gate), ensuring they are not accidentally bypassed.
 
+### XVI. Mandatory Local Verification Before CI/CD
+Every code change MUST be fully verified in local environment before CI/CD
+pipeline execution:
+
+**Mandatory Local Verification Items**:
+1. **Code Analysis**: Execute and pass `flutter analyze --no-fatal-infos`
+2. **Code Format**: Execute and verify `dart format .`
+3. **Unit Tests**: Execute and pass `flutter test`
+4. **Platform Build Verification** (minimum 1 platform):
+   - Web: `flutter build web --release` OR
+   - Android: `flutter build apk --debug` OR
+   - iOS: `flutter build ios --debug --no-codesign` (macOS environment only)
+
+**Response to Verification Failure**:
+- MUST resolve all issues locally before pushing to CI/CD
+- Git push only allowed after verification passes
+- CI/CD failure is considered local verification omission and workflow violation
+
+**Verification Script Provision**:
+- Automate all verification with `scripts/local-verify.sh` script
+- Execute in Docker environment to guarantee identical environment as CI/CD
+
+**Exceptions**:
+- Documentation-only changes (docs/, README, etc.): Analysis/tests may be skipped
+- CI/CD configuration files only: Analysis/tests may be skipped
+- However, format checking is MANDATORY in all cases
+
+**Rationale**: CI/CD is expensive and has long feedback cycles; repeated failures
+significantly degrade development velocity. Through complete local verification,
+CI/CD is used only as final confirmation gate, maximizing efficiency.
+Docker-based local verification prevents "works on my machine" issues proactively.
+
 ## Git Workflow & Branching Strategy
 
 **Branch Lifecycle**:
@@ -477,4 +511,4 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.8.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
+**Version**: 1.9.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
