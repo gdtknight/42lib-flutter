@@ -1,17 +1,17 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.6.0 → 1.7.0 (Issue/PR/Commit Synchronization)
+Version: 1.7.0 → 1.8.0 (Mandatory Workflow Pre-Check & Task-to-Issue Mapping)
 Modified Principles: None
 Added Sections:
-  - XIV. Issue, Pull Request, and Commit Message Synchronization (NEW)
+  - XV. Mandatory Constitution Pre-Check and Task-Issue Workflow (NEW)
 Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Constitution Check updated with synchronization validation
-  ✅ spec-template.md - No changes required (scope unchanged)
-  ✅ tasks-template.md - Constitution compliance updated with new principle
-  ✅ README.md - Updated to include Principle XIV in summary (14th principle added to list)
-Follow-up TODOs: None
+  ⏳ AI Agent prompt - Add constitution reminder at start
+  ⏳ Task workflow - T00x task numbering enforcement
+Follow-up TODOs: 
+  - Create .github/WORKFLOW.md for quick reference
+  - Update AI agent system prompts
 ==================
 -->
 
@@ -269,6 +269,97 @@ artifacts. This principle is critical for maintaining project transparency, enab
 effective collaboration, and supporting automated workflows like release note
 generation and impact analysis.
 
+### XV. Mandatory Constitution Pre-Check and Task-Issue Workflow
+Every work session and task MUST follow strict pre-check and issue workflow:
+
+**Before Starting ANY Work**:
+1. **Constitution Review (MANDATORY)**:
+   - AI agents and developers MUST read and confirm Constitution compliance
+   - Review ALL 15 principles before proceeding
+   - Confirm understanding of Branch Strategy (II) and PR Review Gate (XI)
+   - Reminder: "Have I checked the Constitution today?"
+
+2. **Task-to-Issue Mapping (T00x Tasks)**:
+   - Every T00x numbered task (e.g., T033, T045) MUST have a dedicated GitHub Issue
+   - Issue MUST be created BEFORE starting work on the task
+   - Issue number format: `[T00x] Task description`
+   - Group related T00x tasks into a single Issue only if they are tightly coupled
+
+3. **Branch Creation and Linking**:
+   - Create feature branch IMMEDIATELY after Issue creation
+   - Branch naming: `feature/<issue-no>-<short-desc>` or `fix/<issue-no>-<short-desc>`
+   - Link branch to Issue in Development section via GitHub UI or CLI:
+     ```bash
+     gh issue develop <issue-no> --name feature/<issue-no>-<description>
+     ```
+   - Verify branch linkage before starting implementation
+
+4. **Work Execution**:
+   - All commits MUST reference the Issue number: `[#ISSUE_NO] description`
+   - No direct commits to `dev` or `main` branches
+   - Work in feature/fix branch only
+
+5. **Pull Request Creation**:
+   - Create PR to `dev` branch after work completion
+   - PR title MUST reference Issue: `[#ISSUE_NO] Summary`
+   - PR body MUST include "Closes #ISSUE_NO"
+   - Add labels matching the Issue labels
+   - Link PR to feature branch in Development section
+
+6. **Review and Merge**:
+   - STOP and wait for PR approval (even if self-review)
+   - Do NOT proceed with next task until PR is approved
+   - After approval, merge to `dev`
+   - Delete feature branch after merge
+
+**Enforcement Checklist (AI Agents)**:
+- [ ] Did I review the Constitution before starting?
+- [ ] Is there a GitHub Issue for this T00x task?
+- [ ] Did I create and link a feature branch?
+- [ ] Are all commits in the feature branch (not dev)?
+- [ ] Did I create a PR before moving to the next task?
+- [ ] Am I waiting for PR approval before continuing?
+
+**Violations and Penalties**:
+- Direct commits to `dev`/`main`: Immediate revert or PR creation required
+- Missing Issue for T00x task: Work must stop until Issue is created
+- Missing branch linkage: Must be added retroactively
+- Skipping PR approval: All subsequent work blocked until compliance
+
+**Example Workflow for T033**:
+```bash
+# 1. Constitution check (manual review)
+cat .specify/memory/constitution.md
+
+# 2. Create Issue
+gh issue create --title "[T033] 42 OAuth 로그인 구현" \
+  --body "..." --label "type:feature,tech:flutter" \
+  --milestone "v0.1.0"
+# Output: Issue #14 created
+
+# 3. Create and link branch
+gh issue develop 14 --name feature/14-oauth-login
+git checkout feature/14-oauth-login
+
+# 4. Implement and commit
+git add .
+git commit -m "[#14] feat: 42 OAuth 로그인 구현"
+
+# 5. Push and create PR
+git push origin feature/14-oauth-login
+gh pr create --title "[#14] 42 OAuth 로그인 구현" \
+  --body "Closes #14" --label "type:feature,tech:flutter"
+
+# 6. Wait for approval ⏸️
+# 7. After approval, merge and continue
+```
+
+**Rationale**: Mandatory pre-checks prevent Constitution violations before they occur.
+Task-to-Issue mapping ensures every piece of work is tracked and linked. Branch
+workflow enforces code review gates and prevents unauthorized direct commits. This
+principle is the enforcement mechanism for Principles II (Branch Strategy) and XI
+(PR Review Gate), ensuring they are not accidentally bypassed.
+
 ## Git Workflow & Branching Strategy
 
 **Branch Lifecycle**:
@@ -345,4 +436,4 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.7.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
+**Version**: 1.8.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
