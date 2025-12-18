@@ -117,11 +117,13 @@ All development activities MUST be conducted within Docker containers:
 - Local machine environment MUST NOT be modified or polluted with project dependencies
 - All build, test, and development tools run inside Docker containers
 - Docker Compose used for orchestrating multi-container development setups
-- Dockerfile and docker-compose.yml MUST be maintained in repository root
+- All Docker-related files (Dockerfile, docker-compose.yml, etc.) MUST be organized in `docker/` directory
+- docker-compose.yml should reference Dockerfiles in `docker/` directory
 
 **Rationale**: Docker isolation ensures reproducible development environments across
 all contributors, eliminates "works on my machine" issues, prevents dependency
-conflicts with local system, and enables consistent CI/CD execution.
+conflicts with local system, and enables consistent CI/CD execution. Centralizing
+Docker files in dedicated directory improves project organization and maintainability.
 
 ### IX. Flutter Cross-Platform Compatibility
 Flutter application MUST support iOS, Android, and Web platforms with strict

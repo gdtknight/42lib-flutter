@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit';
 import { PrismaClient } from '@prisma/client';
 import { logger } from './utils/logger';
 import { errorHandler } from './middleware/error_handler';
+import bookRoutes from './routes/books';
 
 const app: Express = express();
 const prisma = new PrismaClient();
@@ -29,7 +30,9 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// API 라우트 (향후 추가)
+// API 라우트
+app.use('/api/books', bookRoutes);
+
 app.get('/api/v1', (req, res) => {
   res.json({ message: '42lib API v1', status: 'ready' });
 });

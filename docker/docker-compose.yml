@@ -4,11 +4,11 @@ services:
   # Flutter 개발 컨테이너
   flutter-dev:
     build:
-      context: .
-      dockerfile: Dockerfile.flutter
+      context: ..
+      dockerfile: docker/Dockerfile.flutter
     container_name: 42lib-flutter-dev
     volumes:
-      - .:/app
+      - ..:/app
       - flutter-pub-cache:/root/.pub-cache
     ports:
       - "8080:8080"
@@ -22,11 +22,11 @@ services:
   # Backend API 컨테이너
   backend-api:
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
     container_name: 42lib-backend-api
     volumes:
-      - ./backend:/app
+      - ../backend:/app
       - /app/node_modules
     ports:
       - "3000:3000"

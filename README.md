@@ -49,6 +49,10 @@
 │   ├── prisma/           # Prisma 스키마 및 마이그레이션
 │   ├── src/              # 백엔드 소스 코드
 │   └── tests/            # 백엔드 테스트
+├── docker/               # Docker 관련 파일
+│   ├── Dockerfile        # Backend Dockerfile
+│   ├── Dockerfile.flutter # Flutter Dockerfile
+│   └── docker-compose.yml # Docker Compose 구성
 ├── docs/                 # 프로젝트 문서 (한글)
 │   ├── architecture/     # 아키텍처 문서
 │   ├── api/              # API 문서
@@ -85,6 +89,7 @@ cd 42lib-flutter
 
 ```bash
 # 1. Docker 컨테이너 빌드 및 시작
+cd docker
 docker-compose up -d
 
 # 2. 서비스 확인
