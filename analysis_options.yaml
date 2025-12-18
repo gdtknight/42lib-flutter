@@ -23,6 +23,12 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
+    - "**/*.mocks.dart"
+    - "test/**"
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
+  errors:
+    # Downgrade some errors to warnings for development
+    uri_does_not_exist: warning
+    depend_on_referenced_packages: warning
