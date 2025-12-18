@@ -163,6 +163,56 @@ backend/
 
 **Structure Decision**: Flutter-first cross-platform architecture with separate mobile and web screen implementations sharing common widgets, models, and services. Custom backend (structure TBD in Phase 0 based on BaaS vs custom API decision) for data persistence and 42 API integration. Platform-specific code minimized and isolated per Constitution IX.
 
+## GitHub Issue Workflow
+
+**Task-to-Issue Mapping** (per Constitution XV):
+
+### Grouping Policy
+- **One Issue per User Story**: Group all T00x tasks within a User Story into single Issue
+- **Issue Title Format**: `[User Story N] Brief description (T0XX-T0YY)`
+- **Example**: `[User Story 1] Browse and Search Books (T033-T057)`
+
+### Branch Strategy
+- **Feature Branch**: Create `feature/<issue-no>-<short-desc>` from `dev`
+- **Example**: `feature/16-browse-search-books`
+- **Link Branch**: Use `gh issue develop <issue-no>` to link branch to Issue
+
+### Commit Format
+- **Reference T00x in commits**: `[#ISSUE_NO] type(T00x): description`
+- **Examples**:
+  - `[#16] test(T033): Add unit test for Book model`
+  - `[#16] feat(T042): Create Book model with validation`
+  - `[#16] feat(T047): Implement GET /books endpoint`
+
+### Pull Request Process
+1. Create PR from feature branch to `dev`
+2. PR title: `[#ISSUE_NO] User Story N summary`
+3. PR body must include: `Closes #ISSUE_NO`
+4. Self-review acceptable for solo projects (5min reflection period)
+5. Merge after approval, delete feature branch
+
+### Example Workflow
+```bash
+# Create Issue for US1 (T033-T057)
+gh issue create \
+  --title "[User Story 1] Browse and Search Books (T033-T057)" \
+  --label "type:feature,priority:high" \
+  --milestone "v0.1.0"
+
+# Create and link branch
+gh issue develop 16 --name feature/16-browse-search-books
+git checkout feature/16-browse-search-books
+
+# Work with T00x-specific commits
+git commit -m "[#16] test(T033): Add Book model unit test"
+git commit -m "[#16] feat(T042): Create Book model"
+
+# Create PR
+git push origin feature/16-browse-search-books
+gh pr create --title "[#16] User Story 1: Browse and Search Books" \
+  --body "Closes #16"
+```
+
 ## Complexity Tracking
 
 > **Fill ONLY if Constitution Check has violations that must be justified**

@@ -282,10 +282,20 @@ Every work session and task MUST follow strict pre-check and issue workflow:
    - Reminder: "Have I checked the Constitution today?"
 
 2. **Task-to-Issue Mapping (T00x Tasks)**:
-   - Every T00x numbered task (e.g., T033, T045) MUST have a dedicated GitHub Issue
-   - Issue MUST be created BEFORE starting work on the task
-   - Issue number format: `[T00x] Task description`
-   - Group related T00x tasks into a single Issue only if they are tightly coupled
+   - **Grouping Policy**: Group related T00x tasks by User Story or Phase
+     - **Recommended**: One Issue per User Story combining all T00x tasks within that story
+     - Example: "Phase 3: User Story 1 - Browse and Search Books (T033-T057)"
+     - Rationale: Reduces overhead for small teams while maintaining meaningful work units
+   - **Granularity Options**:
+     - **User Story Level** (Recommended for solo/small teams): One Issue per US with all T00x tasks
+     - **Functional Group Level**: Group by Tests, Models, Backend, UI within each US
+     - **Individual Task Level**: One Issue per T00x (use for critical or complex tasks only)
+   - Issue MUST be created BEFORE starting work on the task group
+   - Issue title format: `[User Story N] Brief description (T0XX-T0YY)`
+   - Commit messages within the Issue MUST reference specific T00x tasks:
+     - Example: `[#16] feat(T042): Create Book model with validation rules`
+     - Example: `[#16] test(T033): Add unit test for Book model`
+   - **Small Team Optimization**: For teams ≤3 developers, prefer User Story level grouping
 
 3. **Branch Creation and Linking**:
    - Create feature branch IMMEDIATELY after Issue creation
@@ -309,10 +319,22 @@ Every work session and task MUST follow strict pre-check and issue workflow:
    - Link PR to feature branch in Development section
 
 6. **Review and Merge**:
-   - STOP and wait for PR approval (even if self-review)
-   - Do NOT proceed with next task until PR is approved
+   - **Solo/Small Team Projects**: Self-review is acceptable but MUST be documented
+     - Create PR and add review comments explaining changes
+     - Wait minimum 5 minutes before approval (reflection period)
+     - Use GitHub's self-approval or mark as "reviewed" in PR description
+   - **Team Projects**: Wait for peer review approval
+   - Do NOT proceed with next task until PR is approved and merged
    - After approval, merge to `dev`
    - Delete feature branch after merge
+   
+7. **Retrospective Corrections**:
+   - If work was committed directly to `dev` without Issue/PR:
+     - Create Issue retroactively with title reflecting completed work
+     - Update commit messages if feasible (use `git commit --amend` or `git rebase -i`)
+     - Document in Issue that work was completed before Issue creation
+     - Apply correct workflow for all future tasks
+   - Prefer forward compliance over rewriting history if commits are already pushed
 
 **Enforcement Checklist (AI Agents)**:
 - [ ] Did I review the Constitution before starting?
@@ -328,24 +350,41 @@ Every work session and task MUST follow strict pre-check and issue workflow:
 - Missing branch linkage: Must be added retroactively
 - Skipping PR approval: All subsequent work blocked until compliance
 
-**Example Workflow for T033**:
+**Example Workflow for User Story Tasks**:
 ```bash
 # 1. Constitution check (manual review)
 cat .specify/memory/constitution.md
 
-# 2. Create Issue
-gh issue create --title "[T033] 42 OAuth 로그인 구현" \
-  --body "..." --label "type:feature,tech:flutter" \
-  --milestone "v0.1.0"
-# Output: Issue #14 created
+# 2. Create Issue for User Story (grouping T033-T057)
+gh issue create \
+  --title "[User Story 1] Browse and Search Books (T033-T057)" \
+  --body "Implement book browsing and search functionality including:
+  - Tests (T033-T041)
+  - Models & Repository (T042-T045)
+  - Backend API (T046-T049)
+  - State Management (T050-T052)
+  - UI Components (T053-T055)
+  - Screens (T056-T057)" \
+  --label "type:feature,priority:high,scope:user-story" \
+  --milestone "v0.1.0" \
+  --project "42lib-flutter"
+# Output: Issue #16 created
 
 # 3. Create and link branch
-gh issue develop 14 --name feature/14-oauth-login
-git checkout feature/14-oauth-login
+gh issue develop 16 --name feature/16-browse-search-books
+git checkout feature/16-browse-search-books
 
-# 4. Implement and commit
-git add .
-git commit -m "[#14] feat: 42 OAuth 로그인 구현"
+# 4. Implement and commit (reference T00x in each commit)
+git add test/unit_test/models/book_test.dart
+git commit -m "[#16] test(T033): Add unit test for Book model"
+
+git add lib/models/book.dart
+git commit -m "[#16] feat(T042): Create Book model with validation"
+
+git add backend/src/routes/books.ts
+git commit -m "[#16] feat(T047): Implement GET /books endpoint"
+
+# ... continue for all T033-T057 tasks ...
 
 # 5. Push and create PR
 git push origin feature/14-oauth-login
