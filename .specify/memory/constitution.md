@@ -1,19 +1,22 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.8.0 → 1.9.0 (Local Verification Before CI/CD)
-Modified Principles: None
-Added Sections:
-  - XVI. Mandatory Local Verification Before CI/CD (NEW)
+Version: 1.9.0 → 1.10.0 (MVP-Based Platform Build Strategy)
+Modified Principles:
+  - XVI. Mandatory Local Verification Before CI/CD - Extended with MVP-based platform build strategy
+Added Sections: None
 Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Updated Constitution Check section
-  ✅ tasks-template.md - Updated Final Constitution Compliance Check
-  ⚠ local-verify.sh script - NEEDS CREATION (referenced in XVI but doesn't exist yet)
+  ✅ plan-template.md - Constitution Check section includes local verification
+  ✅ tasks-template.md - Final Constitution Compliance Check references local verification
+  ✅ spec-template.md - No changes required (no local verification reference)
+  ✅ README.md - Updated with MVP build strategy and constitution reference
+  ⚠ .github/workflows/ - NEEDS UPDATE to implement MVP-based CI/CD strategy
 Follow-up TODOs:
-  - Create scripts/local-verify.sh for automated local verification
-  - Update CI/CD workflows to reference local verification requirement
-  - Add Docker-based verification instructions to developer guide
+  - Modify CI/CD workflows to run Web-only builds before MVP v0.1.0
+  - Add Android/iOS builds to CI/CD after MVP v0.1.0 release
+  - Document MVP completion milestone in project roadmap (GitHub milestone)
+  - Update scripts/local-verify.sh to support --mvp-mode flag
 ==================
 -->
 
@@ -411,28 +414,52 @@ pipeline execution:
 1. **Code Analysis**: Execute and pass `flutter analyze --no-fatal-infos`
 2. **Code Format**: Execute and verify `dart format .`
 3. **Unit Tests**: Execute and pass `flutter test`
-4. **Platform Build Verification** (minimum 1 platform):
-   - Web: `flutter build web --release` OR
-   - Android: `flutter build apk --debug` OR
-   - iOS: `flutter build ios --debug --no-codesign` (macOS environment only)
+4. **Platform Build Verification**:
+   
+   **MVP 완성 전 (첫 번째 릴리스 v0.1.0 이전)**:
+   - **모든 타겟 플랫폼 빌드가 로컬에서 성공해야 함** (ALL platforms MUST pass):
+     - Android: `flutter build apk --debug`
+     - iOS: `flutter build ios --debug --no-codesign` (macOS 환경에서만)
+     - Web: `flutter build web --release`
+   - **플랫폼 빌드 실패 시 PR 생성 금지**
+   - 목적: MVP 개발 단계에서 플랫폼 호환성 문제를 조기 발견하고 해결
+   
+   **MVP 완성 후 (v0.1.0 릴리스 이후)**:
+   - **최소 1개 플랫폼 빌드 검증으로 완화 가능** (minimum 1 platform):
+     - Web: `flutter build web --release` OR
+     - Android: `flutter build apk --debug` OR
+     - iOS: `flutter build ios --debug --no-codesign` (macOS 환경에서만)
+   - CI/CD가 안정적으로 작동함이 증명된 후 적용
+
+**CI/CD 파이프라인 조정**:
+- **MVP 완성 전**: CI/CD는 Web 빌드만 수행 (빠른 피드백, ~1분)
+  - Android 빌드 (~4분), iOS 빌드 (~2.5분)는 로컬 검증 필수
+  - CI/CD에서 Web 빌드로 기본적인 Flutter 호환성만 확인
+- **MVP 완성 후**: CI/CD에서 전체 플랫폼 빌드 활성화
+  - Android/iOS 빌드를 CI/CD 파이프라인에 추가
+  - 로컬 검증은 1개 플랫폼으로 완화 가능
 
 **Response to Verification Failure**:
 - MUST resolve all issues locally before pushing to CI/CD
 - Git push only allowed after verification passes
 - CI/CD failure is considered local verification omission and workflow violation
+- MVP 완성 전: 모든 플랫폼 빌드 실패는 PR 생성 차단 사유
 
 **Verification Script Provision**:
 - Automate all verification with `scripts/local-verify.sh` script
 - Execute in Docker environment to guarantee identical environment as CI/CD
+- Script supports MVP mode flag: `--mvp-mode` (all platforms) or default (1 platform)
 
 **Exceptions**:
 - Documentation-only changes (docs/, README, etc.): Analysis/tests may be skipped
 - CI/CD configuration files only: Analysis/tests may be skipped
 - However, format checking is MANDATORY in all cases
+- Platform build exceptions do NOT apply during MVP phase - all platforms required
 
-**Rationale**: CI/CD is expensive and has long feedback cycles; repeated failures
-significantly degrade development velocity. Through complete local verification,
-CI/CD is used only as final confirmation gate, maximizing efficiency.
+**Rationale**: MVP 개발 단계에서 CI/CD의 긴 빌드 시간(Android 4분, iOS 2.5분)은
+개발 속도를 저하시킵니다. 로컬에서 완전히 검증한 후 Web만 CI/CD에서 확인하여
+피드백 주기를 최소화하고, MVP 완성 후 전체 플랫폼 CI/CD를 활성화합니다.
+이는 개발 효율성을 최대화하면서도 품질을 보장하는 단계적 접근법입니다.
 Docker-based local verification prevents "works on my machine" issues proactively.
 
 ## Git Workflow & Branching Strategy
@@ -511,4 +538,4 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.9.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
+**Version**: 1.10.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18

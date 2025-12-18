@@ -3,10 +3,12 @@
 # Local Verification Script for 42lib-flutter
 # Constitution XVI: Mandatory Local Verification Before CI/CD
 #
-# Usage: ./scripts/local-verify.sh [--skip-build] [--platform=web|android|ios]
+# Usage: ./scripts/local-verify.sh [--skip-build] [--platform=web|android|ios] [--mvp-mode]
 #
 # This script runs all verification checks in Docker environment
 # to ensure consistency with CI/CD pipeline.
+#
+# --mvp-mode: MVP 개발 모드 (모든 플랫폼 빌드 필수, Constitution v1.10.0)
 
 set -e
 
@@ -25,6 +27,7 @@ NC='\033[0m' # No Color
 # Options
 SKIP_BUILD=false
 PLATFORM="web"  # Default platform
+MVP_MODE=true  # Default: MVP mode (Constitution v1.10.0)
 
 # Parse arguments
 for arg in "$@"; do
@@ -35,6 +38,14 @@ for arg in "$@"; do
       ;;
     --platform=*)
       PLATFORM="${arg#*=}"
+      shift
+      ;;
+    --mvp-mode)
+      MVP_MODE=true
+      shift
+      ;;
+    --no-mvp-mode)
+      MVP_MODE=false
       shift
       ;;
     *)
@@ -49,9 +60,15 @@ mkdir -p "${LOG_DIR}"
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║         42lib-flutter Local Verification                   ║${NC}"
 echo -e "${BLUE}║         Constitution XVI Compliance Check                  ║${NC}"
+if [ "$MVP_MODE" = true ]; then
+  echo -e "${BLUE}║         🚧 MVP MODE: All platforms required                ║${NC}"
+fi
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 echo "Log file: ${LOG_FILE}"
+if [ "$MVP_MODE" = true ]; then
+  echo -e "${YELLOW}⚠ MVP Mode: Android, iOS, Web 빌드 모두 성공 필요${NC}"
+fi
 echo ""
 
 # Start logging
@@ -126,42 +143,84 @@ else
   exit 1
 fi
 
-# Step 4: Platform Build (optional)
+# Step 4: Platform Build (MVP mode requires all platforms)
 if [ "$SKIP_BUILD" = false ]; then
-  print_step "Step 4/4: Running ${PLATFORM} build..."
-  
-  case $PLATFORM in
-    web)
-      if docker-compose exec -T flutter-dev flutter build web --release; then
-        print_success "Web build succeeded"
-      else
-        print_error "Web build failed"
-        exit 1
-      fi
-      ;;
-    android)
-      if docker-compose exec -T flutter-dev flutter build apk --debug; then
-        print_success "Android build succeeded"
-      else
-        print_error "Android build failed"
-        exit 1
-      fi
-      ;;
-    ios)
+  if [ "$MVP_MODE" = true ]; then
+    print_step "Step 4/6: MVP Mode - Testing ALL platforms..."
+    
+    # Web build
+    print_step "Step 4a: Web 빌드..."
+    if docker-compose exec -T flutter-dev flutter build web --release; then
+      print_success "Web build succeeded"
+    else
+      print_error "Web build failed"
+      exit 1
+    fi
+    
+    # Android build
+    print_step "Step 4b: Android 빌드..."
+    if docker-compose exec -T flutter-dev flutter build apk --debug; then
+      print_success "Android build succeeded"
+    else
+      print_error "Android build failed"
+      print_warning "Android 빌드 실패: platform:android 라벨로 Issue 생성 필요"
+      exit 1
+    fi
+    
+    # iOS build (macOS only)
+    print_step "Step 4c: iOS 빌드..."
+    if [[ "$OSTYPE" == "darwin"* ]]; then
       if docker-compose exec -T flutter-dev flutter build ios --debug --no-codesign; then
         print_success "iOS build succeeded"
       else
         print_error "iOS build failed"
+        print_warning "iOS 빌드 실패: platform:ios 라벨로 Issue 생성 필요"
         exit 1
       fi
-      ;;
-    *)
-      print_error "Unknown platform: ${PLATFORM}"
-      exit 1
-      ;;
-  esac
+    else
+      print_warning "iOS build skipped (non-macOS environment)"
+    fi
+    
+  else
+    print_step "Step 4/4: Running ${PLATFORM} build..."
+    
+    case $PLATFORM in
+      web)
+        if docker-compose exec -T flutter-dev flutter build web --release; then
+          print_success "Web build succeeded"
+        else
+          print_error "Web build failed"
+          exit 1
+        fi
+        ;;
+      android)
+        if docker-compose exec -T flutter-dev flutter build apk --debug; then
+          print_success "Android build succeeded"
+        else
+          print_error "Android build failed"
+          exit 1
+        fi
+        ;;
+      ios)
+        if docker-compose exec -T flutter-dev flutter build ios --debug --no-codesign; then
+          print_success "iOS build succeeded"
+        else
+          print_error "iOS build failed"
+          exit 1
+        fi
+        ;;
+      *)
+        print_error "Unknown platform: ${PLATFORM}"
+        exit 1
+        ;;
+    esac
+  fi
 else
   print_warning "Step 4/4: Build verification skipped (--skip-build flag)"
+  if [ "$MVP_MODE" = true ]; then
+    print_error "⚠️ MVP Mode에서는 --skip-build 사용 불가!"
+    exit 1
+  fi
 fi
 
 # Success summary
@@ -170,7 +229,12 @@ echo -e "${GREEN}╔════════════════════
 echo -e "${GREEN}║                 ✓ ALL CHECKS PASSED                        ║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo "Your code is ready to be pushed to CI/CD."
+if [ "$MVP_MODE" = true ]; then
+  echo "✅ MVP Mode: All platforms verified (Web + Android + iOS)"
+  echo "Your code is ready for PR creation."
+else
+  echo "Your code is ready to be pushed to CI/CD."
+fi
 echo "Log saved to: ${LOG_FILE}"
 echo ""
 

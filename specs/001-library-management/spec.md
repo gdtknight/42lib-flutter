@@ -14,6 +14,11 @@
 - Q: What platform verification priority should be used based on developer environment? → A: macOS: iOS simulator build first; Linux/Windows: Web build first (fastest, least dependencies); Android optional (slowest)
 - Q: How should documentation changes be validated? → A: Apply `dart format` automatically to documentation; exclude Markdown files from format checks; script auto-detects changed file types
 - Q: How should verification results be recorded? → A: Log files: `logs/YYYY-MM-DD/verify-YYYYMMDD-HHmmss.log`; verification pass: simple checkmark output; verification fail: detailed error log; consider Git commit hook for auto-execution
+- Q: What defines feature completion and MVP readiness? → A: Functional completeness P1 user stories + 80% coverage + README
+- Q: How should platform-specific issues be tracked during development? → A: Create separate platform-specific issues, mark as "platform:android" or "platform:ios", continue Web development
+- Q: How should MVP declaration be managed and verified? → A: Manual MVP declaration via GitHub milestone completion, CI workflow updated in separate PR
+- Q: How should iOS verification be handled on non-macOS developer machines? → A: Skip iOS local verification on non-macOS, rely on CI/CD after MVP or use macOS for final validation
+- Q: What is the development priority order across platforms? → A: Web-first development priority (fastest feedback), then Android, iOS last (slowest build)
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -227,6 +232,15 @@ Library administrators access collected book suggestions through the web dashboa
 - **PR-010**: Code formatting via `dart format` MUST be applied automatically to Dart source files; Markdown files MUST be excluded from format checks
 - **PR-011**: Verification results MUST be logged to `logs/YYYY-MM-DD/verify-YYYYMMDD-HHmmss.log` with simple checkmark output on success and detailed error logs on failure
 
+### Development Workflow Requirements
+
+- **DW-001**: Development priority order MUST be Web-first (fastest feedback), then Android, iOS last (slowest build)
+- **DW-002**: Platform-specific issues MUST be tracked separately with labels "platform:android" or "platform:ios"
+- **DW-003**: Web development MAY continue independently when platform-specific blockers exist
+- **DW-004**: iOS local verification MUST be skipped on non-macOS developer machines; rely on CI/CD after MVP or use macOS for final validation
+- **DW-005**: MVP declaration MUST be managed manually via GitHub milestone completion
+- **DW-006**: CI workflow updates for MVP gating MUST be implemented in a separate PR (not in feature branch)
+
 ### Key Entities
 
 - **Book**: Represents a physical book in the library collection with attributes including title, author, ISBN, category/topic, description, publication year, quantity (number of copies), and current availability status
@@ -239,6 +253,13 @@ Library administrators access collected book suggestions through the web dashboa
 - **Collection Period**: Time window (quarterly or bi-annually) during which book suggestions are accepted
 
 ## Success Criteria *(mandatory)*
+
+### MVP Readiness Definition
+
+**MVP-001**: MVP is declared complete when ALL of the following conditions are met:
+- All P1 (Priority 1) user stories are functionally complete and tested
+- Test coverage reaches minimum 80% across all modules
+- README documentation is complete with setup, architecture, and usage instructions
 
 ### Measurable Outcomes
 

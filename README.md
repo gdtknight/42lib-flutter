@@ -36,6 +36,7 @@
 13. **명확한 Issue & PR 제목**: GitHub Issue와 Pull Request 제목은 전체 내용을 포괄적으로 나타내야 합니다
 14. **Issue/PR/커밋 메시지 동기화**: Issue 제목, PR 제목, 커밋 메시지가 개발 생명주기 전반에 걸쳐 일관성과 추적가능성을 유지해야 합니다
 15. **필수 헌법 사전 확인 및 작업 워크플로우**: 모든 작업 전 헌법 검토 필수, T00x 작업은 개별 Issue 생성 및 feature 브랜치 연결 필수
+16. **필수 로컬 검증 (CI/CD 전)**: MVP 완성 전 모든 플랫폼 빌드 검증 필수, MVP 완성 후 최소 1개 플랫폼으로 완화
 
 자세한 내용은 [프로젝트 헌법](.specify/memory/constitution.md)을 참조하세요.
 
@@ -178,7 +179,7 @@ GitHub Actions를 통한 자동화:
 ## 문서
 
 ### 프로젝트 관리
-- [프로젝트 헌법](.specify/memory/constitution.md) - 프로젝트 거버넌스 및 핵심 원칙 (v1.7.0)
+- [프로젝트 헌법](.specify/memory/constitution.md) - 프로젝트 거버넌스 및 핵심 원칙 (v1.10.0)
 - [Constitution 준수 가이드](docs/processes/constitution-compliance-guide.md) - 실무 체크리스트
 - [Constitution 준수 보고서](docs/processes/constitution-compliance-report-2025-12-17.md) - 분석 결과
 
@@ -218,7 +219,10 @@ GitHub Actions를 통한 자동화:
 **모든 코드 변경 후 CI/CD에 푸시하기 전에 반드시 로컬 검증을 수행하세요** (Constitution XVI):
 
 ```bash
-# 전체 검증 (analyze, format, test, web build)
+# MVP 완성 전 (v0.1.0 이전): 모든 플랫폼 빌드 검증
+./scripts/local-verify.sh --mvp-mode
+
+# MVP 완성 후 (v0.1.0 이후): 최소 1개 플랫폼 빌드 검증
 ./scripts/local-verify.sh
 
 # 빌드 제외 (빠른 검증)
@@ -227,13 +231,22 @@ GitHub Actions를 통한 자동화:
 # 특정 플랫폼 빌드
 ./scripts/local-verify.sh --platform=android
 ./scripts/local-verify.sh --platform=ios
+./scripts/local-verify.sh --platform=web
 ```
 
 검증 항목:
 - ✅ Flutter analyze (info는 경고만)
 - ✅ Dart format (자동 포맷 적용)
 - ✅ Unit tests (모든 테스트 통과)
-- ✅ Platform build (최소 1개, 기본 web)
+- ✅ Platform build
+  - **MVP 전**: Android, iOS, Web 모두 필수
+  - **MVP 후**: 최소 1개 플랫폼 (기본 web)
+
+CI/CD 전략 (Constitution XVI):
+- **MVP 완성 전 (v0.1.0 이전)**: CI/CD는 Web 빌드만 수행 (빠른 피드백)
+  - Android/iOS는 로컬 검증 필수 (각각 ~4분, ~2.5분 소요)
+  - 목적: 개발 속도 향상, 피드백 주기 최소화
+- **MVP 완성 후 (v0.1.0 이후)**: CI/CD에서 전체 플랫폼 빌드 활성화
 
 검증 결과는 `logs/YYYY-MM-DD/verify-YYYYMMDD-HHmmss.log`에 저장됩니다.
 
