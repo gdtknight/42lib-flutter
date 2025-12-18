@@ -5,6 +5,21 @@
 **Status**: Draft  
 **Input**: User description: "42 학습 공간에 비치된 학습용 도서 관리용 앱을 제작할 예정. 일반 사용자용 앱을 제작하고, 도서 관리자를 위한 기능들은 웹으로 제공할 예정. 도서 개수는 약 500개 정도이고 공간상 제약으로 최대 1000개 정도까지 늘어날 것으로 예상함. 우선적으로 사용자 앱을 통해 도서 정보 열람이 가능하도록 할 것이고, 42 API 연동을 통해 도서 대출까지 확장할 계획을 가지고 있음. 도서 관리자용 기능은 도서 추가, 제거, 조회, 대출 관련 정보 조회가 필수로 들어갈 예정이고, 희망 도서 목록 수집과 관련된 기능도 추가적으로 들어갈 예정. 희망 도서는 반기 내지 분기 1회 정도로 요청받을 계획."
 
+## Clarifications
+
+### Session 2025-12-18
+
+- Q: What is the testing and verification environment? → A: Docker Compose with project containers
+- Q: How should developers respond when CI verification fails? → A: Checkout locally, re-run `scripts/local-verify.sh`, fix issues, verify locally, then re-push
+- Q: What platform verification priority should be used based on developer environment? → A: macOS: iOS simulator build first; Linux/Windows: Web build first (fastest, least dependencies); Android optional (slowest)
+- Q: How should documentation changes be validated? → A: Apply `dart format` automatically to documentation; exclude Markdown files from format checks; script auto-detects changed file types
+- Q: How should verification results be recorded? → A: Log files: `logs/YYYY-MM-DD/verify-YYYYMMDD-HHmmss.log`; verification pass: simple checkmark output; verification fail: detailed error log; consider Git commit hook for auto-execution
+- Q: What defines feature completion and MVP readiness? → A: Functional completeness P1 user stories + 80% coverage + README
+- Q: How should platform-specific issues be tracked during development? → A: Create separate platform-specific issues, mark as "platform:android" or "platform:ios", continue Web development
+- Q: How should MVP declaration be managed and verified? → A: Manual MVP declaration via GitHub milestone completion, CI workflow updated in separate PR
+- Q: How should iOS verification be handled on non-macOS developer machines? → A: Skip iOS local verification on non-macOS, rely on CI/CD after MVP or use macOS for final validation
+- Q: What is the development priority order across platforms? → A: Web-first development priority (fastest feedback), then Android, iOS last (slowest build)
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Browse and Search Books in Mobile App (Priority: P1)
@@ -136,6 +151,8 @@ Library administrators access collected book suggestions through the web dashboa
 - How are students notified when they reach the front of a reservation queue?
 - What happens if multiple copies of a book are available and multiple reservations exist?
 - How does the system handle time zone differences for 24-hour reservation expiration?
+- **CI Failure Recovery**: When CI verification fails, developers MUST checkout the branch locally, re-run `scripts/local-verify.sh` to reproduce the issue, fix the root cause, verify the fix passes locally, then re-push to trigger CI again
+- **Verification Script Behavior**: The `scripts/local-verify.sh` script MUST auto-detect file types in changed files and apply appropriate checks (Dart formatting for `.dart` files, skip formatting for `.md` files)
 
 ## Requirements *(mandatory)*
 
@@ -207,9 +224,22 @@ Library administrators access collected book suggestions through the web dashboa
 - **PR-002**: iOS compatibility MUST support iOS 17, 16, 15, and 14
 - **PR-003**: Android compatibility MUST support Android 14, 13, 12, and 11
 - **PR-004**: Web dashboard MUST support modern browsers (Chrome, Safari, Firefox, Edge - latest 2 versions)
-- **PR-005**: Development and testing MUST be conducted within Docker containers
+- **PR-005**: Development and testing MUST be conducted within Docker Compose environment with project containers
 - **PR-006**: Platform-specific code MUST be minimized and isolated in lib/platform/
 - **PR-007**: 42 API integration MUST handle authentication failures gracefully with user-friendly error messages
+- **PR-008**: Local verification script `scripts/local-verify.sh` MUST be provided for developers to run identical CI checks locally
+- **PR-009**: Platform verification priority MUST be: macOS environments prioritize iOS simulator builds first; Linux/Windows environments prioritize Web builds first (fastest with minimal dependencies); Android builds are optional (slowest)
+- **PR-010**: Code formatting via `dart format` MUST be applied automatically to Dart source files; Markdown files MUST be excluded from format checks
+- **PR-011**: Verification results MUST be logged to `logs/YYYY-MM-DD/verify-YYYYMMDD-HHmmss.log` with simple checkmark output on success and detailed error logs on failure
+
+### Development Workflow Requirements
+
+- **DW-001**: Development priority order MUST be Web-first (fastest feedback), then Android, iOS last (slowest build)
+- **DW-002**: Platform-specific issues MUST be tracked separately with labels "platform:android" or "platform:ios"
+- **DW-003**: Web development MAY continue independently when platform-specific blockers exist
+- **DW-004**: iOS local verification MUST be skipped on non-macOS developer machines; rely on CI/CD after MVP or use macOS for final validation
+- **DW-005**: MVP declaration MUST be managed manually via GitHub milestone completion
+- **DW-006**: CI workflow updates for MVP gating MUST be implemented in a separate PR (not in feature branch)
 
 ### Key Entities
 
@@ -223,6 +253,13 @@ Library administrators access collected book suggestions through the web dashboa
 - **Collection Period**: Time window (quarterly or bi-annually) during which book suggestions are accepted
 
 ## Success Criteria *(mandatory)*
+
+### MVP Readiness Definition
+
+**MVP-001**: MVP is declared complete when ALL of the following conditions are met:
+- All P1 (Priority 1) user stories are functionally complete and tested
+- Test coverage reaches minimum 80% across all modules
+- README documentation is complete with setup, architecture, and usage instructions
 
 ### Measurable Outcomes
 
@@ -276,6 +313,8 @@ Library administrators access collected book suggestions through the web dashboa
 - **Initial Book Data**: Library catalog must be populated with initial 500 books before user launch
 - **Administrator Training**: Admin users need basic training on web dashboard functionality
 - **Network Connectivity**: Both mobile app and web dashboard require internet connectivity for real-time sync
+- **Docker Compose Environment**: Development requires Docker Compose with project containers configured for testing and verification workflows
+- **Git Commit Hooks**: Optional but recommended for automated local verification before pushing to CI
 
 ## Future Extensibility
 

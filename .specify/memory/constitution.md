@@ -1,17 +1,27 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version: 1.6.0 → 1.7.0 (Issue/PR/Commit Synchronization)
-Modified Principles: None
-Added Sections:
-  - XIV. Issue, Pull Request, and Commit Message Synchronization (NEW)
+Version: 1.10.0 → 1.11.0 (Design Compliance Verification)
+Modified Principles:
+  - XVII. Design Compliance Verification - NEW PRINCIPLE ADDED
+Added Sections: None
 Removed Sections: None
 Templates Status:
-  ✅ plan-template.md - Constitution Check updated with synchronization validation
-  ✅ spec-template.md - No changes required (scope unchanged)
-  ✅ tasks-template.md - Constitution compliance updated with new principle
-  ✅ README.md - Updated to include Principle XIV in summary (14th principle added to list)
-Follow-up TODOs: None
+  ✅ plan-template.md - Constitution Check section needs design validation addition
+  ✅ tasks-template.md - Final Constitution Compliance Check needs design reference
+  ⚠ spec-template.md - Design requirements (DR-XXX) section exists, no changes needed
+  ✅ README.md - No changes required
+  ⚠ .github/workflows/ - NEEDS UPDATE to add design verification step
+  ⚠ .github/pull_request_template.md - NEEDS CREATION with design checklist
+Follow-up TODOs:
+  - Create scripts/verify-design.sh with color validation logic
+  - Integrate design verification into scripts/local-verify.sh
+  - Add design verification step to CI/CD workflows
+  - Create .github/pull_request_template.md with design checklist
+  - Update plan-template.md to include design validation gates
+  - Create specs/001-library-management/checklists/design-compliance.md
+  - Document 42 Brand Guidelines reference URL
+  - Assign Design Owner for the project
 ==================
 -->
 
@@ -117,11 +127,13 @@ All development activities MUST be conducted within Docker containers:
 - Local machine environment MUST NOT be modified or polluted with project dependencies
 - All build, test, and development tools run inside Docker containers
 - Docker Compose used for orchestrating multi-container development setups
-- Dockerfile and docker-compose.yml MUST be maintained in repository root
+- All Docker-related files (Dockerfile, docker-compose.yml, etc.) MUST be organized in `docker/` directory
+- docker-compose.yml should reference Dockerfiles in `docker/` directory
 
 **Rationale**: Docker isolation ensures reproducible development environments across
 all contributors, eliminates "works on my machine" issues, prevents dependency
-conflicts with local system, and enables consistent CI/CD execution.
+conflicts with local system, and enables consistent CI/CD execution. Centralizing
+Docker files in dedicated directory improves project organization and maintainability.
 
 ### IX. Flutter Cross-Platform Compatibility
 Flutter application MUST support iOS, Android, and Web platforms with strict
@@ -269,6 +281,192 @@ artifacts. This principle is critical for maintaining project transparency, enab
 effective collaboration, and supporting automated workflows like release note
 generation and impact analysis.
 
+### XV. Mandatory Constitution Pre-Check and Task-Issue Workflow
+Every work session and task MUST follow strict pre-check and issue workflow:
+
+**Before Starting ANY Work**:
+1. **Constitution Review (MANDATORY)**:
+   - AI agents and developers MUST read and confirm Constitution compliance
+   - Review ALL 15 principles before proceeding
+   - Confirm understanding of Branch Strategy (II) and PR Review Gate (XI)
+   - Reminder: "Have I checked the Constitution today?"
+
+2. **Task-to-Issue Mapping (T00x Tasks)**:
+   - **Grouping Policy**: Group related T00x tasks by User Story or Phase
+     - **Recommended**: One Issue per User Story combining all T00x tasks within that story
+     - Example: "Phase 3: User Story 1 - Browse and Search Books (T033-T057)"
+     - Rationale: Reduces overhead for small teams while maintaining meaningful work units
+   - **Granularity Options**:
+     - **User Story Level** (Recommended for solo/small teams): One Issue per US with all T00x tasks
+     - **Functional Group Level**: Group by Tests, Models, Backend, UI within each US
+     - **Individual Task Level**: One Issue per T00x (use for critical or complex tasks only)
+   - Issue MUST be created BEFORE starting work on the task group
+   - Issue title format: `[User Story N] Brief description (T0XX-T0YY)`
+   - Commit messages within the Issue MUST reference specific T00x tasks:
+     - Example: `[#16] feat(T042): Create Book model with validation rules`
+     - Example: `[#16] test(T033): Add unit test for Book model`
+   - **Small Team Optimization**: For teams ≤3 developers, prefer User Story level grouping
+
+3. **Branch Creation and Linking**:
+   - Create feature branch IMMEDIATELY after Issue creation
+   - Branch naming: `feature/<issue-no>-<short-desc>` or `fix/<issue-no>-<short-desc>`
+   - Link branch to Issue in Development section via GitHub UI or CLI:
+     ```bash
+     gh issue develop <issue-no> --name feature/<issue-no>-<description>
+     ```
+   - Verify branch linkage before starting implementation
+
+4. **Work Execution**:
+   - All commits MUST reference the Issue number: `[#ISSUE_NO] description`
+   - No direct commits to `dev` or `main` branches
+   - Work in feature/fix branch only
+
+5. **Pull Request Creation**:
+   - Create PR to `dev` branch after work completion
+   - PR title MUST reference Issue: `[#ISSUE_NO] Summary`
+   - PR body MUST include "Closes #ISSUE_NO"
+   - Add labels matching the Issue labels
+   - Link PR to feature branch in Development section
+
+6. **Review and Merge**:
+   - **Solo/Small Team Projects**: Self-review is acceptable but MUST be documented
+     - Create PR and add review comments explaining changes
+     - Wait minimum 5 minutes before approval (reflection period)
+     - Use GitHub's self-approval or mark as "reviewed" in PR description
+   - **Team Projects**: Wait for peer review approval
+   - Do NOT proceed with next task until PR is approved and merged
+   - After approval, merge to `dev`
+   - Delete feature branch after merge
+   
+7. **Retrospective Corrections**:
+   - If work was committed directly to `dev` without Issue/PR:
+     - Create Issue retroactively with title reflecting completed work
+     - Update commit messages if feasible (use `git commit --amend` or `git rebase -i`)
+     - Document in Issue that work was completed before Issue creation
+     - Apply correct workflow for all future tasks
+   - Prefer forward compliance over rewriting history if commits are already pushed
+
+**Enforcement Checklist (AI Agents)**:
+- [ ] Did I review the Constitution before starting?
+- [ ] Is there a GitHub Issue for this T00x task?
+- [ ] Did I create and link a feature branch?
+- [ ] Are all commits in the feature branch (not dev)?
+- [ ] Did I create a PR before moving to the next task?
+- [ ] Am I waiting for PR approval before continuing?
+
+**Violations and Penalties**:
+- Direct commits to `dev`/`main`: Immediate revert or PR creation required
+- Missing Issue for T00x task: Work must stop until Issue is created
+- Missing branch linkage: Must be added retroactively
+- Skipping PR approval: All subsequent work blocked until compliance
+
+**Example Workflow for User Story Tasks**:
+```bash
+# 1. Constitution check (manual review)
+cat .specify/memory/constitution.md
+
+# 2. Create Issue for User Story (grouping T033-T057)
+gh issue create \
+  --title "[User Story 1] Browse and Search Books (T033-T057)" \
+  --body "Implement book browsing and search functionality including:
+  - Tests (T033-T041)
+  - Models & Repository (T042-T045)
+  - Backend API (T046-T049)
+  - State Management (T050-T052)
+  - UI Components (T053-T055)
+  - Screens (T056-T057)" \
+  --label "type:feature,priority:high,scope:user-story" \
+  --milestone "v0.1.0" \
+  --project "42lib-flutter"
+# Output: Issue #16 created
+
+# 3. Create and link branch
+gh issue develop 16 --name feature/16-browse-search-books
+git checkout feature/16-browse-search-books
+
+# 4. Implement and commit (reference T00x in each commit)
+git add test/unit_test/models/book_test.dart
+git commit -m "[#16] test(T033): Add unit test for Book model"
+
+git add lib/models/book.dart
+git commit -m "[#16] feat(T042): Create Book model with validation"
+
+git add backend/src/routes/books.ts
+git commit -m "[#16] feat(T047): Implement GET /books endpoint"
+
+# ... continue for all T033-T057 tasks ...
+
+# 5. Push and create PR
+git push origin feature/14-oauth-login
+gh pr create --title "[#14] 42 OAuth 로그인 구현" \
+  --body "Closes #14" --label "type:feature,tech:flutter"
+
+# 6. Wait for approval ⏸️
+# 7. After approval, merge and continue
+```
+
+**Rationale**: Mandatory pre-checks prevent Constitution violations before they occur.
+Task-to-Issue mapping ensures every piece of work is tracked and linked. Branch
+workflow enforces code review gates and prevents unauthorized direct commits. This
+principle is the enforcement mechanism for Principles II (Branch Strategy) and XI
+(PR Review Gate), ensuring they are not accidentally bypassed.
+
+### XVI. Mandatory Local Verification Before CI/CD
+Every code change MUST be fully verified in local environment before CI/CD
+pipeline execution:
+
+**Mandatory Local Verification Items**:
+1. **Code Analysis**: Execute and pass `flutter analyze --no-fatal-infos`
+2. **Code Format**: Execute and verify `dart format .`
+3. **Unit Tests**: Execute and pass `flutter test`
+4. **Platform Build Verification**:
+   
+   **MVP 완성 전 (첫 번째 릴리스 v0.1.0 이전)**:
+   - **모든 타겟 플랫폼 빌드가 로컬에서 성공해야 함** (ALL platforms MUST pass):
+     - Android: `flutter build apk --debug`
+     - iOS: `flutter build ios --debug --no-codesign` (macOS 환경에서만)
+     - Web: `flutter build web --release`
+   - **플랫폼 빌드 실패 시 PR 생성 금지**
+   - 목적: MVP 개발 단계에서 플랫폼 호환성 문제를 조기 발견하고 해결
+   
+   **MVP 완성 후 (v0.1.0 릴리스 이후)**:
+   - **최소 1개 플랫폼 빌드 검증으로 완화 가능** (minimum 1 platform):
+     - Web: `flutter build web --release` OR
+     - Android: `flutter build apk --debug` OR
+     - iOS: `flutter build ios --debug --no-codesign` (macOS 환경에서만)
+   - CI/CD가 안정적으로 작동함이 증명된 후 적용
+
+**CI/CD 파이프라인 조정**:
+- **MVP 완성 전**: CI/CD는 Web 빌드만 수행 (빠른 피드백, ~1분)
+  - Android 빌드 (~4분), iOS 빌드 (~2.5분)는 로컬 검증 필수
+  - CI/CD에서 Web 빌드로 기본적인 Flutter 호환성만 확인
+- **MVP 완성 후**: CI/CD에서 전체 플랫폼 빌드 활성화
+  - Android/iOS 빌드를 CI/CD 파이프라인에 추가
+  - 로컬 검증은 1개 플랫폼으로 완화 가능
+
+**Response to Verification Failure**:
+- MUST resolve all issues locally before pushing to CI/CD
+- Git push only allowed after verification passes
+- CI/CD failure is considered local verification omission and workflow violation
+- MVP 완성 전: 모든 플랫폼 빌드 실패는 PR 생성 차단 사유
+
+**Verification Script Provision**:
+- Automate all verification with `scripts/local-verify.sh` script
+- Execute in Docker environment to guarantee identical environment as CI/CD
+- Script supports MVP mode flag: `--mvp-mode` (all platforms) or default (1 platform)
+
+**Exceptions**:
+- Documentation-only changes (docs/, README, etc.): Analysis/tests may be skipped
+- CI/CD configuration files only: Analysis/tests may be skipped
+- However, format checking is MANDATORY in all cases
+- Platform build exceptions do NOT apply during MVP phase - all platforms required
+
+**Rationale**: MVP 개발 단계에서 CI/CD의 긴 빌드 시간(Android 4분, iOS 2.5분)은
+개발 속도를 저하시킵니다. 로컬에서 완전히 검증한 후 Web만 CI/CD에서 확인하여
+피드백 주기를 최소화하고, MVP 완성 후 전체 플랫폼 CI/CD를 활성화합니다.
+이는 개발 효율성을 최대화하면서도 품질을 보장하는 단계적 접근법입니다.
+Docker-based local verification prevents "works on my machine" issues proactively.
+
 ## Git Workflow & Branching Strategy
 
 **Branch Lifecycle**:
@@ -345,4 +543,56 @@ single source of truth for project governance.
 **Constitution Authority**: In case of conflict between this constitution and
 other project documentation, the constitution takes precedence.
 
-**Version**: 1.7.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
+**Version**: 1.11.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18
+
+---
+
+### XVII. Design Compliance Verification
+All visual design changes MUST be verified against 42 brand identity guidelines
+before PR approval:
+
+**Design Review Requirements**:
+1. **Color Validation**:
+   - Primary color MUST be #00BABC (teal/cyan) with full opacity (0xFF00BABC in Flutter)
+   - Dark theme background MUST use approved dark palette (#121212 or equivalent)
+   - No arbitrary color additions without design approval
+   - Automated color extraction test MUST validate theme files
+
+2. **Design Authority**:
+   - Visual design changes require approval from designated Design Owner
+   - Design Owner: Project Lead or designated 42 Brand Manager
+   - For solo projects: Self-review with documented rationale required
+
+3. **PR Design Checklist** (required for UI changes):
+   - [ ] Screenshots attached for visual changes
+   - [ ] 42 brand colors verified (primary #00BABC present and correct)
+   - [ ] Dark theme compatibility tested
+   - [ ] No hardcoded colors outside theme.dart
+   - [ ] Accessibility contrast ratios meet WCAG AA standards (≥4.5:1)
+
+4. **Automated Verification**:
+   - `scripts/verify-design.sh` MUST validate:
+     - theme.dart contains correct 42 primary color (0xFF00BABC)
+     - No inline color definitions in widget files
+     - All colors reference AppTheme constants
+   - Design verification runs in CI/CD pipeline
+   - Design verification integrated in `scripts/local-verify.sh`
+
+5. **Official Brand Guidelines**:
+   - Reference document: 42 Brand Guidelines (to be documented)
+   - When guidelines conflict with implementation, guidelines take precedence
+   - Escalate guideline interpretation questions to Design Owner
+
+**Exceptions**:
+- Backend-only changes: Design checks skipped
+- Test files: May use mock colors for testing purposes
+- Third-party library default colors: Document override necessity in code comments
+
+**Rationale**: Design consistency is a core brand asset. The color bug (0x00BABC
+→ 0xFF00BABC) discovered in theme.dart demonstrates why automated verification
+prevents color drift and implementation errors. Manual review ensures UX coherence,
+and explicit ownership creates accountability for design decisions. This principle
+complements Constitution VI (42 Identity Design Standard) with enforceable
+verification procedures.
+
+**Version**: 1.11.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-18

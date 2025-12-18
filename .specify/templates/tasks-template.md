@@ -197,6 +197,8 @@ Review compliance with all applicable principles:
 - [ ] CI & Immediate Sharing (XII): Verification process in place, non-code changes shared immediately
 - [ ] Descriptive Issue/PR Titles (XIII): Titles comprehensively represent complete content, avoid vague descriptions
 - [ ] Issue/PR/Commit Synchronization (XIV): Issue title, PR title, and commit messages maintain consistency and traceability
+- [ ] Mandatory Constitution Pre-Check (XV): Constitution reviewed before work, Task-to-Issue mapping followed, branch workflow enforced
+- [ ] Local Verification Before CI/CD (XVI): All code changes verified locally (analyze, format, test, build) before push
 
 **Non-Compliance Documentation**:
 [If any principle cannot be met, document here with justification and remediation plan]

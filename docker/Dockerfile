@@ -1,5 +1,5 @@
 # Flutter 개발 환경 Docker 이미지
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # 타임존 설정 (대화형 프롬프트 방지)
 ENV DEBIAN_FRONTEND=noninteractive
@@ -13,14 +13,14 @@ RUN apt-get update && apt-get install -y \
     xz-utils \
     zip \
     libglu1-mesa \
-    openjdk-11-jdk \
+    openjdk-17-jdk \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Flutter SDK 설치
+# Flutter SDK 설치 (GitHub Actions와 동일한 버전)
 ENV FLUTTER_HOME=/opt/flutter
 ENV FLUTTER_VERSION=3.24.0
-RUN git clone https://github.com/flutter/flutter.git -b stable ${FLUTTER_HOME} \
+RUN git clone https://github.com/flutter/flutter.git -b ${FLUTTER_VERSION} ${FLUTTER_HOME} \
     && ${FLUTTER_HOME}/bin/flutter --version
 
 # PATH 설정
@@ -29,10 +29,10 @@ ENV PATH=${FLUTTER_HOME}/bin:${PATH}
 # Flutter 사전 설정
 RUN flutter doctor --android-licenses || true \
     && flutter config --no-analytics \
-    && flutter precache
+    && flutter precache --web
 
 # 작업 디렉토리 설정
-WORKDIR /workspace
+WORKDIR /app
 
 # Flutter doctor 실행 (의존성 확인)
 RUN flutter doctor

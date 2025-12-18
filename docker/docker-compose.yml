@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  flutter-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 42lib-flutter-dev
+    volumes:
+      - ..:/app
+      - flutter_pub_cache:/root/.pub-cache
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    environment:
+      - FLUTTER_HOME=/opt/flutter
+      - PATH=/opt/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    command: tail -f /dev/null
+
+volumes:
+  flutter_pub_cache:
+    driver: local

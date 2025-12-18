@@ -1,0 +1,254 @@
+// Prisma Schema for 42 Learning Space Library Management System
+// Based on: specs/001-library-management/data-model.md
+// Constitution Principle VIII: Docker-based development environment
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// Entity 1: Book
+// ============================================================================
+model Book {
+  id                 String   @id @default(uuid())
+  title              String   @db.VarChar(500)
+  author             String   @db.VarChar(200)
+  isbn               String?  @unique @db.VarChar(13)
+  category           String   @db.VarChar(100)
+  description        String?  @db.Text
+  publicationYear    Int?
+  quantity           Int      @default(1)
+  availableQuantity  Int      @default(1)
+  coverImageUrl      String?  @db.VarChar(500)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relationships
+  loanRequests       LoanRequest[]
+  reservations       Reservation[]
+  loans              Loan[]
+
+  // Indexes for performance (FR-027, SC-009)
+  @@index([title, author], name: "idx_book_search")
+  @@index([category], name: "idx_book_category")
+  @@map("books")
+}
+
+// ============================================================================
+// Entity 2: Student
+// ============================================================================
+model Student {
+  id               String   @id @default(uuid())
+  fortytwoUserId   Int      @unique
+  username         String   @db.VarChar(50)
+  email            String   @db.VarChar(255)
+  fullName         String   @db.VarChar(200)
+  createdAt        DateTime @default(now())
+  lastLoginAt      DateTime @updatedAt
+
+  // Relationships
+  loanRequests     LoanRequest[]
+  reservations     Reservation[]
+  loans            Loan[]
+  suggestions      BookSuggestion[]
+
+  // Indexes
+  @@index([fortytwoUserId], name: "idx_student_42id")
+  @@map("students")
+}
+
+// ============================================================================
+// Entity 3: LoanRequest
+// ============================================================================
+model LoanRequest {
+  id              String    @id @default(uuid())
+  studentId       String
+  bookId          String
+  status          LoanRequestStatus @default(pending)
+  requestDate     DateTime  @default(now())
+  reviewedAt      DateTime?
+  reviewedBy      String?
+  rejectionReason String?   @db.Text
+  notes           String?   @db.Text
+
+  // Relationships
+  student         Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  book            Book          @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  reviewer        Administrator? @relation(fields: [reviewedBy], references: [id], onDelete: SetNull)
+  loan            Loan?
+
+  // Indexes
+  @@index([studentId, bookId, status], name: "idx_loan_request_lookup")
+  @@index([status], name: "idx_loan_request_status")
+  @@map("loan_requests")
+}
+
+enum LoanRequestStatus {
+  pending
+  approved
+  rejected
+  cancelled
+}
+
+// ============================================================================
+// Entity 4: Reservation
+// ============================================================================
+model Reservation {
+  id            String    @id @default(uuid())
+  studentId     String
+  bookId        String
+  queuePosition Int
+  status        ReservationStatus @default(waiting)
+  createdAt     DateTime  @default(now())
+  notifiedAt    DateTime?
+  expiresAt     DateTime?
+  fulfilledAt   DateTime?
+
+  // Relationships
+  student       Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  book          Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  loan          Loan?
+
+  // Indexes
+  @@index([bookId, queuePosition], name: "idx_reservation_queue")
+  @@index([status], name: "idx_reservation_status")
+  @@unique([bookId, queuePosition], name: "unique_queue_position")
+  @@map("reservations")
+}
+
+enum ReservationStatus {
+  waiting
+  notified
+  expired
+  fulfilled
+  cancelled
+}
+
+// ============================================================================
+// Entity 5: Loan
+// ============================================================================
+model Loan {
+  id              String    @id @default(uuid())
+  studentId       String
+  bookId          String
+  loanRequestId   String?   @unique
+  reservationId   String?   @unique
+  status          LoanStatus @default(active)
+  checkoutDate    DateTime  @default(now())
+  dueDate         DateTime
+  returnedDate    DateTime?
+  approvedBy      String
+  notes           String?   @db.Text
+
+  // Relationships
+  student         Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  book            Book          @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  loanRequest     LoanRequest?  @relation(fields: [loanRequestId], references: [id], onDelete: SetNull)
+  reservation     Reservation?  @relation(fields: [reservationId], references: [id], onDelete: SetNull)
+  approver        Administrator @relation(fields: [approvedBy], references: [id], onDelete: Restrict)
+
+  // Indexes
+  @@index([studentId], name: "idx_loan_student")
+  @@index([bookId], name: "idx_loan_book")
+  @@index([status, dueDate], name: "idx_loan_overdue")
+  @@map("loans")
+}
+
+enum LoanStatus {
+  active
+  returned
+  overdue
+}
+
+// ============================================================================
+// Entity 6: BookSuggestion
+// ============================================================================
+model BookSuggestion {
+  id                  String    @id @default(uuid())
+  studentId           String
+  suggestedTitle      String    @db.VarChar(500)
+  suggestedAuthor     String    @db.VarChar(200)
+  reason              String?   @db.Text
+  collectionPeriodId  String
+  status              SuggestionStatus @default(submitted)
+  submittedAt         DateTime  @default(now())
+  reviewedAt          DateTime?
+  reviewedBy          String?
+  adminNotes          String?   @db.Text
+
+  // Relationships
+  student             Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  collectionPeriod    CollectionPeriod  @relation(fields: [collectionPeriodId], references: [id], onDelete: Cascade)
+  reviewer            Administrator?    @relation(fields: [reviewedBy], references: [id], onDelete: SetNull)
+
+  // Indexes
+  @@index([collectionPeriodId, status], name: "idx_suggestion_period")
+  @@index([suggestedTitle, suggestedAuthor], name: "idx_suggestion_duplicate")
+  @@map("book_suggestions")
+}
+
+enum SuggestionStatus {
+  submitted
+  approved
+  rejected
+  under_review
+}
+
+// ============================================================================
+// Entity 7: CollectionPeriod
+// ============================================================================
+model CollectionPeriod {
+  id          String    @id @default(uuid())
+  name        String    @unique @db.VarChar(100)
+  startDate   DateTime
+  endDate     DateTime
+  status      PeriodStatus @default(upcoming)
+  createdAt   DateTime  @default(now())
+
+  // Relationships
+  suggestions BookSuggestion[]
+
+  // Indexes
+  @@index([status], name: "idx_period_status")
+  @@index([startDate, endDate], name: "idx_period_dates")
+  @@map("collection_periods")
+}
+
+enum PeriodStatus {
+  upcoming
+  active
+  closed
+}
+
+// ============================================================================
+// Entity 8: Administrator
+// ============================================================================
+model Administrator {
+  id           String    @id @default(uuid())
+  username     String    @unique @db.VarChar(50)
+  passwordHash String    @db.VarChar(255)
+  email        String    @unique @db.VarChar(255)
+  fullName     String    @db.VarChar(200)
+  role         AdminRole @default(admin)
+  createdAt    DateTime  @default(now())
+  lastLoginAt  DateTime?
+
+  // Relationships
+  reviewedLoanRequests  LoanRequest[]
+  approvedLoans         Loan[]
+  reviewedSuggestions   BookSuggestion[]
+
+  // Indexes
+  @@index([username], name: "idx_admin_username")
+  @@map("administrators")
+}
+
+enum AdminRole {
+  admin
+  super_admin
+}
