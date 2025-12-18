@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import booksRouter from './routes/books';
 
 dotenv.config();
 
@@ -38,6 +39,9 @@ app.get('/api/v1', (req: Request, res: Response) => {
     },
   });
 });
+
+// Books API
+app.use('/api/v1/books', booksRouter);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
