@@ -4,7 +4,7 @@ import '../../../state/book/book_bloc.dart';
 import '../../../state/book/book_event.dart';
 import '../../../state/book/book_state.dart';
 import '../../../widgets/book_card.dart';
-import '../../../widgets/search_bar.dart' as custom;
+import '../../../widgets/book_search_bar.dart' as custom;
 import '../../../widgets/category_filter.dart';
 import '../book_detail/book_detail_screen.dart';
 
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Search bar
           Padding(
             padding: const EdgeInsets.all(16),
-            child: custom.SearchBar(
+            child: custom.BookSearchBar(
               onChanged: (query) {
                 context.read<BookBloc>().add(SearchBooks(query: query));
               },

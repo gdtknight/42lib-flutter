@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class SearchBar extends StatefulWidget {
+class BookSearchBar extends StatefulWidget {
   final Function(String) onChanged;
   final String? hintText;
   final bool enabled;
@@ -9,7 +9,7 @@ class SearchBar extends StatefulWidget {
   final double borderRadius;
   final int debounceMilliseconds;
 
-  const SearchBar({
+  const BookSearchBar({
     Key? key,
     required this.onChanged,
     this.hintText = '책 제목, 저자로 검색',
@@ -20,10 +20,10 @@ class SearchBar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SearchBar> createState() => _SearchBarState();
+  State<BookSearchBar> createState() => _BookSearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _BookSearchBarState extends State<BookSearchBar> {
   final TextEditingController _controller = TextEditingController();
   Timer? _debounceTimer;
 

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lib_42_flutter/widgets/search_bar.dart';
+import 'package:lib_42_flutter/widgets/book_search_bar.dart';
 
 void main() {
-  testWidgets('SearchBar displays correctly', (WidgetTester tester) async {
+  testWidgets('BookSearchBar displays correctly', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: SearchBar(
+          body: BookSearchBar(
             onChanged: (_) {},
           ),
         ),
@@ -18,13 +18,13 @@ void main() {
     expect(find.byIcon(Icons.search), findsOneWidget);
   });
 
-  testWidgets('SearchBar accepts text input', (WidgetTester tester) async {
+  testWidgets('BookSearchBar accepts text input', (WidgetTester tester) async {
     String searchQuery = '';
 
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: SearchBar(
+          body: BookSearchBar(
             onChanged: (value) => searchQuery = value,
           ),
         ),
@@ -37,13 +37,13 @@ void main() {
     expect(find.text('Clean Code'), findsOneWidget);
   });
 
-  testWidgets('SearchBar debounces input', (WidgetTester tester) async {
+  testWidgets('BookSearchBar debounces input', (WidgetTester tester) async {
     int callCount = 0;
 
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: SearchBar(
+          body: BookSearchBar(
             onChanged: (_) => callCount++,
             debounceMilliseconds: 500,
           ),
@@ -64,12 +64,12 @@ void main() {
     expect(callCount, 1);
   });
 
-  testWidgets('SearchBar shows clear button when text is entered',
+  testWidgets('BookSearchBar shows clear button when text is entered',
       (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: SearchBar(
+          body: BookSearchBar(
             onChanged: (_) {},
           ),
         ),
@@ -87,14 +87,14 @@ void main() {
     expect(find.byIcon(Icons.clear), findsOneWidget);
   });
 
-  testWidgets('SearchBar clears text when clear button is tapped',
+  testWidgets('BookSearchBar clears text when clear button is tapped',
       (WidgetTester tester) async {
     String searchQuery = 'initial';
 
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: SearchBar(
+          body: BookSearchBar(
             onChanged: (value) => searchQuery = value,
           ),
         ),
@@ -113,11 +113,11 @@ void main() {
     expect(searchQuery, '');
   });
 
-  testWidgets('SearchBar has placeholder text', (WidgetTester tester) async {
+  testWidgets('BookSearchBar has placeholder text', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: SearchBar(
+          body: BookSearchBar(
             onChanged: (_) {},
             hintText: '책 제목, 저자로 검색',
           ),
@@ -128,11 +128,11 @@ void main() {
     expect(find.text('책 제목, 저자로 검색'), findsOneWidget);
   });
 
-  testWidgets('SearchBar can be disabled', (WidgetTester tester) async {
+  testWidgets('BookSearchBar can be disabled', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: SearchBar(
+          body: BookSearchBar(
             onChanged: (_) {},
             enabled: false,
           ),
@@ -144,11 +144,11 @@ void main() {
     expect(textField.enabled, false);
   });
 
-  testWidgets('SearchBar applies custom styling', (WidgetTester tester) async {
+  testWidgets('BookSearchBar applies custom styling', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: SearchBar(
+          body: BookSearchBar(
             onChanged: (_) {},
             backgroundColor: Colors.blue,
             borderRadius: 16.0,
@@ -159,7 +159,7 @@ void main() {
 
     final container = tester.widget<Container>(
       find.descendant(
-        of: find.byType(SearchBar),
+        of: find.byType(BookSearchBar),
         matching: find.byType(Container),
       ).first,
     );
