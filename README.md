@@ -210,3 +210,30 @@ GitHub Actions를 통한 자동화:
 ## 연락처
 
 [연락처 정보 추가 예정]
+
+## 개발 워크플로우
+
+### 로컬 검증 (필수)
+
+**모든 코드 변경 후 CI/CD에 푸시하기 전에 반드시 로컬 검증을 수행하세요** (Constitution XVI):
+
+```bash
+# 전체 검증 (analyze, format, test, web build)
+./scripts/local-verify.sh
+
+# 빌드 제외 (빠른 검증)
+./scripts/local-verify.sh --skip-build
+
+# 특정 플랫폼 빌드
+./scripts/local-verify.sh --platform=android
+./scripts/local-verify.sh --platform=ios
+```
+
+검증 항목:
+- ✅ Flutter analyze (info는 경고만)
+- ✅ Dart format (자동 포맷 적용)
+- ✅ Unit tests (모든 테스트 통과)
+- ✅ Platform build (최소 1개, 기본 web)
+
+검증 결과는 `logs/YYYY-MM-DD/verify-YYYYMMDD-HHmmss.log`에 저장됩니다.
+
