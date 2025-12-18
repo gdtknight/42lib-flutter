@@ -105,7 +105,7 @@ class BookMockDataSource {
   /// Get a book by ID
   Future<Book?> getBookById(String id) async {
     await Future.delayed(const Duration(milliseconds: 300));
-    
+
     try {
       return _mockBooks.firstWhere((book) => book.id == id);
     } catch (e) {
