@@ -1,54 +1,55 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { PrismaClient } from '@prisma/client';
+import { logger } from './utils/logger';
+import { errorHandler } from './middleware/error_handler';
 
 const app: Express = express();
-const port = process.env.PORT || 3000;
+const prisma = new PrismaClient();
+const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
+// 미들웨어 설정
+app.use(helmet()); // 보안 헤더
+app.use(cors()); // CORS 허용
+app.use(express.json()); // JSON 파싱
+app.use(express.urlencoded({ extended: true }));
 
-// Rate limiting
+// Rate Limiting
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000'),
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
+  message: '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.',
 });
-app.use(limiter);
+app.use('/api', limiter);
 
-// Health check
-app.get('/health', (req: Request, res: Response) => {
+// Health Check
+app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// API v1 routes
-app.get('/api/v1', (req: Request, res: Response) => {
-  res.json({
-    message: '42 Library Management System API',
-    version: '0.1.0',
-    endpoints: {
-      health: '/health',
-      books: '/api/v1/books',
-      auth: '/api/v1/auth',
-    },
-  });
+// API 라우트 (향후 추가)
+app.get('/api/v1', (req, res) => {
+  res.json({ message: '42lib API v1', status: 'ready' });
 });
 
-// 404 handler
-app.use((req: Request, res: Response) => {
-  res.status(404).json({ error: 'Not Found' });
+// 에러 핸들링 미들웨어 (마지막에 추가)
+app.use(errorHandler);
+
+// 서버 시작
+app.listen(PORT, () => {
+  logger.info(`🚀 Server running on port ${PORT}`);
+  logger.info(`📚 42lib Backend API v1`);
+  logger.info(`🔗 Health: http://localhost:${PORT}/health`);
+  logger.info(`🔗 API: http://localhost:${PORT}/api/v1`);
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`🚀 Server running on port ${port}`);
-  console.log(`📚 42 Library Management System API`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  logger.info('SIGTERM received, closing server...');
+  await prisma.$disconnect();
+  process.exit(0);
 });
 
-export default app;
+export { app, prisma };
