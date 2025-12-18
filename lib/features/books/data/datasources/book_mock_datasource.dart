@@ -71,7 +71,7 @@ class BookMockDataSource {
     ),
     Book(
       id: '6',
-      title: "You Don't Know JS",
+      title: 'You Don\'t Know JS',
       author: 'Kyle Simpson',
       isbn: '9781491904244',
       category: 'Programming',
