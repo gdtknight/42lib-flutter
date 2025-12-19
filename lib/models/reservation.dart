@@ -69,7 +69,8 @@ class Reservation {
       final diff = expiresAt!.difference(expectedExpiry).inMinutes.abs();
       if (diff > 1) {
         // Allow 1 minute tolerance for clock differences
-        throw ArgumentError('Expires date must be 24 hours after notified date');
+        throw ArgumentError(
+            'Expires date must be 24 hours after notified date');
       }
     }
   }

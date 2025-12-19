@@ -22,20 +22,20 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project directory structure per plan.md implementation plan
-- [ ] T002 Initialize Flutter project with dependencies in pubspec.yaml (flutter_bloc, dio, hive, sqflite, oauth2, etc.)
-- [ ] T003 Initialize backend API project in backend/ with package.json (Express, Prisma, JWT, bcrypt)
-- [ ] T004 [P] Configure Docker development environment in docker-compose.yml (flutter-dev, backend-api, postgres-db)
-- [ ] T005 [P] Create Dockerfile for Flutter development container
-- [ ] T006 [P] Create Dockerfile for backend API container in backend/Dockerfile
-- [ ] T007 [P] Configure Flutter linting and formatting in analysis_options.yaml
-- [ ] T008 [P] Configure Prisma schema in backend/prisma/schema.prisma with all 8 entities
+- [X] T001 Create project directory structure per plan.md implementation plan
+- [X] T002 Initialize Flutter project with dependencies in pubspec.yaml (flutter_bloc, dio, hive, sqflite, oauth2, etc.)
+- [X] T003 Initialize backend API project in backend/ with package.json (Express, Prisma, JWT, bcrypt)
+- [X] T004 [P] Configure Docker development environment in docker-compose.yml (flutter-dev, backend-api, postgres-db, redis-cache)
+- [X] T005 [P] Create Dockerfile for Flutter development container
+- [X] T006 [P] Create Dockerfile for backend API container in backend/Dockerfile
+- [X] T007 [P] Configure Flutter linting and formatting in analysis_options.yaml
+- [X] T008 [P] Configure Prisma schema in backend/prisma/schema.prisma with all 8 entities
 - [ ] T009 [P] Verify iOS build configuration in ios/ directory (support iOS 14-17)
 - [ ] T010 [P] Verify Android build configuration in android/ directory (support Android 11-14)
 - [ ] T011 [P] Verify Web build configuration in web/ directory
-- [ ] T012 Create environment configuration files (.env.example for backend)
-- [ ] T013 Initialize Git repository structure with proper .gitignore
-- [ ] T014 Create README.md with Korean project description and setup instructions
+- [X] T012 Create environment configuration files (.env.example for backend, .dockerignore)
+- [X] T013 Initialize Git repository structure with proper .gitignore
+- [X] T014 Create README.md with Korean project description and setup instructions
 
 ---
 
@@ -46,21 +46,21 @@
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
 - [ ] T015 Run initial Prisma migration to create database schema in backend/prisma/migrations/
-- [ ] T016 [P] Implement 42 brand theme with teal/cyan colors in lib/app/theme.dart
-- [ ] T017 [P] Setup navigation/routing framework in lib/app/routes.dart
-- [ ] T018 [P] Initialize Hive storage for key-value caching in lib/services/storage/hive_service.dart
-- [ ] T019 [P] Initialize sqflite storage for relational data in lib/services/storage/sqflite_service.dart
-- [ ] T020 [P] Implement secure storage service in lib/services/storage/secure_storage_service.dart
-- [ ] T021 [P] Create base API client with dio and interceptors in lib/services/api/base_api_client.dart
-- [ ] T022 [P] Implement error handling and logging infrastructure in lib/utils/error_handler.dart and lib/utils/logger.dart
-- [ ] T023 [P] Setup environment configuration management in lib/app/config.dart
-- [ ] T024 [P] Create reusable UI components library in lib/widgets/common/ (buttons, cards, inputs)
-- [ ] T025 [P] Implement platform detection utility in lib/platform/platform_detector.dart
-- [ ] T026 [P] Setup backend Express server initialization in backend/src/server.ts
-- [ ] T027 [P] Implement backend middleware (CORS, Helmet, rate limiting) in backend/src/middleware/
-- [ ] T028 [P] Create backend error handling middleware in backend/src/middleware/error_handler.ts
-- [ ] T029 [P] Implement backend logging with Winston in backend/src/utils/logger.ts
-- [ ] T030 [P] Create JWT utilities for token generation/validation in backend/src/utils/jwt.ts
+- [X] T016 [P] Implement 42 brand theme with teal/cyan colors in lib/app/theme.dart
+- [X] T017 [P] Setup navigation/routing framework in lib/app/routes.dart
+- [X] T018 [P] Initialize Hive storage for key-value caching in lib/services/storage/hive_service.dart
+- [X] T019 [P] Initialize sqflite storage for relational data in lib/services/storage/sqflite_service.dart
+- [X] T020 [P] Implement secure storage service in lib/services/storage/secure_storage_service.dart
+- [X] T021 [P] Create base API client with dio and interceptors in lib/services/api/base_api_client.dart
+- [X] T022 [P] Implement error handling and logging infrastructure in lib/utils/error_handler.dart and lib/utils/logger.dart
+- [X] T023 [P] Setup environment configuration management in lib/app/config.dart
+- [X] T024 [P] Create reusable UI components library in lib/widgets/common/ (buttons, cards, inputs)
+- [X] T025 [P] Implement platform detection utility in lib/platform/platform_detector.dart
+- [X] T026 [P] Setup backend Express server initialization in backend/src/server.ts
+- [X] T027 [P] Implement backend middleware (CORS, Helmet, rate limiting) in backend/src/middleware/
+- [X] T028 [P] Create backend error handling middleware in backend/src/middleware/error_handler.ts
+- [X] T029 [P] Implement backend logging with Winston in backend/src/utils/logger.ts
+- [X] T030 [P] Create JWT utilities for token generation/validation in backend/src/utils/jwt.ts
 - [ ] T031 Validate Docker environment startup and container communication
 - [ ] T032 Run database seed script for initial test data in backend/prisma/seed.ts
 
@@ -92,35 +92,35 @@
 
 **Models & Data Layer**
 
-- [ ] T042 [P] [US1] Create Book model in lib/models/book.dart with validation rules
-- [ ] T043 [P] [US1] Create Book entity JSON serialization in lib/models/book.g.dart (code generation)
-- [ ] T044 [US1] Create BookRepository interface in lib/repositories/book_repository.dart
-- [ ] T045 [US1] Implement BookRepository with sqflite and API sync in lib/repositories/book_repository_impl.dart
+- [X] T042 [P] [US1] Create Book model in lib/models/book.dart with validation rules
+- [X] T043 [P] [US1] Create Book entity JSON serialization in lib/models/book.g.dart (code generation)
+- [X] T044 [US1] Create BookRepository interface in lib/repositories/book_repository.dart
+- [X] T045 [US1] Implement BookRepository with sqflite and API sync in lib/repositories/book_repository_impl.dart
 
 **Backend API - Books**
 
-- [ ] T046 [P] [US1] Create Book Prisma model queries in backend/src/services/book_service.ts
-- [ ] T047 [P] [US1] Implement GET /books endpoint with pagination/filters in backend/src/routes/books.ts
-- [ ] T048 [P] [US1] Implement GET /books/:id endpoint in backend/src/routes/books.ts
+- [X] T046 [P] [US1] Create Book Prisma model queries in backend/src/services/book_service.ts
+- [X] T047 [P] [US1] Implement GET /books endpoint with pagination/filters in backend/src/routes/books.ts
+- [X] T048 [P] [US1] Implement GET /books/:id endpoint in backend/src/routes/books.ts
 - [ ] T049 [US1] Add request validation middleware for book endpoints in backend/src/middleware/validation/book_validation.ts
 
 **State Management**
 
-- [ ] T050 [P] [US1] Create BookEvent classes in lib/state/book/book_event.dart
-- [ ] T051 [P] [US1] Create BookState classes in lib/state/book/book_state.dart
-- [ ] T052 [US1] Implement BookBloc with search/filter logic in lib/state/book/book_bloc.dart
+- [X] T050 [P] [US1] Create BookEvent classes in lib/state/book/book_event.dart
+- [X] T051 [P] [US1] Create BookState classes in lib/state/book/book_state.dart
+- [X] T052 [US1] Implement BookBloc with search/filter logic in lib/state/book/book_bloc.dart
 
 **UI Components**
 
-- [ ] T053 [P] [US1] Create BookCard widget in lib/widgets/book_card.dart
-- [ ] T054 [P] [US1] Create SearchBar widget with debouncing in lib/widgets/search_bar.dart
-- [ ] T055 [P] [US1] Create CategoryFilter widget in lib/widgets/category_filter.dart
+- [X] T053 [P] [US1] Create BookCard widget in lib/widgets/book_card.dart
+- [X] T054 [P] [US1] Create SearchBar widget with debouncing in lib/widgets/search_bar.dart
+- [X] T055 [P] [US1] Create CategoryFilter widget in lib/widgets/category_filter.dart
 
 **Screens**
 
-- [ ] T056 [US1] Create HomeScreen for book browsing in lib/screens/mobile/home/home_screen.dart
-- [ ] T057 [US1] Create BookDetailScreen in lib/screens/mobile/book_detail/book_detail_screen.dart
-- [ ] T058 [US1] Add HomeScreen and BookDetailScreen to navigation routes in lib/app/routes.dart
+- [X] T056 [US1] Create HomeScreen for book browsing in lib/screens/mobile/home/home_screen.dart
+- [X] T057 [US1] Create BookDetailScreen in lib/screens/mobile/book_detail/book_detail_screen.dart
+- [X] T058 [US1] Add HomeScreen and BookDetailScreen to navigation routes in lib/app/routes.dart
 
 **Performance & Polish**
 
