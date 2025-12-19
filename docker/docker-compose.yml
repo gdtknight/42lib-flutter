@@ -87,7 +87,14 @@ services:
       - FLUTTER_HOME=/opt/flutter
       - PATH=/opt/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       - API_BASE_URL=http://backend-api:3000/api/v1
-    command: tail -f /dev/null
+    command: >
+      bash -c "
+        echo '📦 Installing Flutter dependencies...'
+        flutter pub get &&
+        echo '🚀 Starting Flutter Web Server on port 8080...'
+        echo '🌐 Access at: http://localhost:8080'
+        flutter run -d web-server --web-hostname=0.0.0.0 --web-port=8080
+      "
 
 volumes:
   postgres_data:

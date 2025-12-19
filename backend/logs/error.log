@@ -23,3 +23,28 @@ The table `public.books` does not exist in the current database.
     at async Promise.all (index 1)
     at BookService.getBooks (/app/src/services/book_service.ts:56:28)
     at /app/src/routes/books.ts:41:22
+2025-12-19 10:20:12 [ERROR]: Error: 
+Invalid `prisma.book.findMany()` invocation in
+/app/src/services/book_service.ts:57:19
+
+  54 
+  55 // Execute queries in parallel
+  56 const [books, total] = await Promise.all([
+→ 57   prisma.book.findMany(
+The table `public.books` does not exist in the current database.
+PrismaClientKnownRequestError: 
+Invalid `prisma.book.findMany()` invocation in
+/app/src/services/book_service.ts:57:19
+
+  54 
+  55 // Execute queries in parallel
+  56 const [books, total] = await Promise.all([
+→ 57   prisma.book.findMany(
+The table `public.books` does not exist in the current database.
+    at $n.handleRequestError (/app/node_modules/@prisma/client/runtime/library.js:121:7315)
+    at $n.handleAndLogRequestError (/app/node_modules/@prisma/client/runtime/library.js:121:6623)
+    at $n.request (/app/node_modules/@prisma/client/runtime/library.js:121:6307)
+    at l (/app/node_modules/@prisma/client/runtime/library.js:130:9633)
+    at async Promise.all (index 0)
+    at BookService.getBooks (/app/src/services/book_service.ts:56:28)
+    at /app/src/routes/books.ts:41:22
