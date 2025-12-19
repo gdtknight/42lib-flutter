@@ -6,6 +6,8 @@ import { PrismaClient } from '@prisma/client';
 import { logger } from './utils/logger';
 import { errorHandler } from './middleware/error_handler';
 import bookRoutes from './routes/books';
+import authRoutes from './routes/auth';
+import loanRequestRoutes from './routes/loan_requests';
 
 const app: Express = express();
 const prisma = new PrismaClient();
@@ -31,7 +33,9 @@ app.get('/health', (req, res) => {
 });
 
 // API 라우트
-app.use('/api/books', bookRoutes);
+app.use('/api/v1/books', bookRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/loan-requests', loanRequestRoutes);
 
 app.get('/api/v1', (req, res) => {
   res.json({ message: '42lib API v1', status: 'ready' });

@@ -39,7 +39,8 @@ class BookMockDataSource {
       publicationYear: 2019,
       quantity: 4,
       availableQuantity: 4,
-      coverImageUrl: 'https://via.placeholder.com/150x200?text=Pragmatic+Programmer',
+      coverImageUrl:
+          'https://via.placeholder.com/150x200?text=Pragmatic+Programmer',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     ),

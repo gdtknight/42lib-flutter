@@ -75,9 +75,10 @@
 
 ### 필수 요구사항
 
-- Docker 및 Docker Compose 설치
-- Git 설치
+- **Docker 및 Docker Compose** 설치 (Docker Desktop 권장)
+- **Git** 설치
 - GitHub 계정 및 저장소 접근 권한
+- **최소 시스템 요구사항**: 8GB RAM, 20GB 디스크 여유 공간
 
 ### 저장소 클론
 
@@ -86,37 +87,165 @@ git clone git@github.com:gdtknight/42lib-flutter.git
 cd 42lib-flutter
 ```
 
-### Docker 개발 환경 설정
+### Docker 통합 개발 환경 구축
+
+#### 1단계: 환경 변수 설정
 
 ```bash
-# 1. Docker 컨테이너 빌드 및 시작
+# Backend 환경 변수 파일 확인 (이미 생성되어 있음)
+cat backend/.env
+
+# 필요한 경우 42 OAuth 정보 업데이트
+# FORTYTWO_CLIENT_ID, FORTYTWO_CLIENT_SECRET 설정
+```
+
+#### 2단계: Docker Compose로 전체 스택 실행
+
+```bash
+# docker/ 디렉토리로 이동
 cd docker
+
+# 컨테이너 빌드 및 시작 (최초 실행 시 5-10분 소요)
 docker-compose up -d
 
-# 2. 서비스 확인
+# 서비스 상태 확인
 docker-compose ps
-# flutter-dev (포트 8080), backend-api (포트 3000), postgres-db (포트 5432)
 
-# 3. Flutter 컨테이너 접속
-docker-compose exec flutter-dev bash
+# 예상 출력:
+# NAME                  STATUS          PORTS
+# 42lib-postgres        Up (healthy)    0.0.0.0:5432->5432/tcp
+# 42lib-redis           Up (healthy)    0.0.0.0:6379->6379/tcp
+# 42lib-backend         Up (healthy)    0.0.0.0:3000->3000/tcp
+# 42lib-flutter-dev     Up              -
+```
 
-# 4. Flutter 의존성 설치
-flutter pub get
+#### 3단계: 데이터베이스 초기화
 
-# 5. Backend 컨테이너 접속 (별도 터미널)
+```bash
+# Backend 컨테이너에 접속
 docker-compose exec backend-api sh
 
-# 6. Prisma 마이그레이션 실행
+# Prisma 마이그레이션 실행
 npm run migrate
 
-# 7. 개발 서버 시작
-# Backend: npm run dev (자동 시작됨)
-# Flutter Web: flutter run -d web-server --web-port=8080
+# 초기 데이터 시드 (선택사항)
+npm run seed
 
-# 8. 접속 확인
-# Flutter Web: http://localhost:8080
-# Backend API: http://localhost:3000
-# PostgreSQL: localhost:5432
+# 컨테이너 종료 (Ctrl+D 또는 exit)
+```
+
+#### 4단계: Flutter 의존성 설치
+
+```bash
+# Flutter 컨테이너에 접속
+docker-compose exec flutter-dev bash
+
+# Flutter 의존성 설치
+flutter pub get
+
+# 컨테이너 종료 (Ctrl+D 또는 exit)
+```
+
+#### 5단계: 서비스 접속 확인
+
+```bash
+# Backend API Health Check
+curl http://localhost:3000/health
+# 예상 응답: {"status":"ok","timestamp":"..."}
+
+# PostgreSQL 연결 확인
+docker-compose exec postgres-db psql -U library_user -d library_db -c "SELECT 1;"
+
+# Redis 연결 확인
+docker-compose exec redis-cache redis-cli ping
+# 예상 응답: PONG
+```
+
+#### 6단계: 개발 서버 실행
+
+**Backend API** (자동 실행됨):
+- 포트: `http://localhost:3000`
+- API 엔드포인트: `http://localhost:3000/api/v1`
+- Health Check: `http://localhost:3000/health`
+
+**Flutter Web 개발 서버**:
+```bash
+# Flutter 컨테이너에서 실행
+docker-compose exec flutter-dev bash
+flutter run -d web-server --web-hostname=0.0.0.0 --web-port=8080
+
+# 브라우저 접속: http://localhost:8080
+```
+
+**Flutter Android 개발** (AVD 필요):
+```bash
+# AVD 실행 후
+flutter run -d android
+```
+
+**Flutter iOS 개발** (macOS만 해당):
+```bash
+# Simulator 실행 후
+flutter run -d ios
+```
+
+#### 개발 환경 관리
+
+```bash
+# 로그 확인
+docker-compose logs -f backend-api    # Backend 로그
+docker-compose logs -f postgres-db     # PostgreSQL 로그
+
+# 컨테이너 재시작
+docker-compose restart backend-api
+
+# 컨테이너 중지
+docker-compose stop
+
+# 컨테이너 시작
+docker-compose start
+
+# 전체 환경 종료 (데이터 유지)
+docker-compose down
+
+# 전체 환경 종료 + 볼륨 삭제 (데이터 삭제)
+docker-compose down -v
+
+# 빌드 캐시 클리어 후 재빌드
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+#### 트러블슈팅
+
+**문제 1: 포트 충돌 (이미 사용 중)**
+```bash
+# 해결: docker-compose.yml에서 포트 변경
+# 예: 3000:3000 → 3001:3000
+```
+
+**문제 2: 데이터베이스 마이그레이션 실패**
+```bash
+# Prisma Client 재생성
+docker-compose exec backend-api npx prisma generate
+docker-compose exec backend-api npm run migrate
+```
+
+**문제 3: Flutter 의존성 설치 실패**
+```bash
+# Pub cache 클리어
+docker-compose exec flutter-dev flutter clean
+docker-compose exec flutter-dev flutter pub get
+```
+
+**문제 4: 컨테이너 헬스체크 실패**
+```bash
+# 로그 확인
+docker-compose logs backend-api
+docker-compose logs postgres-db
+
+# 컨테이너 재시작
+docker-compose restart backend-api
 ```
 
 ### 개발 워크플로우
