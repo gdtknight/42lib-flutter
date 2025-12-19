@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../data/models/book.dart';
 import '../../data/repositories/book_repository_impl.dart';
 import '../../domain/repositories/book_repository.dart';
 import '../widgets/book_card.dart';
 import '../widgets/book_search_bar.dart';
+import '../../../../models/book.dart' as app_book;
 
 /// Book list screen displaying available books
 class BookListScreen extends StatefulWidget {
@@ -205,12 +207,22 @@ class _BookListScreenState extends State<BookListScreen> {
   }
 
   void _onBookTap(Book book) {
-    // TODO: Navigate to book detail screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Tapped on: ${book.title}'),
-        duration: const Duration(seconds: 1),
-      ),
+    // Convert feature Book to app Book model for navigation
+    final appBook = app_book.Book(
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      category: book.category ?? 'Unknown',
+      isbn: book.isbn,
+      publicationYear: book.publicationYear,
+      quantity: book.quantity ?? 1,
+      availableQuantity: book.availableQuantity ?? 0,
+      description: book.description,
+      coverImageUrl: book.coverImageUrl,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     );
+    
+    context.go('/books/${book.id}', extra: appBook);
   }
 }
