@@ -153,12 +153,13 @@ class LoanBloc extends Bloc<LoanEvent, LoanState> {
       // Find user's position in queue if they have a reservation
       final myReservations = await reservationRepository.getMyReservations();
       final myReservation = myReservations.firstWhere(
-        (r) => r.bookId == event.bookId && r.status == ReservationStatus.active,
+        (r) =>
+            r.bookId == event.bookId && r.status == ReservationStatus.waiting,
         orElse: () => Reservation(
           id: '',
           studentId: '',
           bookId: '',
-          position: 0,
+          queuePosition: 0,
           status: ReservationStatus.cancelled,
           createdAt: DateTime.now(),
         ),

@@ -227,8 +227,9 @@ class _MyLoansScreenState extends State<MyLoansScreen>
   }
 
   Widget _buildReservationsList(List<Reservation> reservations) {
-    final activeReservations =
-        reservations.where((r) => r.status == ReservationStatus.active).toList();
+    final activeReservations = reservations
+        .where((r) => r.status == ReservationStatus.active)
+        .toList();
 
     if (activeReservations.isEmpty) {
       return const Center(
@@ -255,7 +256,7 @@ class _MyLoansScreenState extends State<MyLoansScreen>
           return Column(
             children: [
               ReservationQueueIndicator(
-                position: reservation.position,
+                position: reservation.queuePosition,
                 totalInQueue: 10, // TODO: Get from API
               ),
               const SizedBox(height: 8),
@@ -288,7 +289,9 @@ class _MyLoansScreenState extends State<MyLoansScreen>
           ElevatedButton(
             onPressed: () {
               Navigator.pop(ctx);
-              context.read<LoanBloc>().add(CancelLoanRequest(requestId: requestId));
+              context
+                  .read<LoanBloc>()
+                  .add(CancelLoanRequest(requestId: requestId));
             },
             child: const Text('예'),
           ),

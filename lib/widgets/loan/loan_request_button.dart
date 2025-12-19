@@ -52,8 +52,8 @@ class LoanRequestButton extends StatelessWidget {
       builder: (context, loanState) {
         final authState = context.watch<AuthBloc>().state;
         final isAuthenticated = authState is Authenticated;
-        final isLoading = loanState is LoanRequestCreating &&
-            (loanState).bookId == bookId;
+        final isLoading =
+            loanState is LoanRequestCreating && (loanState).bookId == bookId;
 
         if (!isAuthenticated) {
           return ElevatedButton.icon(
