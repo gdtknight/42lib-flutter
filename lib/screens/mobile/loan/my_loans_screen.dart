@@ -210,7 +210,7 @@ class _MyLoansScreenState extends State<MyLoansScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              '요청일: ${_formatDate(request.requestedAt)}',
+              '요청일: ${_formatDate(request.requestDate)}',
               style: theme.textTheme.bodySmall,
             ),
             if (request.notes != null) ...[
