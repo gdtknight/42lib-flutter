@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/mobile/home/home_screen.dart' as mobile;
 import '../screens/mobile/book_detail/book_detail_screen.dart';
+import '../screens/mobile/auth/login_screen.dart';
+import '../screens/mobile/loan/my_loans_screen.dart';
 import '../models/book.dart';
 
 /// 앱 라우팅 설정
@@ -10,6 +12,8 @@ class AppRouter {
   /// 라우트 경로 상수
   static const String home = '/';
   static const String bookDetail = '/books/:id';
+  static const String login = '/login';
+  static const String myLoans = '/my-loans';
 
   /// GoRouter 인스턴스
   static GoRouter get router => _router;
@@ -26,7 +30,7 @@ class AppRouter {
         builder: (context, state) => const mobile.HomeScreen(),
       ),
 
-      // 도서 상세 (User Story 1)
+      // 도서 상세 (User Story 1, User Story 2)
       GoRoute(
         path: bookDetail,
         name: 'book-detail',
@@ -46,6 +50,20 @@ class AppRouter {
             ),
           );
         },
+      ),
+
+      // 로그인 (User Story 2)
+      GoRoute(
+        path: login,
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+
+      // 내 대출 목록 (User Story 2)
+      GoRoute(
+        path: myLoans,
+        name: 'my-loans',
+        builder: (context, state) => const MyLoansScreen(),
       ),
     ],
 

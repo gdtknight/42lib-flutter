@@ -4,12 +4,17 @@ import '../models/loan_request.dart';
 /// Follows Repository pattern for data abstraction
 abstract class LoanRequestRepository {
   /// Create a new loan request
-  /// Returns the created loan request
-  Future<LoanRequest> createLoanRequest({
-    required String studentId,
+  /// Returns the created loan request or Reservation if book unavailable
+  Future<dynamic> createLoanRequest({
     required String bookId,
     String? notes,
   });
+
+  /// Get current user's loan requests
+  Future<List<LoanRequest>> getMyLoanRequests();
+
+  /// Cancel a loan request
+  Future<void> cancelLoanRequest(String requestId);
 
   /// Get loan request by ID
   /// Returns null if not found
@@ -34,10 +39,6 @@ abstract class LoanRequestRepository {
     int page = 1,
     int limit = 20,
   });
-
-  /// Cancel a loan request (student only, pending status only)
-  /// Returns updated loan request
-  Future<LoanRequest> cancelLoanRequest(String id);
 
   /// Check if student has duplicate pending request for book
   /// Returns true if duplicate exists

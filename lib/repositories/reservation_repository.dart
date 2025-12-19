@@ -3,6 +3,15 @@ import '../models/reservation.dart';
 /// Repository interface for Reservation operations
 /// Follows Repository pattern for data abstraction
 abstract class ReservationRepository {
+  /// Get current user's reservations
+  Future<List<Reservation>> getMyReservations();
+
+  /// Get reservation queue for a book
+  Future<List<Reservation>> getReservationQueue({required String bookId});
+
+  /// Cancel a reservation
+  Future<void> cancelReservation(String reservationId);
+
   /// Create a new reservation (automatic when book unavailable)
   /// Returns the created reservation with queue position
   Future<Reservation> createReservation({
@@ -40,10 +49,6 @@ abstract class ReservationRepository {
     required String studentId,
     required String bookId,
   });
-
-  /// Cancel a reservation (student only, waiting status only)
-  /// Returns updated reservation
-  Future<Reservation> cancelReservation(String id);
 
   /// Check if student has active reservation for book
   /// Returns true if active reservation exists
