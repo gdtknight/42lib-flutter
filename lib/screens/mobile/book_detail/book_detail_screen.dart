@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../models/book.dart';
+import '../../../widgets/loan/loan_request_button.dart';
 
 class BookDetailScreen extends StatelessWidget {
   final Book book;
@@ -227,61 +228,12 @@ class BookDetailScreen extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: book.isAvailable
-                    ? () {
-                        // TODO: Implement loan request
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('대여 신청 기능은 준비 중입니다'),
-                          ),
-                        );
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  book.isAvailable ? '대여 신청' : '대여 불가',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            OutlinedButton(
-              onPressed: () {
-                // TODO: Implement reservation
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('예약 기능은 준비 중입니다'),
-                  ),
-                );
-              },
-              style: OutlinedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                '예약',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+        child: LoanRequestButton(
+          bookId: book.id,
+          isAvailable: book.isAvailable,
+          onSuccess: () {
+            // Optionally refresh book detail or navigate
+          },
         ),
       ),
     );
