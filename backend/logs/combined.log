@@ -71,3 +71,4 @@ The table `public.books` does not exist in the current database.
 2025-12-19 12:51:21 [INFO]: 📚 42lib Backend API v1
 2025-12-19 12:51:21 [INFO]: 🔗 Health: http://localhost:3000/health
 2025-12-19 12:51:21 [INFO]: 🔗 API: http://localhost:3000/api/v1
+2025-12-19 13:05:33 [INFO]: SIGTERM received, closing server...

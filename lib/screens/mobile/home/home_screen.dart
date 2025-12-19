@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../state/book/book_bloc.dart';
 import '../../../state/book/book_event.dart';
 import '../../../state/book/book_state.dart';
 import '../../../widgets/book_card.dart';
 import '../../../widgets/book_search_bar.dart' as custom;
 import '../../../widgets/category_filter.dart';
-import '../book_detail/book_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -184,13 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         return BookCard(
                           book: book,
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    BookDetailScreen(book: book),
-                              ),
-                            );
+                            context.go('/books/${book.id}', extra: book);
                           },
                         );
                       },
