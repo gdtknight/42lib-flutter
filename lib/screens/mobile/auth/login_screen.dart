@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../state/auth/auth_bloc.dart';
 import '../../../state/auth/auth_event.dart';
 import '../../../state/auth/auth_state.dart';
@@ -17,7 +16,13 @@ class LoginScreen extends StatelessWidget {
           if (state is Authenticated) {
             Navigator.pushReplacementNamed(context, '/');
           } else if (state is OAuthLoginInProgress) {
-            _launchOAuth(context, state.authUrl);
+            // TODO: OAuth 브라우저 연동 구현 필요
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('OAuth URL: ${state.authUrl}'),
+                duration: const Duration(seconds: 3),
+              ),
+            );
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -95,6 +100,26 @@ class LoginScreen extends StatelessWidget {
                                 .withOpacity(0.6),
                           ),
                     ),
+                    const SizedBox(height: 32),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withOpacity(0.1),
+                        border: Border.all(color: Colors.amber),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        children: [
+                          const Icon(Icons.info_outline, color: Colors.amber),
+                          const SizedBox(height: 8),
+                          Text(
+                            'OAuth 브라우저 연동은 플랫폼별 구현이 필요합니다.\n현재는 개발 중입니다.',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                   const Spacer(),
                   OutlinedButton.icon(
@@ -114,21 +139,5 @@ class LoginScreen extends StatelessWidget {
         },
       ),
     );
-  }
-
-  Future<void> _launchOAuth(BuildContext context, String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('브라우저를 열 수 없습니다'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
   }
 }

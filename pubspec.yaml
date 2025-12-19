@@ -32,7 +32,6 @@ dependencies:
   
   # UI & Images
   cached_network_image: ^3.3.0
-  url_launcher: ^6.2.2
   
   # Utilities
   intl: ^0.18.1
