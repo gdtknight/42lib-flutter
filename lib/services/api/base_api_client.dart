@@ -5,8 +5,12 @@ import '../storage/secure_storage_service.dart';
 class BaseApiClient {
   late final Dio _dio;
   final String baseUrl;
+  final SecureStorageService _secureStorage;
 
-  BaseApiClient({required this.baseUrl}) {
+  BaseApiClient({
+    required this.baseUrl,
+    SecureStorageService? secureStorage,
+  }) : _secureStorage = secureStorage ?? SecureStorageService() {
     _dio = Dio(BaseOptions(
       baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 30),
@@ -16,7 +20,7 @@ class BaseApiClient {
 
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final token = await SecureStorageService.getAccessToken();
+        final token = await _secureStorage.getAccessToken();
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }

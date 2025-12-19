@@ -228,7 +228,9 @@ class _MyLoansScreenState extends State<MyLoansScreen>
 
   Widget _buildReservationsList(List<Reservation> reservations) {
     final activeReservations = reservations
-        .where((r) => r.status == ReservationStatus.active)
+        .where((r) =>
+            r.status == ReservationStatus.waiting ||
+            r.status == ReservationStatus.notified)
         .toList();
 
     if (activeReservations.isEmpty) {
