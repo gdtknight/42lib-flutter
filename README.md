@@ -435,3 +435,129 @@ CI/CD 전략 (Constitution XVI):
 
 자세한 내용은 `docs/web-test-guide.md` 참조
 
+
+## 🚀 빠른 시작 (Quick Start)
+
+### 1. 전체 환경 시작
+```bash
+# Makefile 사용 (추천)
+make up
+
+# 또는 직접 Docker Compose 사용
+docker compose -f docker/docker-compose.yml up -d
+```
+
+**자동으로 실행되는 것들**:
+- ✅ PostgreSQL 데이터베이스
+- ✅ Redis 캐시
+- ✅ Backend API 서버 (포트 3000)
+- ✅ Flutter Web 서버 (포트 8080) **← 자동 실행!**
+
+### 2. 브라우저 접속
+- **Frontend**: http://localhost:8080
+- **Backend API**: http://localhost:3000/health
+
+### 3. 주요 명령어
+
+#### 전체 환경
+```bash
+make up          # 모든 서비스 시작
+make down        # 모든 서비스 중지
+make restart     # 모든 서비스 재시작
+make logs        # 모든 서비스 로그 확인
+make status      # 서비스 상태 확인
+make health      # 헬스 체크
+```
+
+#### Flutter Web
+```bash
+make web-logs    # Flutter Web 로그 실시간 확인
+make web-restart # Flutter Web 서버 재시작
+make web-manual  # 수동 모드로 전환 (컨테이너 접속)
+```
+
+#### 데이터베이스
+```bash
+make db-shell    # PostgreSQL 접속
+make db-migrate  # Prisma 마이그레이션 실행
+```
+
+#### 컨테이너 접속
+```bash
+make backend-shell  # Backend 컨테이너 접속
+make flutter-shell  # Flutter 컨테이너 접속
+```
+
+### 4. 로그 확인
+```bash
+# 모든 서비스 로그
+make logs
+
+# Flutter Web만
+make web-logs
+
+# Backend만
+docker compose -f docker/docker-compose.yml logs -f backend-api
+```
+
+### 5. 문제 해결
+
+#### Flutter Web이 실행되지 않을 때
+```bash
+# 로그 확인
+make web-logs
+
+# 재시작
+make web-restart
+
+# 의존성 재설치
+make flutter-shell
+flutter clean
+flutter pub get
+exit
+make web-restart
+```
+
+#### Backend API 오류
+```bash
+# 로그 확인
+docker compose -f docker/docker-compose.yml logs backend-api
+
+# 재시작
+docker compose -f docker/docker-compose.yml restart backend-api
+```
+
+#### 데이터베이스 초기화
+```bash
+# 마이그레이션 실행
+make db-migrate
+
+# 완전 초기화 (주의: 모든 데이터 삭제)
+make db-reset
+```
+
+## 📖 개발 가이드
+
+### Hot Reload
+Flutter Web 서버는 기본적으로 hot reload를 지원합니다:
+- 코드 수정 후 저장
+- 브라우저에서 자동으로 반영 (또는 컨테이너에서 `r` 입력)
+
+### 수동 모드로 전환
+자동 실행이 아닌 수동으로 Flutter를 실행하고 싶을 때:
+```bash
+make web-manual
+# 컨테이너 내부에서:
+cd /app
+flutter run -d web-server --web-hostname=0.0.0.0 --web-port=8080
+```
+
+### 환경 정리
+```bash
+# 컨테이너만 중지
+make down
+
+# 컨테이너 + 볼륨 삭제 (완전 초기화)
+make clean
+```
+
