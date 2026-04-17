@@ -1,0 +1,108 @@
+# =============================================================================
+# Flutter / Dart
+# =============================================================================
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+.fvm/
+pubspec.lock.bak
+
+# Generated code
+**/*.g.dart.bak
+**/*.freezed.dart.bak
+
+# Flutter/Dart platform-specific
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/.last_build_id
+
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/key.properties
+*.jks
+**/android/app/debug
+**/android/app/profile
+**/android/app/release
+
+# Web
+/web/icons/*.png.gz
+
+# =============================================================================
+# Node.js (backend/)
+# =============================================================================
+node_modules/
+dist/
+*.tsbuildinfo
+.npm
+.eslintcache
+.pnp.*
+
+# Jest / test artifacts
+coverage/
+*.lcov
+
+# Prisma local artifacts (keep schema.prisma, migrations/; ignore local env)
+backend/prisma/.env
+
+# =============================================================================
+# Environments & Secrets
+# =============================================================================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+credentials.json
+
+# =============================================================================
+# Editors / IDE
+# =============================================================================
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# Claude Code local session state
+.claude/
+
+# =============================================================================
+# OS
+# =============================================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# =============================================================================
+# Project-local
+# =============================================================================
+logs/
+*.log
+
+# =============================================================================
+# Misc
+# =============================================================================
+*.swp
+*.swo
+*~
