@@ -20,15 +20,14 @@ class AppRouter {
       GoRoute(
         path: '/books/:id',
         builder: (context, state) {
-          final bookId = state.pathParameters['id'];
           final book = state.extra as Book?;
-          
+
           if (book != null) {
             return BookDetailScreen(book: book);
           }
-          
-          // If no book provided, show error
-          return BookListScreen();
+
+          // If no book provided, fall back to list
+          return const BookListScreen();
         },
       ),
       
