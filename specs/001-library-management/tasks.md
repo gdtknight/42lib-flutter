@@ -8,6 +8,8 @@
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
+> **Resync Note (#27, 2026-04-18)**: Phase 1-5 progress was re-verified against actual code state. See PR #27 for the verification table mapping each task to its source file or PR. Items still unchecked are real gaps (skipped tests, missing migration files, deferred polish items, US4 not started). Phase 6-13 not yet resynced.
+
 ## Format: `- [ ] [ID] [P?] [Story?] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
@@ -32,7 +34,7 @@
 - [X] T008 [P] Configure Prisma schema in backend/prisma/schema.prisma with all 8 entities
 - [ ] T009 [P] Verify iOS build configuration in ios/ directory (support iOS 14-17)
 - [ ] T010 [P] Verify Android build configuration in android/ directory (support Android 11-14)
-- [ ] T011 [P] Verify Web build configuration in web/ directory
+- [X] T011 [P] Verify Web build configuration in web/ directory
 - [X] T012 Create environment configuration files (.env.example for backend, .dockerignore)
 - [X] T013 Initialize Git repository structure with proper .gitignore
 - [X] T014 Create README.md with Korean project description and setup instructions
@@ -61,8 +63,8 @@
 - [X] T028 [P] Create backend error handling middleware in backend/src/middleware/error_handler.ts
 - [X] T029 [P] Implement backend logging with Winston in backend/src/utils/logger.ts
 - [X] T030 [P] Create JWT utilities for token generation/validation in backend/src/utils/jwt.ts
-- [ ] T031 Validate Docker environment startup and container communication
-- [ ] T032 Run database seed script for initial test data in backend/prisma/seed.ts
+- [X] T031 Validate Docker environment startup and container communication
+- [X] T032 Run database seed script for initial test data in backend/prisma/seed.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -78,15 +80,15 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T033 [P] [US1] Create unit test for Book model in test/unit_test/models/book_test.dart
+- [X] T033 [P] [US1] Create unit test for Book model in test/unit_test/models/book_test.dart
 - [ ] T034 [P] [US1] Create unit test for BookRepository in test/unit_test/repositories/book_repository_test.dart
 - [ ] T035 [P] [US1] Create unit test for BookBloc in test/unit_test/state/book/book_bloc_test.dart
-- [ ] T036 [P] [US1] Create widget test for BookCard in test/widget_test/widgets/book_card_test.dart
-- [ ] T037 [P] [US1] Create widget test for SearchBar in test/widget_test/widgets/search_bar_test.dart
+- [X] T036 [P] [US1] Create widget test for BookCard in test/widget_test/widgets/book_card_test.dart
+- [X] T037 [P] [US1] Create widget test for SearchBar in test/widget_test/widgets/book_search_bar_test.dart
 - [ ] T038 [P] [US1] Create widget test for HomeScreen in test/widget_test/screens/mobile/home/home_screen_test.dart
 - [ ] T039 [P] [US1] Create integration test for book browsing flow in test/integration_test/book_browsing_test.dart
-- [ ] T040 [P] [US1] Create backend unit test for GET /books endpoint in backend/tests/unit/books.test.ts
-- [ ] T041 [P] [US1] Create backend unit test for GET /books/:id endpoint in backend/tests/unit/books.test.ts
+- [X] T040 [P] [US1] Create backend unit test for GET /books endpoint in backend/tests/unit/books.test.ts
+- [X] T041 [P] [US1] Create backend unit test for GET /books/:id endpoint in backend/tests/unit/books.test.ts
 
 ### Implementation for User Story 1
 
@@ -102,7 +104,7 @@
 - [X] T046 [P] [US1] Create Book Prisma model queries in backend/src/services/book_service.ts
 - [X] T047 [P] [US1] Implement GET /books endpoint with pagination/filters in backend/src/routes/books.ts
 - [X] T048 [P] [US1] Implement GET /books/:id endpoint in backend/src/routes/books.ts
-- [ ] T049 [US1] Add request validation middleware for book endpoints in backend/src/middleware/validation/book_validation.ts
+- [X] T049 [US1] Add request validation middleware for book endpoints in backend/src/middleware/validation/book_validation.ts
 
 **State Management**
 
@@ -120,14 +122,14 @@
 
 - [X] T056 [US1] Create HomeScreen for book browsing in lib/screens/mobile/home/home_screen.dart
 - [X] T057 [US1] Create BookDetailScreen in lib/screens/mobile/book_detail/book_detail_screen.dart
-- [X] T058 [US1] Add HomeScreen and BookDetailScreen to navigation routes in lib/app/routes.dart
+- [X] T058 [US1] Add HomeScreen and BookDetailScreen to navigation routes in lib/core/routes/app_router.dart (legacy duplicate at lib/app/routes.dart)
 
 **Performance & Polish**
 
-- [ ] T059 [US1] Implement lazy loading with ListView.builder in HomeScreen
-- [ ] T060 [US1] Add search debouncing (300ms) to SearchBar widget
-- [ ] T061 [US1] Implement offline caching for book catalog in BookRepository
-- [ ] T062 [US1] Add loading states and error handling to HomeScreen
+- [X] T059 [US1] Implement lazy loading with ListView.builder in HomeScreen
+- [X] T060 [US1] Add search debouncing (300ms) to SearchBar widget *(implemented at 500ms default — see Resync notes)*
+- [X] T061 [US1] Implement offline caching for book catalog in BookRepository
+- [X] T062 [US1] Add loading states and error handling to HomeScreen
 - [ ] T063 [US1] Add pagination for book list (20 books per page)
 
 **Checkpoint**: User Story 1 complete - students can browse and search books independently
@@ -204,7 +206,7 @@
 ### Tests for User Story 2
 
 - [ ] T093 [P] [US2] Create unit test for LoanRequest model in test/unit_test/models/loan_request_test.dart
-- [ ] T094 [P] [US2] Create unit test for Reservation model in test/unit_test/models/reservation_test.dart
+- [X] T094 [P] [US2] Create unit test for Reservation model in test/unit_test/models/reservation_test.dart
 - [ ] T095 [P] [US2] Create unit test for Student model in test/unit_test/models/student_test.dart
 - [ ] T096 [P] [US2] Create unit test for LoanBloc in test/unit_test/state/loan/loan_bloc_test.dart
 - [ ] T097 [P] [US2] Create widget test for loan request flow in test/widget_test/screens/mobile/loan/loan_request_test.dart
@@ -237,33 +239,33 @@
 
 **State Management**
 
-- [ ] T116 [P] [US2] Create LoanEvent classes in lib/state/loan/loan_event.dart
-- [ ] T117 [P] [US2] Create LoanState classes in lib/state/loan/loan_state.dart
-- [ ] T118 [US2] Implement LoanBloc in lib/state/loan/loan_bloc.dart
-- [ ] T119 [US2] Update AuthBloc to support 42 OAuth flow
+- [X] T116 [P] [US2] Create LoanEvent classes in lib/state/loan/loan_event.dart
+- [X] T117 [P] [US2] Create LoanState classes in lib/state/loan/loan_state.dart
+- [X] T118 [US2] Implement LoanBloc in lib/state/loan/loan_bloc.dart
+- [X] T119 [US2] Update AuthBloc to support 42 OAuth flow
 
 **Services**
 
-- [ ] T120 [P] [US2] Implement 42 OAuth client in lib/services/auth/auth_42_client.dart
-- [ ] T121 [US2] Implement secure token storage for 42 auth tokens in lib/services/storage/secure_storage_service.dart
+- [X] T120 [P] [US2] Implement 42 OAuth client in lib/services/auth/auth_42_client.dart
+- [X] T121 [US2] Implement secure token storage for 42 auth tokens in lib/services/storage/secure_storage_service.dart
 
 **UI Components**
 
-- [ ] T122 [P] [US2] Create LoanRequestButton widget in lib/widgets/loan/loan_request_button.dart
-- [ ] T123 [P] [US2] Create ReservationQueueIndicator widget in lib/widgets/loan/reservation_queue_indicator.dart
+- [X] T122 [P] [US2] Create LoanRequestButton widget in lib/widgets/loan/loan_request_button.dart
+- [X] T123 [P] [US2] Create ReservationQueueIndicator widget in lib/widgets/loan/reservation_queue_indicator.dart
 
 **Screens**
 
-- [ ] T124 [US2] Create LoginScreen with 42 OAuth in lib/screens/mobile/auth/login_screen.dart
-- [ ] T125 [US2] Create MyLoansScreen in lib/screens/mobile/loan/my_loans_screen.dart
-- [ ] T126 [US2] Update BookDetailScreen to show loan request button
-- [ ] T127 [US2] Add loan-related routes to navigation in lib/app/routes.dart
+- [X] T124 [US2] Create LoginScreen with 42 OAuth in lib/screens/mobile/auth/login_screen.dart
+- [X] T125 [US2] Create MyLoansScreen in lib/screens/mobile/loan/my_loans_screen.dart
+- [X] T126 [US2] Update BookDetailScreen to show loan request button
+- [X] T127 [US2] Add loan-related routes to navigation in lib/core/routes/app_router.dart (legacy duplicate at lib/app/routes.dart)
 
 **Integration & Polish**
 
 - [ ] T128 [US2] Implement graceful handling of 42 API failures with error messages
 - [ ] T129 [US2] Add loan request confirmation dialogs
-- [ ] T130 [US2] Display reservation queue position in student profile
+- [X] T130 [US2] Display reservation queue position in student profile
 - [ ] T131 [US2] Add offline queue for loan requests (sync when online)
 
 **Checkpoint**: User Story 2 complete - students can request loans independently, integrates with US1
