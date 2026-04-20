@@ -127,7 +127,7 @@
 **Performance & Polish**
 
 - [X] T059 [US1] Implement lazy loading with ListView.builder in HomeScreen
-- [X] T060 [US1] Add search debouncing (300ms) to SearchBar widget *(implemented at 500ms default — see Resync notes)*
+- [X] T060 [US1] Add search debouncing (500ms) to SearchBar widget
 - [X] T061 [US1] Implement offline caching for book catalog in BookRepository
 - [X] T062 [US1] Add loading states and error handling to HomeScreen
 - [ ] T063 [US1] Add pagination for book list (20 books per page)
