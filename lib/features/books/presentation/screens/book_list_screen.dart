@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/models/book.dart';
 import '../../data/repositories/book_repository_impl.dart';
-import '../../domain/repositories/book_repository.dart';
 import '../bloc/book_bloc.dart';
 import '../bloc/book_event.dart';
 import '../bloc/book_state.dart';
