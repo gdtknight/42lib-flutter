@@ -23,26 +23,32 @@ GoRouter _routerFor(BookBloc bloc) => GoRouter(
     );
 
 Future<void> _pumpScreen(WidgetTester tester, BookBloc bloc) async {
-  await tester.pumpWidget(
-    MaterialApp.router(routerConfig: _routerFor(bloc)),
-  );
+  await tester.pumpWidget(MaterialApp.router(routerConfig: _routerFor(bloc)));
+}
+
+/// Pump enough frames to let the BookBloc process FetchBooks and render
+/// the next state. Using explicit `pump(duration)` avoids `pumpAndSettle`
+/// hanging on `CircularProgressIndicator`'s infinite animation.
+Future<void> _flushBlocFrames(WidgetTester tester) async {
+  for (var i = 0; i < 5; i++) {
+    await tester.pump(const Duration(milliseconds: 10));
+  }
 }
 
 void main() {
   group('BookListScreen (T038)', () {
-    testWidgets('shows CircularProgressIndicator in loading state',
+    testWidgets('shows CircularProgressIndicator while loading',
         (tester) async {
       final repository = FakeBookRepository()
         ..books = [makeBook()]
-        ..delay = const Duration(milliseconds: 200);
+        ..delay = const Duration(seconds: 5); // long enough to stay in loading
       final bloc = BookBloc(repository: repository)..add(const FetchBooks());
 
       await _pumpScreen(tester, bloc);
-      await tester.pump();
+      await tester.pump(); // first frame — BookInitial or transitioning
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      await tester.pumpAndSettle();
       await bloc.close();
     });
 
@@ -56,7 +62,7 @@ void main() {
       final bloc = BookBloc(repository: repository)..add(const FetchBooks());
 
       await _pumpScreen(tester, bloc);
-      await tester.pumpAndSettle();
+      await _flushBlocFrames(tester);
 
       expect(find.byType(BookCard), findsNWidgets(3));
       expect(find.text('Alpha'), findsOneWidget);
@@ -72,49 +78,49 @@ void main() {
       final bloc = BookBloc(repository: repository)..add(const FetchBooks());
 
       await _pumpScreen(tester, bloc);
-      await tester.pumpAndSettle();
+      await _flushBlocFrames(tester);
 
       expect(find.text('No books available'), findsOneWidget);
 
       await bloc.close();
     });
 
-    testWidgets('shows Retry button and calls FetchBooks again on error',
+    testWidgets('shows Retry button on error and re-fetches when tapped',
         (tester) async {
       final repository = FakeBookRepository()..error = Exception('boom');
       final bloc = BookBloc(repository: repository)..add(const FetchBooks());
 
       await _pumpScreen(tester, bloc);
-      await tester.pumpAndSettle();
+      await _flushBlocFrames(tester);
 
       expect(find.textContaining('Failed to load books'), findsOneWidget);
       expect(find.widgetWithText(ElevatedButton, 'Retry'), findsOneWidget);
 
       // Recover and retry
       repository.error = null;
-      repository.books = [makeBook(id: 'retried')];
+      repository.books = [makeBook(id: 'retried', title: 'Retried')];
 
       await tester.tap(find.widgetWithText(ElevatedButton, 'Retry'));
-      await tester.pumpAndSettle();
+      await _flushBlocFrames(tester);
 
-      expect(find.byType(BookCard), findsOneWidget);
+      expect(find.text('Retried'), findsOneWidget);
 
       await bloc.close();
     });
 
     testWidgets('toggles between Grid and List view via AppBar action',
         (tester) async {
-      final repository = FakeBookRepository()
-        ..books = [makeBook(id: 'g1')];
+      final repository = FakeBookRepository()..books = [makeBook(id: 'g1')];
       final bloc = BookBloc(repository: repository)..add(const FetchBooks());
 
       await _pumpScreen(tester, bloc);
-      await tester.pumpAndSettle();
+      await _flushBlocFrames(tester);
 
-      expect(find.byIcon(Icons.list), findsOneWidget); // grid active, shows list icon
+      // Grid view active → AppBar shows list icon as toggle affordance
+      expect(find.byIcon(Icons.list), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.list));
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.byIcon(Icons.grid_view), findsOneWidget);
 

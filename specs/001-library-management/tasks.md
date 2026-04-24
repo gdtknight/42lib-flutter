@@ -86,7 +86,7 @@
 - [X] T036 [P] [US1] Create widget test for BookCard in test/widget_test/widgets/book_card_test.dart
 - [X] T037 [P] [US1] Create widget test for SearchBar in test/widget_test/widgets/book_search_bar_test.dart
 - [X] T038 [P] [US1] Create widget test for BookListScreen in test/features/books/presentation/screens/book_list_screen_test.dart
-- [X] T039 [P] [US1] Create integration test for book browsing flow in test/integration_test/book_browsing_test.dart
+- [X] T039 [P] [US1] Create integration test for book browsing flow in integration_test/book_browsing_test.dart
 - [X] T040 [P] [US1] Create backend unit test for GET /books endpoint in backend/tests/unit/books.test.ts
 - [X] T041 [P] [US1] Create backend unit test for GET /books/:id endpoint in backend/tests/unit/books.test.ts
 

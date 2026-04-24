@@ -43,13 +43,13 @@ void main() {
     );
 
     blocTest<BookBloc, BookState>(
-      'debounces SearchBooks and emits Loaded after 500ms delay',
+      'emits [Loading, Loaded] on SearchBooks '
+      '(UI-level debounce in BookSearchBar widget)',
       build: () {
         repository.books = [makeBook(id: 's1', title: 'Searched')];
         return BookBloc(repository: repository);
       },
       act: (bloc) => bloc.add(const SearchBooks(query: 'clean')),
-      wait: const Duration(milliseconds: 600),
       expect: () => [
         isA<BookLoading>(),
         isA<BookLoaded>()
@@ -65,7 +65,6 @@ void main() {
         return BookBloc(repository: repository);
       },
       act: (bloc) => bloc.add(const SearchBooks(query: '')),
-      wait: const Duration(milliseconds: 100),
       expect: () => [
         isA<BookLoading>(),
         isA<BookLoaded>()

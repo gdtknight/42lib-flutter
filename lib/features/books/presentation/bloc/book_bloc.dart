@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/repositories/book_repository.dart';
 import '../../data/models/book.dart';
@@ -7,10 +6,8 @@ import 'book_state.dart';
 
 class BookBloc extends Bloc<BookEvent, BookState> {
   static const int _defaultLimit = 20;
-  static const Duration _searchDebounce = Duration(milliseconds: 500);
 
   final BookRepository repository;
-  Timer? _debounceTimer;
 
   BookBloc({required this.repository}) : super(const BookInitial()) {
     on<FetchBooks>(_onFetchBooks);
@@ -46,27 +43,24 @@ class BookBloc extends Bloc<BookEvent, BookState> {
     SearchBooks event,
     Emitter<BookState> emit,
   ) async {
-    _debounceTimer?.cancel();
-
+    // Debouncing is handled at the UI layer (BookSearchBar widget).
+    // This handler processes already-debounced semantic events.
     if (event.query.isEmpty) {
       add(const ClearSearch());
       return;
     }
-
-    _debounceTimer = Timer(_searchDebounce, () async {
-      emit(const BookLoading());
-      try {
-        final books = await repository.searchBooks(query: event.query);
-        emit(BookLoaded(
-          books: books,
-          hasMore: books.length >= _defaultLimit,
-          currentPage: 1,
-          searchQuery: event.query,
-        ));
-      } catch (e) {
-        emit(BookError(message: e.toString()));
-      }
-    });
+    emit(const BookLoading());
+    try {
+      final books = await repository.searchBooks(query: event.query);
+      emit(BookLoaded(
+        books: books,
+        hasMore: books.length >= _defaultLimit,
+        currentPage: 1,
+        searchQuery: event.query,
+      ));
+    } catch (e) {
+      emit(BookError(message: e.toString()));
+    }
   }
 
   Future<void> _onFilterByCategory(
@@ -172,11 +166,5 @@ class BookBloc extends Bloc<BookEvent, BookState> {
     } catch (e) {
       emit(BookDetailError(message: e.toString()));
     }
-  }
-
-  @override
-  Future<void> close() {
-    _debounceTimer?.cancel();
-    return super.close();
   }
 }
