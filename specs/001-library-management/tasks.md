@@ -81,12 +81,12 @@
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
 - [X] T033 [P] [US1] Create unit test for Book model in test/unit_test/models/book_test.dart
-- [ ] T034 [P] [US1] Create unit test for BookRepository in test/unit_test/repositories/book_repository_test.dart
-- [ ] T035 [P] [US1] Create unit test for BookBloc in test/unit_test/state/book/book_bloc_test.dart
+- [X] T034 [P] [US1] Create unit test for BookRepository in test/features/books/data/repositories/book_repository_test.dart
+- [X] T035 [P] [US1] Create unit test for BookBloc in test/features/books/presentation/bloc/book_bloc_test.dart
 - [X] T036 [P] [US1] Create widget test for BookCard in test/widget_test/widgets/book_card_test.dart
 - [X] T037 [P] [US1] Create widget test for SearchBar in test/widget_test/widgets/book_search_bar_test.dart
-- [ ] T038 [P] [US1] Create widget test for HomeScreen in test/widget_test/screens/mobile/home/home_screen_test.dart
-- [ ] T039 [P] [US1] Create integration test for book browsing flow in test/integration_test/book_browsing_test.dart
+- [X] T038 [P] [US1] Create widget test for BookListScreen in test/features/books/presentation/screens/book_list_screen_test.dart
+- [X] T039 [P] [US1] Create integration test for book browsing flow in test/integration_test/book_browsing_test.dart
 - [X] T040 [P] [US1] Create backend unit test for GET /books endpoint in backend/tests/unit/books.test.ts
 - [X] T041 [P] [US1] Create backend unit test for GET /books/:id endpoint in backend/tests/unit/books.test.ts
 

@@ -11,10 +11,18 @@ import '../widgets/book_search_bar.dart';
 import '../../../../models/book.dart' as app_book;
 
 class BookListScreen extends StatelessWidget {
-  const BookListScreen({super.key});
+  const BookListScreen({super.key, this.bloc});
+
+  final BookBloc? bloc;
 
   @override
   Widget build(BuildContext context) {
+    if (bloc != null) {
+      return BlocProvider<BookBloc>.value(
+        value: bloc!,
+        child: const _BookListView(),
+      );
+    }
     return BlocProvider<BookBloc>(
       create: (_) => BookBloc(repository: BookRepositoryImpl())
         ..add(const FetchBooks()),
