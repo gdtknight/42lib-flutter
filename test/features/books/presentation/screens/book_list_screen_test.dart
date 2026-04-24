@@ -8,6 +8,13 @@ import 'package:lib_42_flutter/features/books/presentation/widgets/book_card.dar
 import '../../../../support/fake_book_repository.dart';
 
 Future<void> _pump(WidgetTester tester, BookBloc bloc) async {
+  // BookCard's AspectRatio + Column needs height headroom; the default
+  // 800×600 test surface causes layout overflow in Grid view.
+  tester.view.physicalSize = const Size(1920, 1440);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
   await tester.pumpWidget(
     MaterialApp(home: BookListScreen(bloc: bloc)),
   );
