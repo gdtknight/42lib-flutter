@@ -108,28 +108,28 @@
 
 **State Management**
 
-- [X] T050 [P] [US1] Create BookEvent classes in lib/state/book/book_event.dart
-- [X] T051 [P] [US1] Create BookState classes in lib/state/book/book_state.dart
-- [X] T052 [US1] Implement BookBloc with search/filter logic in lib/state/book/book_bloc.dart
+- [X] T050 [P] [US1] Create BookEvent classes in lib/features/books/presentation/bloc/book_event.dart
+- [X] T051 [P] [US1] Create BookState classes in lib/features/books/presentation/bloc/book_state.dart
+- [X] T052 [US1] Implement BookBloc with search/filter logic in lib/features/books/presentation/bloc/book_bloc.dart
 
 **UI Components**
 
 - [X] T053 [P] [US1] Create BookCard widget in lib/widgets/book_card.dart
 - [X] T054 [P] [US1] Create SearchBar widget with debouncing in lib/widgets/search_bar.dart
-- [X] T055 [P] [US1] Create CategoryFilter widget in lib/widgets/category_filter.dart
+- [ ] T055 [P] [US1] Create CategoryFilter widget in lib/features/books/presentation/widgets/category_filter.dart *(legacy 위젯 PR #43에서 삭제 — 카테고리 필터 UI 재도입 시 feature-first 경로로 재작성)*
 
 **Screens**
 
-- [X] T056 [US1] Create HomeScreen for book browsing in lib/screens/mobile/home/home_screen.dart
+- [X] T056 [US1] Create book browsing screen in lib/features/books/presentation/screens/book_list_screen.dart *(기존 lib/screens/mobile/home/home_screen.dart는 PR #43에서 삭제, BookListScreen이 활성)*
 - [X] T057 [US1] Create BookDetailScreen in lib/screens/mobile/book_detail/book_detail_screen.dart
-- [X] T058 [US1] Add HomeScreen and BookDetailScreen to navigation routes in lib/core/routes/app_router.dart (legacy duplicate at lib/app/routes.dart)
+- [X] T058 [US1] Add BookListScreen and BookDetailScreen to navigation routes in lib/core/routes/app_router.dart
 
 **Performance & Polish**
 
-- [X] T059 [US1] Implement lazy loading with ListView.builder in HomeScreen
+- [X] T059 [US1] Implement lazy loading with ListView.builder/GridView.builder in BookListScreen
 - [X] T060 [US1] Add search debouncing (500ms) to SearchBar widget
-- [X] T061 [US1] Implement offline caching for book catalog in BookRepository
-- [X] T062 [US1] Add loading states and error handling to HomeScreen
+- [ ] T061 [US1] Implement offline caching for book catalog in BookRepository *(SQLite 캐시가 있던 legacy 구현은 PR #43에서 삭제. 현 feature-first BookRepositoryImpl은 Mock 데이터라 캐시 불필요. 실제 API 연동 시 재도입 필요)*
+- [X] T062 [US1] Add loading states and error handling to BookListScreen
 - [ ] T063 [US1] Add pagination for book list (20 books per page)
 
 **Checkpoint**: User Story 1 complete - students can browse and search books independently
