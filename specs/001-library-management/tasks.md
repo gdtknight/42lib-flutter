@@ -150,10 +150,10 @@
 - [ ] T065 [P] [US4] Create widget test for admin dashboard in test/widget_test/screens/web/dashboard/dashboard_screen_test.dart
 - [ ] T066 [P] [US4] Create widget test for book management form in test/widget_test/screens/web/catalog/book_form_test.dart
 - [ ] T067 [P] [US4] Create integration test for admin book management flow in test/integration_test/admin_catalog_test.dart
-- [ ] T068 [P] [US4] Create backend unit test for POST /books endpoint in backend/tests/unit/books.test.ts
-- [ ] T069 [P] [US4] Create backend unit test for PUT /books/:id endpoint in backend/tests/unit/books.test.ts
-- [ ] T070 [P] [US4] Create backend unit test for DELETE /books/:id endpoint in backend/tests/unit/books.test.ts
-- [ ] T071 [P] [US4] Create backend unit test for admin authentication in backend/tests/unit/auth.test.ts
+- [X] T068 [P] [US4] Create backend unit test for POST /books endpoint in backend/tests/unit/books_admin.test.ts
+- [X] T069 [P] [US4] Create backend unit test for PUT /books/:id endpoint in backend/tests/unit/books_admin.test.ts
+- [X] T070 [P] [US4] Create backend unit test for DELETE /books/:id endpoint in backend/tests/unit/books_admin.test.ts
+- [X] T071 [P] [US4] Create backend unit test for admin authentication in backend/tests/unit/admin.test.ts
 
 ### Implementation for User Story 4
 
@@ -164,13 +164,13 @@
 
 **Backend API - Admin & Books Management**
 
-- [ ] T074 [P] [US4] Implement admin authentication with bcrypt in backend/src/services/auth_service.ts
-- [ ] T075 [P] [US4] Create admin authentication middleware in backend/src/middleware/auth.ts
-- [ ] T076 [P] [US4] Implement POST /books endpoint (admin only) in backend/src/routes/books.ts
-- [ ] T077 [P] [US4] Implement PUT /books/:id endpoint (admin only) in backend/src/routes/books.ts
-- [ ] T078 [P] [US4] Implement DELETE /books/:id endpoint with active loan check in backend/src/routes/books.ts
-- [ ] T079 [P] [US4] Implement POST /admin/login endpoint in backend/src/routes/admin.ts
-- [ ] T080 [US4] Add ISBN uniqueness validation to book creation in backend/src/services/book_service.ts
+- [X] T074 [P] [US4] Implement admin authentication with bcrypt in backend/src/services/admin_auth_service.ts
+- [X] T075 [P] [US4] Create admin authentication middleware in backend/src/middleware/auth.ts
+- [X] T076 [P] [US4] Implement POST /books endpoint (admin only) in backend/src/routes/books.ts
+- [X] T077 [P] [US4] Implement PUT /books/:id endpoint (admin only) in backend/src/routes/books.ts
+- [X] T078 [P] [US4] Implement DELETE /books/:id endpoint with active loan check in backend/src/routes/books.ts
+- [X] T079 [P] [US4] Implement POST /admin/login endpoint in backend/src/routes/admin.ts
+- [X] T080 [US4] Add ISBN uniqueness validation to book creation in backend/src/services/book_service.ts
 
 **State Management**
 

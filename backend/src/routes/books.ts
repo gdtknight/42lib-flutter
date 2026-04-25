@@ -1,6 +1,10 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import { PrismaClient } from '@prisma/client';
 import { bookService } from '../services/book_service';
 import { validateBookQuery, validateBookId } from '../middleware/validation/book_validation';
+import { authenticateAdmin } from '../middleware/auth';
+
+const prisma = new PrismaClient();
 
 const router = Router();
 
@@ -85,10 +89,10 @@ router.get(
 );
 
 /**
- * POST /api/books
- * Create a new book (admin only - will add auth middleware later)
+ * POST /api/v1/books
+ * Create a new book (admin only)
  */
-router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', authenticateAdmin, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const bookData = req.body;
 
@@ -109,11 +113,12 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 /**
- * PUT /api/books/:id
- * Update a book (admin only - will add auth middleware later)
+ * PUT /api/v1/books/:id
+ * Update a book (admin only)
  */
 router.put(
   '/:id',
+  authenticateAdmin,
   validateBookId,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -144,11 +149,13 @@ router.put(
 );
 
 /**
- * DELETE /api/books/:id
- * Delete a book (admin only - will add auth middleware later)
+ * DELETE /api/v1/books/:id
+ * Delete a book (admin only). Rejects with 409 Conflict when the book has
+ * active loans or pending loan requests.
  */
 router.delete(
   '/:id',
+  authenticateAdmin,
   validateBookId,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -157,6 +164,20 @@ router.delete(
       const book = await bookService.getBookById(id);
       if (!book) {
         return res.status(404).json({ error: 'Book not found' });
+      }
+
+      const [activeLoans, pendingRequests] = await Promise.all([
+        prisma.loan.count({ where: { bookId: id, status: 'active' } }),
+        prisma.loanRequest.count({ where: { bookId: id, status: 'pending' } }),
+      ]);
+
+      if (activeLoans > 0 || pendingRequests > 0) {
+        return res.status(409).json({
+          error: 'Conflict',
+          message: '활성 대출 또는 대기 중인 대출 요청이 있어 삭제할 수 없습니다.',
+          activeLoans,
+          pendingRequests,
+        });
       }
 
       await bookService.deleteBook(id);
