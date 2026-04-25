@@ -146,7 +146,7 @@
 
 ### Tests for User Story 4
 
-- [ ] T064 [P] [US4] Create unit test for Administrator model in test/unit_test/models/administrator_test.dart
+- [X] T064 [P] [US4] Create unit test for Administrator model in test/features/admin_catalog/data/models/administrator_test.dart
 - [ ] T065 [P] [US4] Create widget test for admin dashboard in test/widget_test/screens/web/dashboard/dashboard_screen_test.dart
 - [ ] T066 [P] [US4] Create widget test for book management form in test/widget_test/screens/web/catalog/book_form_test.dart
 - [ ] T067 [P] [US4] Create integration test for admin book management flow in test/integration_test/admin_catalog_test.dart
@@ -159,8 +159,8 @@
 
 **Models & Data Layer**
 
-- [ ] T072 [P] [US4] Create Administrator model in lib/models/administrator.dart
-- [ ] T073 [US4] Create AdministratorRepository in lib/repositories/administrator_repository.dart
+- [X] T072 [P] [US4] Create Administrator model in lib/features/admin_catalog/data/models/administrator.dart
+- [X] T073 [US4] Create AdminAuthRepository (interface + HTTP impl) in lib/features/admin_catalog/{domain,data}/repositories/
 
 **Backend API - Admin & Books Management**
 
@@ -174,9 +174,9 @@
 
 **State Management**
 
-- [ ] T081 [P] [US4] Create AuthEvent classes for admin in lib/state/auth/auth_event.dart
-- [ ] T082 [P] [US4] Create AuthState classes for admin in lib/state/auth/auth_state.dart
-- [ ] T083 [US4] Implement AuthBloc for admin authentication in lib/state/auth/auth_bloc.dart
+- [X] T081 [P] [US4] Create AdminAuthEvent classes in lib/features/admin_catalog/presentation/bloc/admin_auth_event.dart
+- [X] T082 [P] [US4] Create AdminAuthState classes in lib/features/admin_catalog/presentation/bloc/admin_auth_state.dart
+- [X] T083 [US4] Implement AdminAuthBloc in lib/features/admin_catalog/presentation/bloc/admin_auth_bloc.dart
 
 **UI Components - Web Dashboard**
 

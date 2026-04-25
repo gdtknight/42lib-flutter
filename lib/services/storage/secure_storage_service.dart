@@ -9,6 +9,8 @@ class SecureStorageService {
   static const String _keyUserId = 'user_id';
   static const String _key42Token = '42_oauth_token';
   static const String _keyJwtToken = 'jwt_token';
+  static const String _keyAdminToken = 'admin_jwt_token';
+  static const String _keyAdminProfile = 'admin_profile';
 
   SecureStorageService({FlutterSecureStorage? storage})
       : _storage = storage ?? const FlutterSecureStorage();
@@ -94,5 +96,31 @@ class SecureStorageService {
   /// Clear all stored tokens
   Future<void> clearAll() async {
     await _storage.deleteAll();
+  }
+
+  // Admin session (separate from student JWT)
+
+  Future<void> writeAdminToken(String token) async {
+    await _storage.write(key: _keyAdminToken, value: token);
+  }
+
+  Future<String?> readAdminToken() async {
+    return _storage.read(key: _keyAdminToken);
+  }
+
+  Future<void> deleteAdminToken() async {
+    await _storage.delete(key: _keyAdminToken);
+  }
+
+  Future<void> writeAdminProfile(String json) async {
+    await _storage.write(key: _keyAdminProfile, value: json);
+  }
+
+  Future<String?> readAdminProfile() async {
+    return _storage.read(key: _keyAdminProfile);
+  }
+
+  Future<void> deleteAdminProfile() async {
+    await _storage.delete(key: _keyAdminProfile);
   }
 }
