@@ -8,6 +8,7 @@ import { errorHandler } from './middleware/error_handler';
 import bookRoutes from './routes/books';
 import authRoutes from './routes/auth';
 import loanRequestRoutes from './routes/loan_requests';
+import adminRoutes from './routes/admin';
 
 const app: Express = express();
 const prisma = new PrismaClient();
@@ -36,6 +37,7 @@ app.get('/health', (req, res) => {
 app.use('/api/v1/books', bookRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/loan-requests', loanRequestRoutes);
+app.use('/api/v1/admin', adminRoutes);
 
 app.get('/api/v1', (req, res) => {
   res.json({ message: '42lib API v1', status: 'ready' });
