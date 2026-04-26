@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lib_42_flutter/features/books/data/datasources/book_mock_datasource.dart';
 import 'package:lib_42_flutter/features/books/data/repositories/book_repository_impl.dart';
 
 void main() {
@@ -6,7 +7,9 @@ void main() {
     late BookRepositoryImpl repository;
 
     setUp(() {
-      repository = BookRepositoryImpl();
+      // Inject the mock data source so the repo doesn't try to hit the network
+      // in unit tests. Production wires up BookHttpDataSource by default.
+      repository = BookRepositoryImpl(dataSource: BookMockDataSource());
     });
 
     test('should fetch all mock books on first page', () async {
