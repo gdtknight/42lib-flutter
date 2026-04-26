@@ -58,24 +58,3 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 }
 
-/// Placeholder for catalog screen — replaced in US4-C-β.
-class AdminCatalogPlaceholderScreen extends StatelessWidget {
-  const AdminCatalogPlaceholderScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('도서 관리')),
-      drawer: const AdminSidebar(currentRoute: '/admin/catalog'),
-      body: const Center(
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Text(
-            '도서 관리 화면은 곧 제공됩니다 (US4-C-β).',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
-    );
-  }
-}
