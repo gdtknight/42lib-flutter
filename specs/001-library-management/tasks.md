@@ -180,16 +180,16 @@
 
 **UI Components - Web Dashboard**
 
-- [ ] T084 [P] [US4] Create AdminSidebar navigation widget in lib/widgets/admin/admin_sidebar.dart
+- [X] T084 [P] [US4] Create AdminSidebar navigation widget in lib/features/admin_catalog/presentation/widgets/admin_sidebar.dart
 - [ ] T085 [P] [US4] Create BookFormWidget for add/edit in lib/widgets/admin/book_form.dart
 - [ ] T086 [P] [US4] Create DeleteConfirmationDialog in lib/widgets/admin/delete_confirmation_dialog.dart
 
 **Screens - Web Dashboard**
 
-- [ ] T087 [US4] Create AdminLoginScreen in lib/screens/web/login/admin_login_screen.dart
-- [ ] T088 [US4] Create AdminDashboardScreen in lib/screens/web/dashboard/dashboard_screen.dart
+- [X] T087 [US4] Create AdminLoginScreen in lib/features/admin_catalog/presentation/screens/admin_login_screen.dart
+- [X] T088 [US4] Create AdminDashboardScreen in lib/features/admin_catalog/presentation/screens/admin_dashboard_screen.dart
 - [ ] T089 [US4] Create CatalogManagementScreen in lib/screens/web/catalog/catalog_screen.dart
-- [ ] T090 [US4] Add admin routes to navigation in lib/app/routes.dart
+- [X] T090 [US4] Add admin routes to navigation in lib/core/routes/app_router.dart (with auth guard via refreshListenable + redirect)
 - [ ] T091 [US4] Implement book add/edit form with validation in CatalogManagementScreen
 - [ ] T092 [US4] Implement book deletion with warning dialog for active loans
 
