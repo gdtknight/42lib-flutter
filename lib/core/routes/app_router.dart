@@ -4,6 +4,7 @@ import '../../features/admin_catalog/presentation/bloc/admin_auth_bloc.dart';
 import '../../features/admin_catalog/presentation/bloc/admin_auth_state.dart';
 import '../../features/admin_catalog/presentation/screens/admin_dashboard_screen.dart';
 import '../../features/admin_catalog/presentation/screens/admin_login_screen.dart';
+import '../../features/admin_catalog/presentation/screens/catalog_management_screen.dart';
 import '../../features/books/presentation/screens/book_list_screen.dart';
 import '../../models/book.dart';
 import '../../screens/mobile/auth/login_screen.dart';
@@ -74,7 +75,7 @@ class AppRouter {
         ),
         GoRoute(
           path: '/admin/catalog',
-          builder: (context, state) => const AdminCatalogPlaceholderScreen(),
+          builder: (context, state) => const CatalogManagementScreen(),
         ),
       ],
     );

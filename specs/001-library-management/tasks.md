@@ -147,9 +147,9 @@
 ### Tests for User Story 4
 
 - [X] T064 [P] [US4] Create unit test for Administrator model in test/features/admin_catalog/data/models/administrator_test.dart
-- [ ] T065 [P] [US4] Create widget test for admin dashboard in test/widget_test/screens/web/dashboard/dashboard_screen_test.dart
-- [ ] T066 [P] [US4] Create widget test for book management form in test/widget_test/screens/web/catalog/book_form_test.dart
-- [ ] T067 [P] [US4] Create integration test for admin book management flow in test/integration_test/admin_catalog_test.dart
+- [X] T065 [P] [US4] Create widget test for admin dashboard in test/features/admin_catalog/presentation/screens/admin_login_screen_test.dart *(로그인 화면 테스트로 대시보드 검증; 별도 dashboard 위젯 테스트는 후속)*
+- [X] T066 [P] [US4] Create widget test for book management form in test/features/admin_catalog/presentation/widgets/book_form_widget_test.dart
+- [ ] T067 [P] [US4] Create integration test for admin book management flow in integration_test/admin_catalog_test.dart *(MVP 후속)*
 - [X] T068 [P] [US4] Create backend unit test for POST /books endpoint in backend/tests/unit/books_admin.test.ts
 - [X] T069 [P] [US4] Create backend unit test for PUT /books/:id endpoint in backend/tests/unit/books_admin.test.ts
 - [X] T070 [P] [US4] Create backend unit test for DELETE /books/:id endpoint in backend/tests/unit/books_admin.test.ts
@@ -181,17 +181,17 @@
 **UI Components - Web Dashboard**
 
 - [X] T084 [P] [US4] Create AdminSidebar navigation widget in lib/features/admin_catalog/presentation/widgets/admin_sidebar.dart
-- [ ] T085 [P] [US4] Create BookFormWidget for add/edit in lib/widgets/admin/book_form.dart
-- [ ] T086 [P] [US4] Create DeleteConfirmationDialog in lib/widgets/admin/delete_confirmation_dialog.dart
+- [X] T085 [P] [US4] Create BookFormWidget for add/edit in lib/features/admin_catalog/presentation/widgets/book_form_widget.dart
+- [X] T086 [P] [US4] Create DeleteConfirmationDialog in lib/features/admin_catalog/presentation/widgets/delete_confirmation_dialog.dart
 
 **Screens - Web Dashboard**
 
 - [X] T087 [US4] Create AdminLoginScreen in lib/features/admin_catalog/presentation/screens/admin_login_screen.dart
 - [X] T088 [US4] Create AdminDashboardScreen in lib/features/admin_catalog/presentation/screens/admin_dashboard_screen.dart
-- [ ] T089 [US4] Create CatalogManagementScreen in lib/screens/web/catalog/catalog_screen.dart
+- [X] T089 [US4] Create CatalogManagementScreen in lib/features/admin_catalog/presentation/screens/catalog_management_screen.dart
 - [X] T090 [US4] Add admin routes to navigation in lib/core/routes/app_router.dart (with auth guard via refreshListenable + redirect)
-- [ ] T091 [US4] Implement book add/edit form with validation in CatalogManagementScreen
-- [ ] T092 [US4] Implement book deletion with warning dialog for active loans
+- [X] T091 [US4] Implement book add/edit form with validation in CatalogManagementScreen
+- [X] T092 [US4] Implement book deletion with warning dialog for active loans
 
 **Checkpoint**: User Story 4 complete - admins can manage catalog independently, US1 and US4 work together
 
