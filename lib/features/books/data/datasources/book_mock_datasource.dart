@@ -1,8 +1,9 @@
 import '../models/book.dart';
+import 'book_data_source.dart';
 
-/// Mock data source for books
-/// Provides sample data for testing and development
-class BookMockDataSource {
+/// Mock data source for books — used by tests for deterministic results.
+/// Production code wires up [BookHttpDataSource] instead.
+class BookMockDataSource implements BookDataSource {
   static final List<Book> _mockBooks = [
     Book(
       id: '1',
@@ -86,6 +87,7 @@ class BookMockDataSource {
   ];
 
   /// Fetch all books with pagination
+  @override
   Future<List<Book>> fetchBooks({int page = 1, int limit = 20}) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 500));
@@ -104,6 +106,7 @@ class BookMockDataSource {
   }
 
   /// Get a book by ID
+  @override
   Future<Book?> getBookById(String id) async {
     await Future.delayed(const Duration(milliseconds: 300));
 
@@ -115,6 +118,7 @@ class BookMockDataSource {
   }
 
   /// Search books by title, author, or category
+  @override
   Future<List<Book>> searchBooks({
     String? query,
     String? category,

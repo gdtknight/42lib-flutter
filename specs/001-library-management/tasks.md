@@ -128,7 +128,7 @@
 
 - [X] T059 [US1] Implement lazy loading with ListView.builder/GridView.builder in BookListScreen
 - [X] T060 [US1] Add search debouncing (500ms) to SearchBar widget
-- [ ] T061 [US1] Implement offline caching for book catalog in BookRepository *(SQLite 캐시가 있던 legacy 구현은 PR #43에서 삭제. 현 feature-first BookRepositoryImpl은 Mock 데이터라 캐시 불필요. 실제 API 연동 시 재도입 필요)*
+- [ ] T061 [US1] Implement offline caching for book catalog in BookRepository *(PR #55로 BookHttpDataSource 도입 — 학생도 실 API 사용. 오프라인 SQLite 캐시는 여전히 미구현, 별도 후속)*
 - [X] T062 [US1] Add loading states and error handling to BookListScreen
 - [ ] T063 [US1] Add pagination for book list (20 books per page)
 
