@@ -61,57 +61,56 @@ jobs:
         with:
           files: ./coverage/lcov.info
 
-  # Android/iOS 빌드는 MVP 완성 후 활성화 (Constitution v1.10.0)
-  # MVP 개발 단계에서는 로컬 검증 필수, CI/CD는 Web만 수행
-  # TODO: v0.1.0 릴리스 후 아래 주석 해제
-  
-  # build-android:
-  #   name: Android 빌드
-  #   runs-on: ubuntu-latest
-  #   needs: test
-  #   if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     
-  #     - name: Flutter 설정
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: '3.24.0'
-  #         channel: 'stable'
-  #         cache: true
-  #     
-  #     - name: 의존성 설치
-  #       run: flutter pub get
-  #     
-  #     - name: Android APK 빌드
-  #       run: flutter build apk --release
-  #     
-  #     - name: 빌드 산출물 업로드
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: android-apk
-  #         path: build/app/outputs/flutter-apk/app-release.apk
+  # Android/iOS 빌드: v0.2.0 MVP 릴리스 후 활성화 (Constitution v1.10.0).
+  # 태그 푸시 시에만 실행하여 PR/일반 푸시 피드백 시간을 보호.
 
-  # build-ios:
-  #   name: iOS 빌드
-  #   runs-on: macos-latest
-  #   needs: test
-  #   if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     
-  #     - name: Flutter 설정
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: '3.24.0'
-  #         channel: 'stable'
-  #         cache: true
-  #     
-  #     - name: 의존성 설치
-  #       run: flutter pub get
-  #     
-  #     - name: iOS 빌드 (서명 없이)
-  #       run: flutter build ios --release --no-codesign
+  build-android:
+    name: Android 빌드
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Flutter 설정
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: 의존성 설치
+        run: flutter pub get
+
+      - name: Android APK 빌드
+        run: flutter build apk --release
+
+      - name: 빌드 산출물 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  build-ios:
+    name: iOS 빌드
+    runs-on: macos-latest
+    needs: test
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Flutter 설정
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: 의존성 설치
+        run: flutter pub get
+
+      - name: iOS 빌드 (서명 없이)
+        run: flutter build ios --release --no-codesign
 
   build-web:
     name: Web 빌드
