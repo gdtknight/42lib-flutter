@@ -45,6 +45,10 @@ class _BookListViewState extends State<_BookListView> {
     setState(() => _isGridView = !_isGridView);
   }
 
+  void _loadMore(BuildContext context) {
+    context.read<BookBloc>().add(const LoadMoreBooks());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,12 +99,23 @@ class _BookListViewState extends State<_BookListView> {
       if (state.books.isEmpty) {
         return _EmptyView(searchQuery: state.searchQuery);
       }
+      final onLoadMore = () => _loadMore(context);
       return RefreshIndicator(
         onRefresh: () async =>
             context.read<BookBloc>().add(const RefreshBooks()),
         child: _isGridView
-            ? _BookGrid(books: state.books, onTap: _onBookTap)
-            : _BookList(books: state.books, onTap: _onBookTap),
+            ? _BookGrid(
+                books: state.books,
+                hasMore: state.hasMore,
+                onTap: _onBookTap,
+                onLoadMore: onLoadMore,
+              )
+            : _BookList(
+                books: state.books,
+                hasMore: state.hasMore,
+                onTap: _onBookTap,
+                onLoadMore: onLoadMore,
+              ),
       );
     }
 
@@ -181,11 +196,69 @@ class _EmptyView extends StatelessWidget {
   }
 }
 
-class _BookGrid extends StatelessWidget {
-  final List<Book> books;
-  final void Function(Book) onTap;
+/// Mixin for the grid/list views to share infinite-scroll pagination wiring.
+/// Triggers [onLoadMore] when the user scrolls within [_loadMoreThreshold]
+/// pixels of the bottom AND a new page is available AND we haven't already
+/// triggered for the current item count.
+mixin _PaginationMixin<W extends StatefulWidget> on State<W> {
+  static const double _loadMoreThreshold = 200;
 
-  const _BookGrid({required this.books, required this.onTap});
+  late final ScrollController _scrollController;
+  int _lastTriggerCount = 0;
+
+  bool get hasMore;
+  int get itemCount;
+  VoidCallback get onLoadMore;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!hasMore) return;
+    if (!_scrollController.hasClients) return;
+    final position = _scrollController.position;
+    if (position.pixels < position.maxScrollExtent - _loadMoreThreshold) return;
+    if (itemCount <= _lastTriggerCount) return;
+    _lastTriggerCount = itemCount;
+    onLoadMore();
+  }
+}
+
+class _BookGrid extends StatefulWidget {
+  final List<Book> books;
+  final bool hasMore;
+  final void Function(Book) onTap;
+  final VoidCallback onLoadMore;
+
+  const _BookGrid({
+    required this.books,
+    required this.hasMore,
+    required this.onTap,
+    required this.onLoadMore,
+  });
+
+  @override
+  State<_BookGrid> createState() => _BookGridState();
+}
+
+class _BookGridState extends State<_BookGrid> with _PaginationMixin<_BookGrid> {
+  @override
+  bool get hasMore => widget.hasMore;
+  @override
+  int get itemCount => widget.books.length;
+  @override
+  VoidCallback get onLoadMore => widget.onLoadMore;
 
   int _getCrossAxisCount(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -198,6 +271,7 @@ class _BookGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      controller: _scrollController,
       padding: const EdgeInsets.all(16),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: _getCrossAxisCount(context),
@@ -205,33 +279,63 @@ class _BookGrid extends StatelessWidget {
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
       ),
-      itemCount: books.length,
+      itemCount: widget.books.length,
       itemBuilder: (context, index) => BookCard(
-        book: books[index],
-        onTap: () => onTap(books[index]),
+        book: widget.books[index],
+        onTap: () => widget.onTap(widget.books[index]),
       ),
     );
   }
 }
 
-class _BookList extends StatelessWidget {
+class _BookList extends StatefulWidget {
   final List<Book> books;
+  final bool hasMore;
   final void Function(Book) onTap;
+  final VoidCallback onLoadMore;
 
-  const _BookList({required this.books, required this.onTap});
+  const _BookList({
+    required this.books,
+    required this.hasMore,
+    required this.onTap,
+    required this.onLoadMore,
+  });
+
+  @override
+  State<_BookList> createState() => _BookListState();
+}
+
+class _BookListState extends State<_BookList> with _PaginationMixin<_BookList> {
+  @override
+  bool get hasMore => widget.hasMore;
+  @override
+  int get itemCount => widget.books.length;
+  @override
+  VoidCallback get onLoadMore => widget.onLoadMore;
 
   @override
   Widget build(BuildContext context) {
+    final showSpinner = widget.hasMore;
+    final listLength = widget.books.length + (showSpinner ? 1 : 0);
     return ListView.builder(
+      controller: _scrollController,
       padding: const EdgeInsets.all(16),
-      itemCount: books.length,
-      itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.only(bottom: 16),
-        child: BookCard(
-          book: books[index],
-          onTap: () => onTap(books[index]),
-        ),
-      ),
+      itemCount: listLength,
+      itemBuilder: (context, index) {
+        if (index >= widget.books.length) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: BookCard(
+            book: widget.books[index],
+            onTap: () => widget.onTap(widget.books[index]),
+          ),
+        );
+      },
     );
   }
 }
