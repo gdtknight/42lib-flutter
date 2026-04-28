@@ -1,7 +1,7 @@
 name: lib_42_flutter
 description: 42 Learning Space Library Management System - Flutter App
 publish_to: 'none'
-version: 0.2.2+1
+version: 0.2.3+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -51,14 +51,16 @@ dev_dependencies:
   build_runner: ^2.4.7
   json_serializable: ^6.7.1
 
-# Transitive dep override: win32 5.2.0 (pinned via flutter_secure_storage_windows)
-# uses UnmodifiableUint8ListView which was removed in Dart SDK 3.5. Force ≥5.5.0.
-# See: https://github.com/gdtknight/42lib-flutter/issues/67
-dependency_overrides:
-  win32: ^5.5.0
-  
   # Linting
   flutter_lints: ^3.0.1
+
+# Transitive dep override: win32 5.2.0 (pinned via flutter_secure_storage_windows)
+# uses UnmodifiableUint8ListView (removed in Dart 3.5). Need ≥5.5.0.
+# But win32 5.10+ requires Dart 3.6+ language level (Flutter 3.24 = Dart 3.5).
+# Pin to range compatible with Dart 3.5: 5.5.x ~ 5.9.x.
+# See: https://github.com/gdtknight/42lib-flutter/issues/67
+dependency_overrides:
+  win32: '>=5.5.0 <5.10.0'
 
 flutter:
   uses-material-design: true
