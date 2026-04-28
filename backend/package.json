@@ -1,6 +1,6 @@
 {
   "name": "42lib-backend",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "42 Learning Space Library Management System - Backend API",
   "main": "src/server.ts",
   "scripts": {
