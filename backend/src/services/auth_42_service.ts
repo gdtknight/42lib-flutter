@@ -38,8 +38,17 @@ export class Auth42Service {
     this.clientSecret = process.env.FORTYTWO_CLIENT_SECRET || '';
     this.redirectUri = process.env.FORTYTWO_REDIRECT_URI || '';
 
+    // Don't throw at construction — let MVP/admin flows boot without 42 creds.
+    // Only the OAuth-using methods reject when creds are missing.
     if (!this.clientId || !this.clientSecret || !this.redirectUri) {
-      logger.error('42 OAuth credentials not configured');
+      logger.warn(
+        '42 OAuth credentials not configured. Student OAuth flows will be unavailable.',
+      );
+    }
+  }
+
+  private requireConfigured(): void {
+    if (!this.clientId || !this.clientSecret || !this.redirectUri) {
       throw new Error('42 OAuth configuration missing');
     }
   }
@@ -48,6 +57,7 @@ export class Auth42Service {
    * Generate authorization URL for OAuth flow
    */
   getAuthorizationUrl(state?: string): string {
+    this.requireConfigured();
     const params = new URLSearchParams({
       client_id: this.clientId,
       redirect_uri: this.redirectUri,
@@ -63,6 +73,7 @@ export class Auth42Service {
    * Exchange authorization code for access token
    */
   async exchangeCodeForToken(code: string): Promise<TokenResponse> {
+    this.requireConfigured();
     try {
       const response = await axios.post<TokenResponse>(
         this.tokenUrl,
