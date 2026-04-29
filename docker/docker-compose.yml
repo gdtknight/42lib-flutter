@@ -71,8 +71,8 @@ services:
   # Flutter Development Environment
   flutter-dev:
     build:
-      context: .
-      dockerfile: Dockerfile.flutter
+      context: ..
+      dockerfile: docker/Dockerfile.flutter
     container_name: 42lib-flutter-dev
     depends_on:
       - backend-api

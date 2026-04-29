@@ -4,7 +4,7 @@ FROM ubuntu:22.04
 # 환경 변수 설정
 ENV DEBIAN_FRONTEND=noninteractive
 ENV FLUTTER_HOME=/opt/flutter
-ENV FLUTTER_VERSION=3.16.0
+ENV FLUTTER_VERSION=3.24.0
 ENV PATH="$FLUTTER_HOME/bin:$PATH"
 
 # 기본 도구 설치
