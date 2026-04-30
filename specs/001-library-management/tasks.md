@@ -47,7 +47,7 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T015 Run initial Prisma migration to create database schema in backend/prisma/migrations/
+- [X] T015 Run initial Prisma migration to create database schema in backend/prisma/migrations/
 - [X] T016 [P] Implement 42 brand theme with teal/cyan colors in lib/app/theme.dart
 - [X] T017 [P] Setup navigation/routing framework in lib/app/routes.dart
 - [X] T018 [P] Initialize Hive storage for key-value caching in lib/services/storage/hive_service.dart
