@@ -205,11 +205,11 @@
 
 ### Tests for User Story 2
 
-- [ ] T093 [P] [US2] Create unit test for LoanRequest model in test/unit_test/models/loan_request_test.dart
+- [X] T093 [P] [US2] Create unit test for LoanRequest model in test/unit_test/models/loan_request_test.dart
 - [X] T094 [P] [US2] Create unit test for Reservation model in test/unit_test/models/reservation_test.dart
-- [ ] T095 [P] [US2] Create unit test for Student model in test/unit_test/models/student_test.dart
-- [ ] T096 [P] [US2] Create unit test for LoanBloc in test/unit_test/state/loan/loan_bloc_test.dart
-- [ ] T097 [P] [US2] Create widget test for loan request flow in test/widget_test/screens/mobile/loan/loan_request_test.dart
+- [X] T095 [P] [US2] Create unit test for Student model in test/unit_test/models/student_test.dart
+- [X] T096 [P] [US2] Create unit test for LoanBloc in test/unit_test/state/loan/loan_bloc_test.dart
+- [X] T097 [P] [US2] Create widget test for loan request flow in test/widget_test/screens/mobile/loan/loan_request_test.dart
 - [ ] T098 [P] [US2] Create integration test for 42 OAuth flow in test/integration_test/auth_42_test.dart
 - [X] T099 [P] [US2] Create backend unit test for 42 OAuth integration in backend/tests/unit/auth_42.test.ts
 - [X] T100 [P] [US2] Create backend unit test for POST /loan-requests in backend/tests/unit/loan_requests.test.ts
@@ -263,8 +263,8 @@
 
 **Integration & Polish**
 
-- [ ] T128 [US2] Implement graceful handling of 42 API failures with error messages
-- [ ] T129 [US2] Add loan request confirmation dialogs
+- [X] T128 [US2] Implement graceful handling of 42 API failures with error messages
+- [X] T129 [US2] Add loan request confirmation dialogs
 - [X] T130 [US2] Display reservation queue position in student profile
 - [ ] T131 [US2] Add offline queue for loan requests (sync when online)
 
