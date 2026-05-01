@@ -283,9 +283,9 @@
 - [ ] T132 [P] [US5] Create unit test for Loan model in test/unit_test/models/loan_test.dart
 - [ ] T133 [P] [US5] Create widget test for loan management screen in test/widget_test/screens/web/loans/loans_screen_test.dart
 - [ ] T134 [P] [US5] Create integration test for loan approval flow in test/integration_test/admin_loan_management_test.dart
-- [ ] T135 [P] [US5] Create backend unit test for PUT /loan-requests/:id/approve in backend/tests/unit/loan_requests.test.ts
-- [ ] T136 [P] [US5] Create backend unit test for PUT /loans/:id/return in backend/tests/unit/loans.test.ts
-- [ ] T137 [P] [US5] Create backend unit test for overdue detection in backend/tests/unit/loans.test.ts
+- [X] T135 [P] [US5] Create backend unit test for PUT /loan-requests/:id/approve in backend/tests/unit/loan_requests.test.ts
+- [X] T136 [P] [US5] Create backend unit test for PUT /loans/:id/return in backend/tests/unit/loans.test.ts
+- [X] T137 [P] [US5] Create backend unit test for overdue detection in backend/tests/unit/loans.test.ts
 
 ### Implementation for User Story 5
 
@@ -296,15 +296,15 @@
 
 **Backend API - Loan Management**
 
-- [ ] T140 [P] [US5] Implement GET /loan-requests endpoint (admin) in backend/src/routes/loan_requests.ts
-- [ ] T141 [P] [US5] Implement PUT /loan-requests/:id/approve endpoint in backend/src/routes/loan_requests.ts
-- [ ] T142 [P] [US5] Implement PUT /loan-requests/:id/reject endpoint in backend/src/routes/loan_requests.ts
-- [ ] T143 [P] [US5] Implement GET /loans endpoint (admin) in backend/src/routes/loans.ts
-- [ ] T144 [P] [US5] Implement PUT /loans/:id/return endpoint in backend/src/routes/loans.ts
-- [ ] T145 [P] [US5] Implement GET /loans/history endpoint with filters in backend/src/routes/loans.ts
-- [ ] T146 [US5] Implement loan approval logic with availability check in backend/src/services/loan_service.ts
-- [ ] T147 [US5] Implement automatic overdue detection in backend/src/services/loan_service.ts
-- [ ] T148 [US5] Add notification to reservation queue when book returned
+- [X] T140 [P] [US5] Implement GET /loan-requests endpoint (admin) in backend/src/routes/loan_requests.ts
+- [X] T141 [P] [US5] Implement PUT /loan-requests/:id/approve endpoint in backend/src/routes/loan_requests.ts
+- [X] T142 [P] [US5] Implement PUT /loan-requests/:id/reject endpoint in backend/src/routes/loan_requests.ts
+- [X] T143 [P] [US5] Implement GET /loans endpoint (admin) in backend/src/routes/loans.ts
+- [X] T144 [P] [US5] Implement PUT /loans/:id/return endpoint in backend/src/routes/loans.ts
+- [X] T145 [P] [US5] Implement GET /loans/history endpoint with filters in backend/src/routes/loans.ts
+- [X] T146 [US5] Implement loan approval logic with availability check in backend/src/services/loan_service.ts
+- [X] T147 [US5] Implement automatic overdue detection in backend/src/services/loan_service.ts
+- [X] T148 [US5] Add notification to reservation queue when book returned
 
 **State Management**
 
