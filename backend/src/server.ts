@@ -46,13 +46,15 @@ app.get('/api/v1', (req, res) => {
 // 에러 핸들링 미들웨어 (마지막에 추가)
 app.use(errorHandler);
 
-// 서버 시작
-app.listen(PORT, () => {
-  logger.info(`🚀 Server running on port ${PORT}`);
-  logger.info(`📚 42lib Backend API v1`);
-  logger.info(`🔗 Health: http://localhost:${PORT}/health`);
-  logger.info(`🔗 API: http://localhost:${PORT}/api/v1`);
-});
+// 서버 시작 (테스트 환경에서는 listen 안 함 — supertest가 app 객체로 직접 호출)
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    logger.info(`🚀 Server running on port ${PORT}`);
+    logger.info(`📚 42lib Backend API v1`);
+    logger.info(`🔗 Health: http://localhost:${PORT}/health`);
+    logger.info(`🔗 API: http://localhost:${PORT}/api/v1`);
+  });
+}
 
 // Graceful shutdown
 process.on('SIGTERM', async () => {

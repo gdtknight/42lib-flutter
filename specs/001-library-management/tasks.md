@@ -211,9 +211,9 @@
 - [ ] T096 [P] [US2] Create unit test for LoanBloc in test/unit_test/state/loan/loan_bloc_test.dart
 - [ ] T097 [P] [US2] Create widget test for loan request flow in test/widget_test/screens/mobile/loan/loan_request_test.dart
 - [ ] T098 [P] [US2] Create integration test for 42 OAuth flow in test/integration_test/auth_42_test.dart
-- [ ] T099 [P] [US2] Create backend unit test for 42 OAuth integration in backend/tests/unit/auth_42.test.ts
-- [ ] T100 [P] [US2] Create backend unit test for POST /loan-requests in backend/tests/unit/loan_requests.test.ts
-- [ ] T101 [P] [US2] Create backend unit test for reservation queue logic in backend/tests/unit/reservations.test.ts
+- [X] T099 [P] [US2] Create backend unit test for 42 OAuth integration in backend/tests/unit/auth_42.test.ts
+- [X] T100 [P] [US2] Create backend unit test for POST /loan-requests in backend/tests/unit/loan_requests.test.ts
+- [X] T101 [P] [US2] Create backend unit test for reservation queue logic in backend/tests/unit/reservations.test.ts
 
 ### Implementation for User Story 2
 
