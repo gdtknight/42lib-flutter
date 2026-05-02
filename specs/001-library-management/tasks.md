@@ -280,7 +280,7 @@
 
 ### Tests for User Story 5
 
-- [ ] T132 [P] [US5] Create unit test for Loan model in test/unit_test/models/loan_test.dart
+- [X] T132 [P] [US5] Create unit test for Loan model in test/features/admin_catalog/data/models/loan_test.dart
 - [ ] T133 [P] [US5] Create widget test for loan management screen in test/widget_test/screens/web/loans/loans_screen_test.dart
 - [ ] T134 [P] [US5] Create integration test for loan approval flow in test/integration_test/admin_loan_management_test.dart
 - [X] T135 [P] [US5] Create backend unit test for PUT /loan-requests/:id/approve in backend/tests/unit/loan_requests.test.ts
@@ -291,8 +291,8 @@
 
 **Models & Data Layer**
 
-- [ ] T138 [P] [US5] Create Loan model in lib/models/loan.dart
-- [ ] T139 [US5] Create LoanRepository in lib/repositories/loan_repository.dart
+- [X] T138 [P] [US5] Create Loan model in lib/features/admin_catalog/data/models/loan.dart
+- [X] T139 [US5] Create LoanRepository in lib/features/admin_catalog/{domain,data}/repositories/admin_loan_repository*.dart
 
 **Backend API - Loan Management**
 
@@ -308,19 +308,19 @@
 
 **State Management**
 
-- [ ] T149 [US5] Update LoanBloc to support admin loan management operations
+- [X] T149 [US5] Update LoanBloc to support admin loan management operations *(별도 AdminLoansBloc 신설)*
 
 **UI Components - Web Dashboard**
 
-- [ ] T150 [P] [US5] Create LoanRequestCard widget in lib/widgets/admin/loan_request_card.dart
-- [ ] T151 [P] [US5] Create ActiveLoanCard widget in lib/widgets/admin/active_loan_card.dart
+- [X] T150 [P] [US5] Create LoanRequestCard widget in lib/widgets/admin/loan_request_card.dart *(LoansManagementScreen 내 _LoanRequestRow)*
+- [X] T151 [P] [US5] Create ActiveLoanCard widget in lib/widgets/admin/active_loan_card.dart *(LoansManagementScreen 내 _LoanRow)*
 - [ ] T152 [P] [US5] Create OverdueIndicator widget in lib/widgets/admin/overdue_indicator.dart
 
 **Screens - Web Dashboard**
 
-- [ ] T153 [US5] Create LoanManagementScreen in lib/screens/web/loans/loans_screen.dart
+- [X] T153 [US5] Create LoanManagementScreen in lib/screens/web/loans/loans_screen.dart *(features/admin_catalog/presentation/screens/loans_management_screen.dart)*
 - [ ] T154 [US5] Create LoanHistoryScreen with filters in lib/screens/web/loans/loan_history_screen.dart
-- [ ] T155 [US5] Add loan management routes to admin navigation
+- [X] T155 [US5] Add loan management routes to admin navigation *(/admin/loans + AdminSidebar 메뉴)*
 
 **Integration & Polish**
 
