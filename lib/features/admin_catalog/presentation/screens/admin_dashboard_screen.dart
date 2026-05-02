@@ -47,6 +47,16 @@ class AdminDashboardScreen extends StatelessWidget {
                         onTap: () => context.go('/admin/catalog'),
                       ),
                     ),
+                    const SizedBox(height: 8),
+                    Card(
+                      child: ListTile(
+                        leading: const Icon(Icons.assignment),
+                        title: const Text('대출 관리'),
+                        subtitle: const Text('대출 요청 승인, 반납 처리, 연체 추적'),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => context.go('/admin/loans'),
+                      ),
+                    ),
                   ],
                 ),
               ),
