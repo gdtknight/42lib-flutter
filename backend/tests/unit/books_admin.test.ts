@@ -169,8 +169,7 @@ describe('Admin book CRUD (T068/T069/T070)', () => {
         },
       });
       bookId = book.id;
-      const student = await prisma.student.findUnique({
-        where: { username: STUDENT.username },
+      const student = await prisma.student.findFirst({ where: { username: STUDENT.username },
       });
       studentId = student!.id;
     });

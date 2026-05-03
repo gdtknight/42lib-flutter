@@ -58,7 +58,7 @@ describe('GET /books', () => {
   });
 
   it('should return all books with default pagination', async () => {
-    const response = await request(app).get('/api/books').expect(200);
+    const response = await request(app).get('/api/v1/books').expect(200);
 
     expect(response.body.data).toHaveLength(3);
     expect(response.body.total).toBe(3);
@@ -68,7 +68,7 @@ describe('GET /books', () => {
 
   it('should return books with custom pagination', async () => {
     const response = await request(app)
-      .get('/api/books?page=1&limit=2')
+      .get('/api/v1/books?page=1&limit=2')
       .expect(200);
 
     expect(response.body.data).toHaveLength(2);
@@ -79,7 +79,7 @@ describe('GET /books', () => {
 
   it('should filter books by title', async () => {
     const response = await request(app)
-      .get('/api/books?title=Clean')
+      .get('/api/v1/books?title=Clean')
       .expect(200);
 
     expect(response.body.data).toHaveLength(1);
@@ -88,7 +88,7 @@ describe('GET /books', () => {
 
   it('should filter books by author', async () => {
     const response = await request(app)
-      .get('/api/books?author=Martin')
+      .get('/api/v1/books?author=Martin')
       .expect(200);
 
     expect(response.body.data).toHaveLength(1);
@@ -97,7 +97,7 @@ describe('GET /books', () => {
 
   it('should filter books by category', async () => {
     const response = await request(app)
-      .get('/api/books?category=Programming')
+      .get('/api/v1/books?category=Programming')
       .expect(200);
 
     expect(response.body.data).toHaveLength(2);
@@ -106,7 +106,7 @@ describe('GET /books', () => {
 
   it('should search books by multiple criteria', async () => {
     const response = await request(app)
-      .get('/api/books?title=Design&category=Programming')
+      .get('/api/v1/books?title=Design&category=Programming')
       .expect(200);
 
     expect(response.body.data).toHaveLength(1);
@@ -115,7 +115,7 @@ describe('GET /books', () => {
 
   it('should return empty array when no books match', async () => {
     const response = await request(app)
-      .get('/api/books?title=NonExistent')
+      .get('/api/v1/books?title=NonExistent')
       .expect(200);
 
     expect(response.body.data).toHaveLength(0);
@@ -124,7 +124,7 @@ describe('GET /books', () => {
 
   it('should sort books by title ascending', async () => {
     const response = await request(app)
-      .get('/api/books?sortBy=title&sortOrder=asc')
+      .get('/api/v1/books?sortBy=title&sortOrder=asc')
       .expect(200);
 
     expect(response.body.data[0].title).toBe('Clean Code');
@@ -132,14 +132,14 @@ describe('GET /books', () => {
 
   it('should sort books by createdAt descending', async () => {
     const response = await request(app)
-      .get('/api/books?sortBy=createdAt&sortOrder=desc')
+      .get('/api/v1/books?sortBy=createdAt&sortOrder=desc')
       .expect(200);
 
     expect(response.body.data).toHaveLength(3);
   });
 
   it('should return book with availability status', async () => {
-    const response = await request(app).get('/api/books').expect(200);
+    const response = await request(app).get('/api/v1/books').expect(200);
 
     const availableBook = response.body.data.find(
       (book: any) => book.id === '123e4567-e89b-12d3-a456-426614174000'
@@ -154,7 +154,7 @@ describe('GET /books', () => {
 
   it('should return 400 for invalid pagination parameters', async () => {
     const response = await request(app)
-      .get('/api/books?page=-1&limit=0')
+      .get('/api/v1/books?page=-1&limit=0')
       .expect(400);
 
     expect(response.body.error).toBeDefined();
@@ -162,7 +162,7 @@ describe('GET /books', () => {
 
   it('should handle case-insensitive search', async () => {
     const response = await request(app)
-      .get('/api/books?title=clean%20code')
+      .get('/api/v1/books?title=clean%20code')
       .expect(200);
 
     expect(response.body.data).toHaveLength(1);
@@ -198,7 +198,7 @@ describe('GET /books/:id', () => {
 
   it('should return a book by id', async () => {
     const response = await request(app)
-      .get(`/api/books/${testBookId}`)
+      .get(`/api/v1/books/${testBookId}`)
       .expect(200);
 
     expect(response.body.id).toBe(testBookId);
@@ -210,7 +210,7 @@ describe('GET /books/:id', () => {
   it('should return 404 for non-existent book', async () => {
     const nonExistentId = '123e4567-e89b-12d3-a456-426614174999';
     const response = await request(app)
-      .get(`/api/books/${nonExistentId}`)
+      .get(`/api/v1/books/${nonExistentId}`)
       .expect(404);
 
     expect(response.body.error).toBe('Book not found');
@@ -218,7 +218,7 @@ describe('GET /books/:id', () => {
 
   it('should return 400 for invalid UUID format', async () => {
     const response = await request(app)
-      .get('/api/books/invalid-uuid')
+      .get('/api/v1/books/invalid-uuid')
       .expect(400);
 
     expect(response.body.error).toBeDefined();
@@ -226,7 +226,7 @@ describe('GET /books/:id', () => {
 
   it('should include all book fields', async () => {
     const response = await request(app)
-      .get(`/api/books/${testBookId}`)
+      .get(`/api/v1/books/${testBookId}`)
       .expect(200);
 
     expect(response.body).toHaveProperty('id');

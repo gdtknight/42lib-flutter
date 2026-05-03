@@ -1,0 +1,29 @@
+# Codecov 설정 (Phase 11 / T220)
+#
+# Project = 전체 커버리지 (regression 방지).
+# Patch   = PR이 추가/변경한 라인 커버리지 (새 코드 품질).
+#
+# 임계는 현재 baseline (Flutter 62.8%, Backend 50%)을 기준으로 보수적 설정.
+# 점진 상향은 PR 단위로 spec MVP 정의(80%)를 향해.
+
+coverage:
+  precision: 1
+  round: down
+  status:
+    project:
+      default:
+        # 전체 커버리지가 1% 이상 떨어지면 실패.
+        target: auto
+        threshold: 1%
+        informational: false
+    patch:
+      default:
+        # 신규/변경 라인의 50% 이상이 테스트 커버리지를 가져야 함.
+        target: 50%
+        threshold: 5%
+        informational: false
+
+comment:
+  layout: 'reach,diff,flags,files'
+  behavior: default
+  require_changes: false
