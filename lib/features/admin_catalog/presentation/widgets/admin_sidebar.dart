@@ -51,6 +51,11 @@ class AdminSidebar extends StatelessWidget {
               selectedIcon: Icon(Icons.book),
               label: Text('도서 관리'),
             ),
+            const NavigationDrawerDestination(
+              icon: Icon(Icons.assignment_outlined),
+              selectedIcon: Icon(Icons.assignment),
+              label: Text('대출 관리'),
+            ),
             const Padding(
               padding: EdgeInsets.fromLTRB(28, 16, 28, 8),
               child: Divider(),
@@ -70,6 +75,7 @@ class AdminSidebar extends StatelessWidget {
 
   int get _selectedIndex {
     if (currentRoute.startsWith('/admin/catalog')) return 1;
+    if (currentRoute.startsWith('/admin/loans')) return 2;
     return 0;
   }
 
@@ -81,6 +87,9 @@ class AdminSidebar extends StatelessWidget {
         break;
       case 1:
         context.go('/admin/catalog');
+        break;
+      case 2:
+        context.go('/admin/loans');
         break;
     }
   }

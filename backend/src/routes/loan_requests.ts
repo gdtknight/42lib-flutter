@@ -5,7 +5,12 @@
 
 import express, { Response } from 'express';
 import { loanRequestService } from '../services/loan_request_service';
-import { authenticateStudent, AuthenticatedRequest } from '../middleware/auth';
+import { loanService, LoanError } from '../services/loan_service';
+import {
+  authenticateStudent,
+  authenticateAdmin,
+  AuthenticatedRequest,
+} from '../middleware/auth';
 import { logger } from '../utils/logger';
 
 const router = express.Router();
@@ -131,6 +136,75 @@ router.delete('/:id', authenticateStudent, async (req: AuthenticatedRequest, res
       error: 'Bad Request',
       message: error.message || '대출 신청 취소에 실패했습니다.',
     });
+  }
+});
+
+/**
+ * T140: GET /api/v1/loan-requests
+ * List pending loan requests (admin only).
+ */
+router.get('/', authenticateAdmin, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const data = await loanRequestService.getPendingLoanRequests();
+    res.json({ success: true, data });
+  } catch (error: any) {
+    logger.error('Failed to list loan requests for admin', { error: error.message });
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: '대출 요청 목록을 불러오지 못했습니다.',
+    });
+  }
+});
+
+/**
+ * T141: PUT /api/v1/loan-requests/:id/approve
+ * Approve a pending loan request — creates an active Loan.
+ */
+router.put('/:id/approve', authenticateAdmin, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user!.userId;
+    const { dueInDays, notes } = req.body ?? {};
+    const loan = await loanService.approveLoanRequest(req.params.id, adminId, {
+      dueInDays: typeof dueInDays === 'number' ? dueInDays : undefined,
+      notes,
+    });
+    res.json({ success: true, data: loan });
+  } catch (error: any) {
+    if (error instanceof LoanError) {
+      const status =
+        error.code === 'request_not_found' ? 404
+          : error.code === 'book_unavailable' ? 409
+            : 400;
+      return res.status(status).json({ error: error.code, message: error.message });
+    }
+    logger.error('Failed to approve loan request', { error: error.message });
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
+});
+
+/**
+ * T142: PUT /api/v1/loan-requests/:id/reject
+ * Reject a pending loan request with required reason.
+ */
+router.put('/:id/reject', authenticateAdmin, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user!.userId;
+    const reason = (req.body?.rejectionReason as string | undefined)?.trim();
+    if (!reason) {
+      return res.status(400).json({
+        error: 'Bad Request',
+        message: '반려 사유는 필수입니다.',
+      });
+    }
+    const updated = await loanService.rejectLoanRequest(req.params.id, adminId, reason);
+    res.json({ success: true, data: updated });
+  } catch (error: any) {
+    if (error instanceof LoanError) {
+      const status = error.code === 'request_not_found' ? 404 : 400;
+      return res.status(status).json({ error: error.code, message: error.message });
+    }
+    logger.error('Failed to reject loan request', { error: error.message });
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
   }
 });
 

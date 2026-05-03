@@ -47,7 +47,7 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T015 Run initial Prisma migration to create database schema in backend/prisma/migrations/
+- [X] T015 Run initial Prisma migration to create database schema in backend/prisma/migrations/
 - [X] T016 [P] Implement 42 brand theme with teal/cyan colors in lib/app/theme.dart
 - [X] T017 [P] Setup navigation/routing framework in lib/app/routes.dart
 - [X] T018 [P] Initialize Hive storage for key-value caching in lib/services/storage/hive_service.dart
@@ -205,15 +205,15 @@
 
 ### Tests for User Story 2
 
-- [ ] T093 [P] [US2] Create unit test for LoanRequest model in test/unit_test/models/loan_request_test.dart
+- [X] T093 [P] [US2] Create unit test for LoanRequest model in test/unit_test/models/loan_request_test.dart
 - [X] T094 [P] [US2] Create unit test for Reservation model in test/unit_test/models/reservation_test.dart
-- [ ] T095 [P] [US2] Create unit test for Student model in test/unit_test/models/student_test.dart
-- [ ] T096 [P] [US2] Create unit test for LoanBloc in test/unit_test/state/loan/loan_bloc_test.dart
-- [ ] T097 [P] [US2] Create widget test for loan request flow in test/widget_test/screens/mobile/loan/loan_request_test.dart
+- [X] T095 [P] [US2] Create unit test for Student model in test/unit_test/models/student_test.dart
+- [X] T096 [P] [US2] Create unit test for LoanBloc in test/unit_test/state/loan/loan_bloc_test.dart
+- [X] T097 [P] [US2] Create widget test for loan request flow in test/widget_test/screens/mobile/loan/loan_request_test.dart
 - [ ] T098 [P] [US2] Create integration test for 42 OAuth flow in test/integration_test/auth_42_test.dart
-- [ ] T099 [P] [US2] Create backend unit test for 42 OAuth integration in backend/tests/unit/auth_42.test.ts
-- [ ] T100 [P] [US2] Create backend unit test for POST /loan-requests in backend/tests/unit/loan_requests.test.ts
-- [ ] T101 [P] [US2] Create backend unit test for reservation queue logic in backend/tests/unit/reservations.test.ts
+- [X] T099 [P] [US2] Create backend unit test for 42 OAuth integration in backend/tests/unit/auth_42.test.ts
+- [X] T100 [P] [US2] Create backend unit test for POST /loan-requests in backend/tests/unit/loan_requests.test.ts
+- [X] T101 [P] [US2] Create backend unit test for reservation queue logic in backend/tests/unit/reservations.test.ts
 
 ### Implementation for User Story 2
 
@@ -263,8 +263,8 @@
 
 **Integration & Polish**
 
-- [ ] T128 [US2] Implement graceful handling of 42 API failures with error messages
-- [ ] T129 [US2] Add loan request confirmation dialogs
+- [X] T128 [US2] Implement graceful handling of 42 API failures with error messages
+- [X] T129 [US2] Add loan request confirmation dialogs
 - [X] T130 [US2] Display reservation queue position in student profile
 - [ ] T131 [US2] Add offline queue for loan requests (sync when online)
 
@@ -280,47 +280,47 @@
 
 ### Tests for User Story 5
 
-- [ ] T132 [P] [US5] Create unit test for Loan model in test/unit_test/models/loan_test.dart
+- [X] T132 [P] [US5] Create unit test for Loan model in test/features/admin_catalog/data/models/loan_test.dart
 - [ ] T133 [P] [US5] Create widget test for loan management screen in test/widget_test/screens/web/loans/loans_screen_test.dart
 - [ ] T134 [P] [US5] Create integration test for loan approval flow in test/integration_test/admin_loan_management_test.dart
-- [ ] T135 [P] [US5] Create backend unit test for PUT /loan-requests/:id/approve in backend/tests/unit/loan_requests.test.ts
-- [ ] T136 [P] [US5] Create backend unit test for PUT /loans/:id/return in backend/tests/unit/loans.test.ts
-- [ ] T137 [P] [US5] Create backend unit test for overdue detection in backend/tests/unit/loans.test.ts
+- [X] T135 [P] [US5] Create backend unit test for PUT /loan-requests/:id/approve in backend/tests/unit/loan_requests.test.ts
+- [X] T136 [P] [US5] Create backend unit test for PUT /loans/:id/return in backend/tests/unit/loans.test.ts
+- [X] T137 [P] [US5] Create backend unit test for overdue detection in backend/tests/unit/loans.test.ts
 
 ### Implementation for User Story 5
 
 **Models & Data Layer**
 
-- [ ] T138 [P] [US5] Create Loan model in lib/models/loan.dart
-- [ ] T139 [US5] Create LoanRepository in lib/repositories/loan_repository.dart
+- [X] T138 [P] [US5] Create Loan model in lib/features/admin_catalog/data/models/loan.dart
+- [X] T139 [US5] Create LoanRepository in lib/features/admin_catalog/{domain,data}/repositories/admin_loan_repository*.dart
 
 **Backend API - Loan Management**
 
-- [ ] T140 [P] [US5] Implement GET /loan-requests endpoint (admin) in backend/src/routes/loan_requests.ts
-- [ ] T141 [P] [US5] Implement PUT /loan-requests/:id/approve endpoint in backend/src/routes/loan_requests.ts
-- [ ] T142 [P] [US5] Implement PUT /loan-requests/:id/reject endpoint in backend/src/routes/loan_requests.ts
-- [ ] T143 [P] [US5] Implement GET /loans endpoint (admin) in backend/src/routes/loans.ts
-- [ ] T144 [P] [US5] Implement PUT /loans/:id/return endpoint in backend/src/routes/loans.ts
-- [ ] T145 [P] [US5] Implement GET /loans/history endpoint with filters in backend/src/routes/loans.ts
-- [ ] T146 [US5] Implement loan approval logic with availability check in backend/src/services/loan_service.ts
-- [ ] T147 [US5] Implement automatic overdue detection in backend/src/services/loan_service.ts
-- [ ] T148 [US5] Add notification to reservation queue when book returned
+- [X] T140 [P] [US5] Implement GET /loan-requests endpoint (admin) in backend/src/routes/loan_requests.ts
+- [X] T141 [P] [US5] Implement PUT /loan-requests/:id/approve endpoint in backend/src/routes/loan_requests.ts
+- [X] T142 [P] [US5] Implement PUT /loan-requests/:id/reject endpoint in backend/src/routes/loan_requests.ts
+- [X] T143 [P] [US5] Implement GET /loans endpoint (admin) in backend/src/routes/loans.ts
+- [X] T144 [P] [US5] Implement PUT /loans/:id/return endpoint in backend/src/routes/loans.ts
+- [X] T145 [P] [US5] Implement GET /loans/history endpoint with filters in backend/src/routes/loans.ts
+- [X] T146 [US5] Implement loan approval logic with availability check in backend/src/services/loan_service.ts
+- [X] T147 [US5] Implement automatic overdue detection in backend/src/services/loan_service.ts
+- [X] T148 [US5] Add notification to reservation queue when book returned
 
 **State Management**
 
-- [ ] T149 [US5] Update LoanBloc to support admin loan management operations
+- [X] T149 [US5] Update LoanBloc to support admin loan management operations *(별도 AdminLoansBloc 신설)*
 
 **UI Components - Web Dashboard**
 
-- [ ] T150 [P] [US5] Create LoanRequestCard widget in lib/widgets/admin/loan_request_card.dart
-- [ ] T151 [P] [US5] Create ActiveLoanCard widget in lib/widgets/admin/active_loan_card.dart
+- [X] T150 [P] [US5] Create LoanRequestCard widget in lib/widgets/admin/loan_request_card.dart *(LoansManagementScreen 내 _LoanRequestRow)*
+- [X] T151 [P] [US5] Create ActiveLoanCard widget in lib/widgets/admin/active_loan_card.dart *(LoansManagementScreen 내 _LoanRow)*
 - [ ] T152 [P] [US5] Create OverdueIndicator widget in lib/widgets/admin/overdue_indicator.dart
 
 **Screens - Web Dashboard**
 
-- [ ] T153 [US5] Create LoanManagementScreen in lib/screens/web/loans/loans_screen.dart
+- [X] T153 [US5] Create LoanManagementScreen in lib/screens/web/loans/loans_screen.dart *(features/admin_catalog/presentation/screens/loans_management_screen.dart)*
 - [ ] T154 [US5] Create LoanHistoryScreen with filters in lib/screens/web/loans/loan_history_screen.dart
-- [ ] T155 [US5] Add loan management routes to admin navigation
+- [X] T155 [US5] Add loan management routes to admin navigation *(/admin/loans + AdminSidebar 메뉴)*
 
 **Integration & Polish**
 
