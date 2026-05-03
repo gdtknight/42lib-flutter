@@ -465,12 +465,12 @@
 
 **Purpose**: Achieve 80% code coverage and validate all success criteria
 
-- [ ] T217 [P] Run all unit tests and verify 60% coverage minimum in test/unit_test/
-- [ ] T218 [P] Run all widget tests and verify 30% coverage minimum in test/widget_test/
-- [ ] T219 [P] Run all integration tests and verify 10% coverage minimum in test/integration_test/
-- [ ] T220 Generate Flutter coverage report with lcov
-- [ ] T221 [P] Run backend unit tests and verify coverage in backend/tests/
-- [ ] T222 Generate backend coverage report with Jest
+- [X] T217 [P] Run all unit tests and verify 60% coverage minimum in test/unit_test/
+- [X] T218 [P] Run all widget tests and verify 30% coverage minimum in test/widget_test/
+- [X] T219 [P] Run all integration tests and verify 10% coverage minimum in test/integration_test/
+- [X] T220 Generate Flutter coverage report with lcov
+- [X] T221 [P] Run backend unit tests and verify coverage in backend/tests/
+- [X] T222 Generate backend coverage report with Jest
 - [ ] T223 [P] Test iOS build on iOS 17, 16, 15, 14 simulators
 - [ ] T224 [P] Test Android build on Android 14, 13, 12, 11 emulators
 - [ ] T225 [P] Test Web build on Chrome, Safari, Firefox, Edge (latest 2 versions)
