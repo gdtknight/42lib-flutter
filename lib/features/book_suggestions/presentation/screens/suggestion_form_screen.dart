@@ -97,8 +97,7 @@ class _SuggestionFormViewState extends State<_SuggestionFormView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (state is SuggestionLoaded &&
-                        state.activePeriod != null)
+                    if (state is SuggestionLoaded && state.activePeriod != null)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: Text(

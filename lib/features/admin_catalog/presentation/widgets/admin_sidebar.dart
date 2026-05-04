@@ -56,6 +56,16 @@ class AdminSidebar extends StatelessWidget {
               selectedIcon: Icon(Icons.assignment),
               label: Text('대출 관리'),
             ),
+            const NavigationDrawerDestination(
+              icon: Icon(Icons.lightbulb_outline),
+              selectedIcon: Icon(Icons.lightbulb),
+              label: Text('도서 추천 검토'),
+            ),
+            const NavigationDrawerDestination(
+              icon: Icon(Icons.event_outlined),
+              selectedIcon: Icon(Icons.event),
+              label: Text('수집 기간'),
+            ),
             const Padding(
               padding: EdgeInsets.fromLTRB(28, 16, 28, 8),
               child: Divider(),
@@ -76,6 +86,8 @@ class AdminSidebar extends StatelessWidget {
   int get _selectedIndex {
     if (currentRoute.startsWith('/admin/catalog')) return 1;
     if (currentRoute.startsWith('/admin/loans')) return 2;
+    if (currentRoute.startsWith('/admin/suggestions')) return 3;
+    if (currentRoute.startsWith('/admin/collection-periods')) return 4;
     return 0;
   }
 
@@ -90,6 +102,12 @@ class AdminSidebar extends StatelessWidget {
         break;
       case 2:
         context.go('/admin/loans');
+        break;
+      case 3:
+        context.go('/admin/suggestions');
+        break;
+      case 4:
+        context.go('/admin/collection-periods');
         break;
     }
   }

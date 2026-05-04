@@ -2,7 +2,8 @@ import '../../data/models/book_suggestion.dart';
 import '../../data/models/collection_period.dart';
 
 class SuggestionException implements Exception {
-  final String code; // no_active_period | duplicate_suggestion | network | unauthorized | unknown
+  final String
+      code; // no_active_period | duplicate_suggestion | network | unauthorized | unknown
   final String message;
   const SuggestionException(this.code, this.message);
 

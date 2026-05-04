@@ -392,7 +392,7 @@
 
 ### Tests for User Story 6
 
-- [ ] T181 [P] [US6] Create widget test for suggestions review screen in test/widget_test/screens/web/suggestions/suggestions_screen_test.dart
+- [X] T181 [P] [US6] Create widget test for suggestions review screen in test/widget_test/screens/web/suggestions/suggestions_screen_test.dart (path: test/features/book_suggestions/presentation/screens/suggestions_review_screen_test.dart + admin_suggestions_bloc_test.dart)
 - [X] T182 [P] [US6] Create backend unit test for GET /suggestions endpoint in backend/tests/unit/suggestions.test.ts
 - [X] T183 [P] [US6] Create backend unit test for suggestion grouping in backend/tests/unit/suggestions.test.ts
 
@@ -408,21 +408,21 @@
 
 **UI Components - Web Dashboard**
 
-- [ ] T189 [P] [US6] Create SuggestionCard with requester count in lib/widgets/admin/suggestion_card.dart
-- [ ] T190 [P] [US6] Create CollectionPeriodSelector widget in lib/widgets/admin/collection_period_selector.dart
+- [X] T189 [P] [US6] Create SuggestionCard with requester count (inlined as `_GroupCard` in suggestions_review_screen.dart)
+- [X] T190 [P] [US6] Create CollectionPeriodSelector widget (inlined `_PeriodForm` in collection_periods_screen.dart — feature uses /active period; no list selector needed yet)
 
 **Screens - Web Dashboard**
 
-- [ ] T191 [US6] Create SuggestionsReviewScreen in lib/screens/web/suggestions/suggestions_screen.dart
-- [ ] T192 [US6] Create CollectionPeriodsScreen in lib/screens/web/suggestions/collection_periods_screen.dart
-- [ ] T193 [US6] Add suggestion management routes to admin navigation
+- [X] T191 [US6] Create SuggestionsReviewScreen — path: lib/features/book_suggestions/presentation/screens/suggestions_review_screen.dart (feature-first per ADR 0001)
+- [X] T192 [US6] Create CollectionPeriodsScreen — path: lib/features/book_suggestions/presentation/screens/collection_periods_screen.dart
+- [X] T193 [US6] Add suggestion management routes to admin navigation (/admin/suggestions, /admin/collection-periods + sidebar entries)
 
 **Integration & Polish**
 
-- [ ] T194 [US6] Implement grouped suggestion display with duplicate count
-- [ ] T195 [US6] Add status update (approved/rejected/under review) functionality
-- [ ] T196 [US6] Add option to add approved suggestion directly to catalog
-- [ ] T197 [US6] Display suggestion statistics (most requested categories)
+- [X] T194 [US6] Implement grouped suggestion display with duplicate count (statuses chips + 추천 N명 badge)
+- [X] T195 [US6] Add status update (approved/rejected/under review) functionality (per-item dialog with admin notes)
+- [ ] T196 [US6] Add option to add approved suggestion directly to catalog (deferred — backend endpoint not in scope for v0.4.0)
+- [ ] T197 [US6] Display suggestion statistics (most requested categories) (deferred — analytics out of MVP)
 
 **Checkpoint**: User Story 6 complete - admins can review suggestions, all user stories functional
 
