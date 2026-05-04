@@ -10,6 +10,8 @@ import authRoutes from './routes/auth';
 import loanRequestRoutes from './routes/loan_requests';
 import loanRoutes from './routes/loans';
 import adminRoutes from './routes/admin';
+import suggestionRoutes from './routes/suggestions';
+import collectionPeriodRoutes from './routes/collection_periods';
 
 const app: Express = express();
 const prisma = new PrismaClient();
@@ -40,6 +42,8 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/loan-requests', loanRequestRoutes);
 app.use('/api/v1/loans', loanRoutes);
 app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/suggestions', suggestionRoutes);
+app.use('/api/v1/collection-periods', collectionPeriodRoutes);
 
 app.get('/api/v1', (req, res) => {
   res.json({ message: '42lib API v1', status: 'ready' });
