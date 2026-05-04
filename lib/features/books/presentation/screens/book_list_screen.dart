@@ -57,6 +57,11 @@ class _BookListViewState extends State<_BookListView> {
         centerTitle: true,
         actions: [
           IconButton(
+            icon: const Icon(Icons.lightbulb_outline),
+            tooltip: '내 희망 도서',
+            onPressed: () => context.go('/suggestions/mine'),
+          ),
+          IconButton(
             icon: Icon(_isGridView ? Icons.list : Icons.grid_view),
             onPressed: _toggleView,
             tooltip: _isGridView ? 'List view' : 'Grid view',

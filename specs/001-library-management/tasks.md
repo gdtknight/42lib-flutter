@@ -341,8 +341,8 @@
 
 ### Tests for User Story 3
 
-- [ ] T160 [P] [US3] Create unit test for BookSuggestion model in test/unit_test/models/book_suggestion_test.dart
-- [ ] T161 [P] [US3] Create unit test for CollectionPeriod model in test/unit_test/models/collection_period_test.dart
+- [X] T160 [P] [US3] Create unit test for BookSuggestion model in test/unit_test/models/book_suggestion_test.dart
+- [X] T161 [P] [US3] Create unit test for CollectionPeriod model in test/unit_test/models/collection_period_test.dart
 - [ ] T162 [P] [US3] Create widget test for suggestion form in test/widget_test/screens/mobile/suggestions/suggestion_form_test.dart
 - [X] T163 [P] [US3] Create backend unit test for POST /suggestions in backend/tests/unit/suggestions.test.ts
 - [X] T164 [P] [US3] Create backend unit test for collection period validation in backend/tests/unit/collection_periods.test.ts
@@ -351,9 +351,9 @@
 
 **Models & Data Layer**
 
-- [ ] T165 [P] [US3] Create BookSuggestion model in lib/models/book_suggestion.dart
-- [ ] T166 [P] [US3] Create CollectionPeriod model in lib/models/collection_period.dart
-- [ ] T167 [US3] Create BookSuggestionRepository in lib/repositories/book_suggestion_repository.dart
+- [X] T165 [P] [US3] Create BookSuggestion model in lib/models/book_suggestion.dart
+- [X] T166 [P] [US3] Create CollectionPeriod model in lib/models/collection_period.dart
+- [X] T167 [US3] Create BookSuggestionRepository in lib/repositories/book_suggestion_repository.dart
 
 **Backend API - Suggestions**
 
@@ -364,15 +364,15 @@
 
 **State Management**
 
-- [ ] T172 [P] [US3] Create SuggestionEvent classes in lib/state/suggestion/suggestion_event.dart
-- [ ] T173 [P] [US3] Create SuggestionState classes in lib/state/suggestion/suggestion_state.dart
-- [ ] T174 [US3] Implement SuggestionBloc in lib/state/suggestion/suggestion_bloc.dart
+- [X] T172 [P] [US3] Create SuggestionEvent classes in lib/state/suggestion/suggestion_event.dart
+- [X] T173 [P] [US3] Create SuggestionState classes in lib/state/suggestion/suggestion_state.dart
+- [X] T174 [US3] Implement SuggestionBloc in lib/state/suggestion/suggestion_bloc.dart
 
 **Screens**
 
-- [ ] T175 [US3] Create SuggestionFormScreen in lib/screens/mobile/suggestions/suggestion_form_screen.dart
-- [ ] T176 [US3] Create MySuggestionsScreen in lib/screens/mobile/suggestions/my_suggestions_screen.dart
-- [ ] T177 [US3] Add suggestion routes to navigation
+- [X] T175 [US3] Create SuggestionFormScreen in lib/screens/mobile/suggestions/suggestion_form_screen.dart
+- [X] T176 [US3] Create MySuggestionsScreen in lib/screens/mobile/suggestions/my_suggestions_screen.dart
+- [X] T177 [US3] Add suggestion routes to navigation
 
 **Integration & Polish**
 
