@@ -3,14 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lib_42_flutter/features/book_suggestions/data/models/book_suggestion.dart';
 import 'package:lib_42_flutter/features/book_suggestions/presentation/screens/suggestions_review_screen.dart';
 
+import '../../../../support/fake_admin_book_repository.dart';
 import '../../../../support/fake_admin_suggestion_repository.dart';
 
 Future<void> _pump(
   WidgetTester tester,
-  FakeAdminSuggestionRepository repo,
-) async {
+  FakeAdminSuggestionRepository repo, {
+  FakeAdminBookRepository? bookRepo,
+}) async {
   await tester.pumpWidget(MaterialApp(
-    home: SuggestionsReviewScreen(repository: repo),
+    home: SuggestionsReviewScreen(
+      repository: repo,
+      bookRepository: bookRepo ?? FakeAdminBookRepository(),
+    ),
   ));
   // Initial AdminSuggestionsRequested → AdminSuggestionsLoading → Loaded.
   await tester.pump();
@@ -60,6 +65,45 @@ void main() {
 
       expect(find.textContaining('네트워크 오류'), findsOneWidget);
       expect(find.widgetWithText(FilledButton, '다시 시도'), findsOneWidget);
+    });
+
+    testWidgets('promote action calls AdminBookRepository.createBook (T196)',
+        (tester) async {
+      final repo = FakeAdminSuggestionRepository()
+        ..grouped = [
+          makeGroup(items: [
+            makeSuggestion(
+              id: 'a',
+              suggestedTitle: '클린 아키텍처',
+              suggestedAuthor: 'R. Martin',
+              status: SuggestionStatus.approved,
+            ),
+          ]),
+        ];
+      final bookRepo = FakeAdminBookRepository();
+      await _pump(tester, repo, bookRepo: bookRepo);
+
+      await tester.tap(find.byTooltip('카탈로그에 등록'));
+      await tester.pumpAndSettle();
+
+      // Title and author should be prefilled.
+      expect(find.widgetWithText(TextFormField, '클린 아키텍처'), findsOneWidget);
+      expect(find.widgetWithText(TextFormField, 'R. Martin'), findsOneWidget);
+
+      // Fill required category (3rd TextFormField: title/author/category),
+      // then submit. The submit button sits below the viewport in the
+      // 800×600 test surface, so scroll it into view first.
+      await tester.enterText(find.byType(TextFormField).at(2), 'Programming');
+      await tester.pump();
+      final submit = find.widgetWithText(FilledButton, '카탈로그에 등록');
+      await tester.ensureVisible(submit);
+      await tester.pumpAndSettle();
+      await tester.tap(submit, warnIfMissed: false);
+      await tester.pumpAndSettle();
+      // Allow async createBook + dialog dismiss + snackbar.
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(bookRepo.createCalls, 1);
     });
 
     testWidgets('approve action shows dialog with notes field', (tester) async {
