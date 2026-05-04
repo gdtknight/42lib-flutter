@@ -24,8 +24,7 @@ class MySuggestionsScreen extends StatelessWidget {
     }
     return BlocProvider<SuggestionBloc>(
       create: (_) => SuggestionBloc(
-        repository:
-            SuggestionRepositoryImpl(baseUrl: AppConfig.apiBaseUrl),
+        repository: SuggestionRepositoryImpl(baseUrl: AppConfig.apiBaseUrl),
       )..add(const SuggestionsRequested()),
       child: const _MySuggestionsView(),
     );
@@ -44,8 +43,9 @@ class _MySuggestionsView extends StatelessWidget {
           IconButton(
             tooltip: '새로고침',
             icon: const Icon(Icons.refresh),
-            onPressed: () =>
-                context.read<SuggestionBloc>().add(const SuggestionsRequested()),
+            onPressed: () => context
+                .read<SuggestionBloc>()
+                .add(const SuggestionsRequested()),
           ),
         ],
       ),
@@ -104,8 +104,8 @@ class _MySuggestionsView extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
                         itemCount: loaded.mySuggestions.length,
                         separatorBuilder: (_, __) => const Divider(height: 1),
-                        itemBuilder: (context, i) =>
-                            _SuggestionTile(suggestion: loaded.mySuggestions[i]),
+                        itemBuilder: (context, i) => _SuggestionTile(
+                            suggestion: loaded.mySuggestions[i]),
                       ),
               ),
             ],
@@ -164,8 +164,7 @@ class _EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.lightbulb_outline,
-                size: 56, color: Colors.grey[400]),
+            Icon(Icons.lightbulb_outline, size: 56, color: Colors.grey[400]),
             const SizedBox(height: 12),
             Text(
               '아직 제출한 추천이 없습니다.\n우측 하단 + 버튼으로 추천을 시작하세요.',
@@ -231,8 +230,7 @@ class _SuggestionTile extends StatelessWidget {
         ],
       ),
       trailing: Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
           color: _statusColor(context).withOpacity(0.12),
           border: Border.all(color: _statusColor(context).withOpacity(0.4)),
