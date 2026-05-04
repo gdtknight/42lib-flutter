@@ -341,38 +341,38 @@
 
 ### Tests for User Story 3
 
-- [ ] T160 [P] [US3] Create unit test for BookSuggestion model in test/unit_test/models/book_suggestion_test.dart
-- [ ] T161 [P] [US3] Create unit test for CollectionPeriod model in test/unit_test/models/collection_period_test.dart
+- [X] T160 [P] [US3] Create unit test for BookSuggestion model in test/unit_test/models/book_suggestion_test.dart
+- [X] T161 [P] [US3] Create unit test for CollectionPeriod model in test/unit_test/models/collection_period_test.dart
 - [ ] T162 [P] [US3] Create widget test for suggestion form in test/widget_test/screens/mobile/suggestions/suggestion_form_test.dart
-- [ ] T163 [P] [US3] Create backend unit test for POST /suggestions in backend/tests/unit/suggestions.test.ts
-- [ ] T164 [P] [US3] Create backend unit test for collection period validation in backend/tests/unit/collection_periods.test.ts
+- [X] T163 [P] [US3] Create backend unit test for POST /suggestions in backend/tests/unit/suggestions.test.ts
+- [X] T164 [P] [US3] Create backend unit test for collection period validation in backend/tests/unit/collection_periods.test.ts
 
 ### Implementation for User Story 3
 
 **Models & Data Layer**
 
-- [ ] T165 [P] [US3] Create BookSuggestion model in lib/models/book_suggestion.dart
-- [ ] T166 [P] [US3] Create CollectionPeriod model in lib/models/collection_period.dart
-- [ ] T167 [US3] Create BookSuggestionRepository in lib/repositories/book_suggestion_repository.dart
+- [X] T165 [P] [US3] Create BookSuggestion model in lib/models/book_suggestion.dart
+- [X] T166 [P] [US3] Create CollectionPeriod model in lib/models/collection_period.dart
+- [X] T167 [US3] Create BookSuggestionRepository in lib/repositories/book_suggestion_repository.dart
 
 **Backend API - Suggestions**
 
-- [ ] T168 [P] [US3] Implement POST /suggestions endpoint in backend/src/routes/suggestions.ts
-- [ ] T169 [P] [US3] Implement GET /suggestions/my endpoint in backend/src/routes/suggestions.ts
-- [ ] T170 [P] [US3] Implement GET /collection-periods/active endpoint in backend/src/routes/collection_periods.ts
-- [ ] T171 [US3] Add collection period validation to suggestion submission in backend/src/services/suggestion_service.ts
+- [X] T168 [P] [US3] Implement POST /suggestions endpoint in backend/src/routes/suggestions.ts
+- [X] T169 [P] [US3] Implement GET /suggestions/my endpoint in backend/src/routes/suggestions.ts
+- [X] T170 [P] [US3] Implement GET /collection-periods/active endpoint in backend/src/routes/collection_periods.ts
+- [X] T171 [US3] Add collection period validation to suggestion submission in backend/src/services/suggestion_service.ts
 
 **State Management**
 
-- [ ] T172 [P] [US3] Create SuggestionEvent classes in lib/state/suggestion/suggestion_event.dart
-- [ ] T173 [P] [US3] Create SuggestionState classes in lib/state/suggestion/suggestion_state.dart
-- [ ] T174 [US3] Implement SuggestionBloc in lib/state/suggestion/suggestion_bloc.dart
+- [X] T172 [P] [US3] Create SuggestionEvent classes in lib/state/suggestion/suggestion_event.dart
+- [X] T173 [P] [US3] Create SuggestionState classes in lib/state/suggestion/suggestion_state.dart
+- [X] T174 [US3] Implement SuggestionBloc in lib/state/suggestion/suggestion_bloc.dart
 
 **Screens**
 
-- [ ] T175 [US3] Create SuggestionFormScreen in lib/screens/mobile/suggestions/suggestion_form_screen.dart
-- [ ] T176 [US3] Create MySuggestionsScreen in lib/screens/mobile/suggestions/my_suggestions_screen.dart
-- [ ] T177 [US3] Add suggestion routes to navigation
+- [X] T175 [US3] Create SuggestionFormScreen in lib/screens/mobile/suggestions/suggestion_form_screen.dart
+- [X] T176 [US3] Create MySuggestionsScreen in lib/screens/mobile/suggestions/my_suggestions_screen.dart
+- [X] T177 [US3] Add suggestion routes to navigation
 
 **Integration & Polish**
 
@@ -392,37 +392,37 @@
 
 ### Tests for User Story 6
 
-- [ ] T181 [P] [US6] Create widget test for suggestions review screen in test/widget_test/screens/web/suggestions/suggestions_screen_test.dart
-- [ ] T182 [P] [US6] Create backend unit test for GET /suggestions endpoint in backend/tests/unit/suggestions.test.ts
-- [ ] T183 [P] [US6] Create backend unit test for suggestion grouping in backend/tests/unit/suggestions.test.ts
+- [X] T181 [P] [US6] Create widget test for suggestions review screen in test/widget_test/screens/web/suggestions/suggestions_screen_test.dart (path: test/features/book_suggestions/presentation/screens/suggestions_review_screen_test.dart + admin_suggestions_bloc_test.dart)
+- [X] T182 [P] [US6] Create backend unit test for GET /suggestions endpoint in backend/tests/unit/suggestions.test.ts
+- [X] T183 [P] [US6] Create backend unit test for suggestion grouping in backend/tests/unit/suggestions.test.ts
 
 ### Implementation for User Story 6
 
 **Backend API - Admin Suggestions**
 
-- [ ] T184 [P] [US6] Implement GET /suggestions endpoint (admin, grouped) in backend/src/routes/suggestions.ts
-- [ ] T185 [P] [US6] Implement PUT /suggestions/:id/status endpoint in backend/src/routes/suggestions.ts
-- [ ] T186 [P] [US6] Implement POST /collection-periods endpoint in backend/src/routes/collection_periods.ts
-- [ ] T187 [US6] Implement suggestion grouping by title+author in backend/src/services/suggestion_service.ts
-- [ ] T188 [US6] Add collection period archival logic in backend/src/services/collection_period_service.ts
+- [X] T184 [P] [US6] Implement GET /suggestions endpoint (admin, grouped) in backend/src/routes/suggestions.ts
+- [X] T185 [P] [US6] Implement PUT /suggestions/:id/status endpoint in backend/src/routes/suggestions.ts
+- [X] T186 [P] [US6] Implement POST /collection-periods endpoint in backend/src/routes/collection_periods.ts
+- [X] T187 [US6] Implement suggestion grouping by title+author in backend/src/services/suggestion_service.ts
+- [X] T188 [US6] Add collection period archival logic in backend/src/services/collection_period_service.ts
 
 **UI Components - Web Dashboard**
 
-- [ ] T189 [P] [US6] Create SuggestionCard with requester count in lib/widgets/admin/suggestion_card.dart
-- [ ] T190 [P] [US6] Create CollectionPeriodSelector widget in lib/widgets/admin/collection_period_selector.dart
+- [X] T189 [P] [US6] Create SuggestionCard with requester count (inlined as `_GroupCard` in suggestions_review_screen.dart)
+- [X] T190 [P] [US6] Create CollectionPeriodSelector widget (inlined `_PeriodForm` in collection_periods_screen.dart — feature uses /active period; no list selector needed yet)
 
 **Screens - Web Dashboard**
 
-- [ ] T191 [US6] Create SuggestionsReviewScreen in lib/screens/web/suggestions/suggestions_screen.dart
-- [ ] T192 [US6] Create CollectionPeriodsScreen in lib/screens/web/suggestions/collection_periods_screen.dart
-- [ ] T193 [US6] Add suggestion management routes to admin navigation
+- [X] T191 [US6] Create SuggestionsReviewScreen — path: lib/features/book_suggestions/presentation/screens/suggestions_review_screen.dart (feature-first per ADR 0001)
+- [X] T192 [US6] Create CollectionPeriodsScreen — path: lib/features/book_suggestions/presentation/screens/collection_periods_screen.dart
+- [X] T193 [US6] Add suggestion management routes to admin navigation (/admin/suggestions, /admin/collection-periods + sidebar entries)
 
 **Integration & Polish**
 
-- [ ] T194 [US6] Implement grouped suggestion display with duplicate count
-- [ ] T195 [US6] Add status update (approved/rejected/under review) functionality
-- [ ] T196 [US6] Add option to add approved suggestion directly to catalog
-- [ ] T197 [US6] Display suggestion statistics (most requested categories)
+- [X] T194 [US6] Implement grouped suggestion display with duplicate count (statuses chips + 추천 N명 badge)
+- [X] T195 [US6] Add status update (approved/rejected/under review) functionality (per-item dialog with admin notes)
+- [ ] T196 [US6] Add option to add approved suggestion directly to catalog (deferred — backend endpoint not in scope for v0.4.0)
+- [ ] T197 [US6] Display suggestion statistics (most requested categories) (deferred — analytics out of MVP)
 
 **Checkpoint**: User Story 6 complete - admins can review suggestions, all user stories functional
 
