@@ -393,18 +393,18 @@
 ### Tests for User Story 6
 
 - [ ] T181 [P] [US6] Create widget test for suggestions review screen in test/widget_test/screens/web/suggestions/suggestions_screen_test.dart
-- [ ] T182 [P] [US6] Create backend unit test for GET /suggestions endpoint in backend/tests/unit/suggestions.test.ts
-- [ ] T183 [P] [US6] Create backend unit test for suggestion grouping in backend/tests/unit/suggestions.test.ts
+- [X] T182 [P] [US6] Create backend unit test for GET /suggestions endpoint in backend/tests/unit/suggestions.test.ts
+- [X] T183 [P] [US6] Create backend unit test for suggestion grouping in backend/tests/unit/suggestions.test.ts
 
 ### Implementation for User Story 6
 
 **Backend API - Admin Suggestions**
 
-- [ ] T184 [P] [US6] Implement GET /suggestions endpoint (admin, grouped) in backend/src/routes/suggestions.ts
-- [ ] T185 [P] [US6] Implement PUT /suggestions/:id/status endpoint in backend/src/routes/suggestions.ts
-- [ ] T186 [P] [US6] Implement POST /collection-periods endpoint in backend/src/routes/collection_periods.ts
-- [ ] T187 [US6] Implement suggestion grouping by title+author in backend/src/services/suggestion_service.ts
-- [ ] T188 [US6] Add collection period archival logic in backend/src/services/collection_period_service.ts
+- [X] T184 [P] [US6] Implement GET /suggestions endpoint (admin, grouped) in backend/src/routes/suggestions.ts
+- [X] T185 [P] [US6] Implement PUT /suggestions/:id/status endpoint in backend/src/routes/suggestions.ts
+- [X] T186 [P] [US6] Implement POST /collection-periods endpoint in backend/src/routes/collection_periods.ts
+- [X] T187 [US6] Implement suggestion grouping by title+author in backend/src/services/suggestion_service.ts
+- [X] T188 [US6] Add collection period archival logic in backend/src/services/collection_period_service.ts
 
 **UI Components - Web Dashboard**
 
