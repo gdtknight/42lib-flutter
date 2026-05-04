@@ -344,8 +344,8 @@
 - [ ] T160 [P] [US3] Create unit test for BookSuggestion model in test/unit_test/models/book_suggestion_test.dart
 - [ ] T161 [P] [US3] Create unit test for CollectionPeriod model in test/unit_test/models/collection_period_test.dart
 - [ ] T162 [P] [US3] Create widget test for suggestion form in test/widget_test/screens/mobile/suggestions/suggestion_form_test.dart
-- [ ] T163 [P] [US3] Create backend unit test for POST /suggestions in backend/tests/unit/suggestions.test.ts
-- [ ] T164 [P] [US3] Create backend unit test for collection period validation in backend/tests/unit/collection_periods.test.ts
+- [X] T163 [P] [US3] Create backend unit test for POST /suggestions in backend/tests/unit/suggestions.test.ts
+- [X] T164 [P] [US3] Create backend unit test for collection period validation in backend/tests/unit/collection_periods.test.ts
 
 ### Implementation for User Story 3
 
@@ -357,10 +357,10 @@
 
 **Backend API - Suggestions**
 
-- [ ] T168 [P] [US3] Implement POST /suggestions endpoint in backend/src/routes/suggestions.ts
-- [ ] T169 [P] [US3] Implement GET /suggestions/my endpoint in backend/src/routes/suggestions.ts
-- [ ] T170 [P] [US3] Implement GET /collection-periods/active endpoint in backend/src/routes/collection_periods.ts
-- [ ] T171 [US3] Add collection period validation to suggestion submission in backend/src/services/suggestion_service.ts
+- [X] T168 [P] [US3] Implement POST /suggestions endpoint in backend/src/routes/suggestions.ts
+- [X] T169 [P] [US3] Implement GET /suggestions/my endpoint in backend/src/routes/suggestions.ts
+- [X] T170 [P] [US3] Implement GET /collection-periods/active endpoint in backend/src/routes/collection_periods.ts
+- [X] T171 [US3] Add collection period validation to suggestion submission in backend/src/services/suggestion_service.ts
 
 **State Management**
 
