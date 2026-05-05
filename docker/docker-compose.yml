@@ -49,6 +49,9 @@ services:
       - ../backend:/app
       - /app/node_modules
       - ../backend/logs:/app/logs
+      # Mount the OpenAPI contract read-only so /api/docs (Swagger UI) can
+      # serve it without duplicating the spec inside backend/.
+      - ../specs:/specs:ro
     working_dir: /app
     ports:
       - "3000:3000"
