@@ -421,7 +421,7 @@
 
 - [X] T194 [US6] Implement grouped suggestion display with duplicate count (statuses chips + 추천 N명 badge)
 - [X] T195 [US6] Add status update (approved/rejected/under review) functionality (per-item dialog with admin notes)
-- [ ] T196 [US6] Add option to add approved suggestion directly to catalog (deferred — backend endpoint not in scope for v0.4.0)
+- [X] T196 [US6] Add option to add approved suggestion directly to catalog — 승인된 추천 행에 "카탈로그에 등록" 액션 추가 (BookFormWidget prefill로 기존 POST /api/v1/books 재사용)
 - [ ] T197 [US6] Display suggestion statistics (most requested categories) (deferred — analytics out of MVP)
 
 **Checkpoint**: User Story 6 complete - admins can review suggestions, all user stories functional

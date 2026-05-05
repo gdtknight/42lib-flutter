@@ -5,16 +5,21 @@ import '../../../books/data/models/book.dart';
 import '../../domain/repositories/admin_book_repository.dart';
 
 /// Reusable form for creating or editing a book. When [initial] is provided,
-/// the form is in edit mode and pre-populated.
+/// the form is in edit mode and pre-populated. [prefillTitle]/[prefillAuthor]
+/// seed only those two fields (used when promoting a suggestion to catalog).
 class BookFormWidget extends StatefulWidget {
   const BookFormWidget({
     super.key,
     this.initial,
+    this.prefillTitle,
+    this.prefillAuthor,
     required this.onSubmit,
     this.submitLabel = '저장',
   });
 
   final Book? initial;
+  final String? prefillTitle;
+  final String? prefillAuthor;
   final void Function(AdminBookPayload payload) onSubmit;
   final String submitLabel;
 
@@ -38,8 +43,9 @@ class _BookFormWidgetState extends State<BookFormWidget> {
   void initState() {
     super.initState();
     final b = widget.initial;
-    _title = TextEditingController(text: b?.title ?? '');
-    _author = TextEditingController(text: b?.author ?? '');
+    _title = TextEditingController(text: b?.title ?? widget.prefillTitle ?? '');
+    _author =
+        TextEditingController(text: b?.author ?? widget.prefillAuthor ?? '');
     _category = TextEditingController(text: b?.category ?? '');
     _isbn = TextEditingController(text: b?.isbn ?? '');
     _description = TextEditingController(text: b?.description ?? '');
@@ -175,8 +181,7 @@ class _BookFormWidgetState extends State<BookFormWidget> {
                     controller: _availableQuantity,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration:
-                        const InputDecoration(labelText: '대출 가능 수량 *'),
+                    decoration: const InputDecoration(labelText: '대출 가능 수량 *'),
                     validator: _validateAvailability,
                   ),
                 ),

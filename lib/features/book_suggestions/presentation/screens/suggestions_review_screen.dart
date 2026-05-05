@@ -9,23 +9,50 @@ import '../../domain/repositories/admin_suggestion_repository.dart';
 import '../bloc/admin_suggestions_bloc.dart';
 import '../bloc/admin_suggestions_event.dart';
 import '../bloc/admin_suggestions_state.dart';
+import '../../../admin_catalog/data/repositories/admin_book_repository_impl.dart';
+import '../../../admin_catalog/domain/repositories/admin_book_repository.dart';
 import '../../../admin_catalog/presentation/widgets/admin_sidebar.dart';
+import '../../../admin_catalog/presentation/widgets/book_form_widget.dart';
 
 class SuggestionsReviewScreen extends StatelessWidget {
-  const SuggestionsReviewScreen({super.key, this.repository});
+  const SuggestionsReviewScreen({
+    super.key,
+    this.repository,
+    this.bookRepository,
+  });
 
   final AdminSuggestionRepository? repository;
+  final AdminBookRepository? bookRepository;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AdminSuggestionsBloc>(
-      create: (_) => AdminSuggestionsBloc(
-        repository: repository ??
-            AdminSuggestionRepositoryImpl(baseUrl: AppConfig.apiBaseUrl),
-      )..add(const AdminSuggestionsRequested()),
-      child: const _Body(),
+    return _BookRepoScope(
+      repository: bookRepository ??
+          AdminBookRepositoryImpl(baseUrl: AppConfig.apiBaseUrl),
+      child: BlocProvider<AdminSuggestionsBloc>(
+        create: (_) => AdminSuggestionsBloc(
+          repository: repository ??
+              AdminSuggestionRepositoryImpl(baseUrl: AppConfig.apiBaseUrl),
+        )..add(const AdminSuggestionsRequested()),
+        child: const _Body(),
+      ),
     );
   }
+}
+
+class _BookRepoScope extends InheritedWidget {
+  const _BookRepoScope({required this.repository, required super.child});
+  final AdminBookRepository repository;
+
+  static AdminBookRepository of(BuildContext context) {
+    final scope = context.dependOnInheritedWidgetOfExactType<_BookRepoScope>();
+    assert(scope != null, '_BookRepoScope missing in tree');
+    return scope!.repository;
+  }
+
+  @override
+  bool updateShouldNotify(_BookRepoScope oldWidget) =>
+      repository != oldWidget.repository;
 }
 
 class _Body extends StatelessWidget {
@@ -328,7 +355,80 @@ class _ItemRow extends StatelessWidget {
                     _openReviewDialog(context, SuggestionStatus.underReview),
               ),
           ],
+          if (suggestion.isApproved)
+            IconButton(
+              tooltip: '카탈로그에 등록',
+              icon: const Icon(Icons.library_add_outlined,
+                  color: Colors.blueAccent),
+              onPressed: () => _openPromoteDialog(context),
+            ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _openPromoteDialog(BuildContext context) async {
+    final repo = _BookRepoScope.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '추천 도서를 카탈로그에 등록',
+                    style: Theme.of(dialogContext).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '제목과 저자는 추천 정보로 미리 채워졌습니다. 카테고리와 수량을 입력하세요.',
+                    style: Theme.of(dialogContext).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  BookFormWidget(
+                    prefillTitle: suggestion.suggestedTitle,
+                    prefillAuthor: suggestion.suggestedAuthor,
+                    submitLabel: '카탈로그에 등록',
+                    onSubmit: (payload) async {
+                      try {
+                        await repo.createBook(payload);
+                        if (dialogContext.mounted) {
+                          Navigator.of(dialogContext).pop();
+                        }
+                        messenger
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(const SnackBar(
+                            content: Text('카탈로그에 등록되었습니다.'),
+                          ));
+                      } catch (e) {
+                        messenger
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(SnackBar(
+                            content: Text('등록 실패: $e'),
+                          ));
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => Navigator.of(dialogContext).pop(),
+                      child: const Text('닫기'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
