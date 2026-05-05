@@ -113,34 +113,56 @@ export class ReservationService {
   }
 
   /**
-   * BR-305: Reorder queue when reservation is cancelled or expired
+   * BR-305: Reorder queue when reservation is cancelled or expired.
+   *
+   * The schema has @@unique([bookId, queuePosition]) over ALL rows
+   * (including cancelled/expired/fulfilled), so a naive renumber-in-place
+   * may collide with a non-active reservation that still holds a positive
+   * slot. We sidestep that with a 2-phase update inside a transaction:
+   *   1. Park every reservation for this book in a unique negative slot.
+   *   2. Assign sequential positions 1..N to the active subset only.
+   * Non-active rows keep their negative slot, which is fine because every
+   * downstream read filters by status.
    */
   async reorderQueue(bookId: string) {
     try {
-      const reservations = await prisma.reservation.findMany({
-        where: {
-          bookId,
-          status: { in: [ReservationStatus.waiting, ReservationStatus.notified] },
-        },
+      const all = await prisma.reservation.findMany({
+        where: { bookId },
         orderBy: { queuePosition: 'asc' },
       });
+      if (all.length === 0) return [];
 
-      // Update queue positions to be sequential (1, 2, 3, ...)
-      for (let i = 0; i < reservations.length; i++) {
-        if (reservations[i].queuePosition !== i + 1) {
-          await prisma.reservation.update({
-            where: { id: reservations[i].id },
+      const active = all.filter(
+        (r) =>
+          r.status === ReservationStatus.waiting ||
+          r.status === ReservationStatus.notified,
+      );
+
+      await prisma.$transaction(async (tx) => {
+        // Phase 1: park every row at -(index+1)-1_000_000. Guaranteed
+        // unique (bookId, queuePosition) within this book.
+        for (let i = 0; i < all.length; i++) {
+          await tx.reservation.update({
+            where: { id: all[i].id },
+            data: { queuePosition: -(i + 1) - 1_000_000 },
+          });
+        }
+        // Phase 2: assign 1..N to active in arrival order.
+        for (let i = 0; i < active.length; i++) {
+          await tx.reservation.update({
+            where: { id: active[i].id },
             data: { queuePosition: i + 1 },
           });
         }
-      }
+      });
 
       logger.info('Reservation queue reordered', {
         bookId,
-        count: reservations.length,
+        active: active.length,
+        total: all.length,
       });
 
-      return reservations;
+      return active;
     } catch (error: any) {
       logger.error('Failed to reorder reservation queue', {
         error: error.message,
