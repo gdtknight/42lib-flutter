@@ -485,7 +485,7 @@
 
 **Purpose**: Complete documentation and prepare for deployment
 
-- [ ] T230 [P] Create API documentation with Swagger UI in backend/src/swagger.ts
+- [X] T230 [P] Create API documentation with Swagger UI in backend/src/swagger.ts (mounts spec via docker volume; serves /api/docs and /api/docs/openapi.json)
 - [ ] T231 [P] Update README.md with final setup instructions (Korean)
 - [ ] T232 [P] Document environment variables in .env.example
 - [ ] T233 [P] Create deployment guide in docs/deployment.md (Korean)
