@@ -34,6 +34,16 @@ void installNoopSecureStoragePlatform() {
   FlutterSecureStoragePlatform.instance = _NoopPlatform();
 }
 
+/// Install an in-memory platform handler that actually round-trips values
+/// through a backing Map. Returns the live store so tests can assert state.
+/// Call from `setUp` and reset between tests.
+Map<String, String> installInMemorySecureStoragePlatform() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  final store = <String, String>{};
+  FlutterSecureStoragePlatform.instance = _InMemoryPlatform(store);
+  return store;
+}
+
 class _NoopPlatform extends FlutterSecureStoragePlatform with MockPlatformInterfaceMixin {
   @override
   Future<bool> containsKey(
@@ -62,4 +72,43 @@ class _NoopPlatform extends FlutterSecureStoragePlatform with MockPlatformInterf
       {required String key,
       required String value,
       required Map<String, String> options}) async {}
+}
+
+class _InMemoryPlatform extends FlutterSecureStoragePlatform with MockPlatformInterfaceMixin {
+  _InMemoryPlatform(this._store);
+  final Map<String, String> _store;
+
+  @override
+  Future<bool> containsKey(
+          {required String key, required Map<String, String> options}) async =>
+      _store.containsKey(key);
+
+  @override
+  Future<void> delete(
+      {required String key, required Map<String, String> options}) async {
+    _store.remove(key);
+  }
+
+  @override
+  Future<void> deleteAll({required Map<String, String> options}) async {
+    _store.clear();
+  }
+
+  @override
+  Future<String?> read(
+          {required String key, required Map<String, String> options}) async =>
+      _store[key];
+
+  @override
+  Future<Map<String, String>> readAll(
+          {required Map<String, String> options}) async =>
+      Map.of(_store);
+
+  @override
+  Future<void> write(
+      {required String key,
+      required String value,
+      required Map<String, String> options}) async {
+    _store[key] = value;
+  }
 }

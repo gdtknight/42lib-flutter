@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 /// about unrelated bookkeeping calls.
 class FakeDioAdapter implements HttpClientAdapter {
   final List<RequestOptions> requests = [];
-  final List<_FakeResponse> _queue = [];
+  final List<_FakeEntry> _queue = [];
   bool throwTimeout = false;
 
   void enqueue({
@@ -20,7 +20,22 @@ class FakeDioAdapter implements HttpClientAdapter {
   }) {
     final encoded = rawBody ??
         jsonEncode(bodyList != null ? {'data': bodyList} : (body ?? {}));
-    _queue.add(_FakeResponse(statusCode: statusCode, body: encoded));
+    _queue.add(_FakeEntry.response(statusCode: statusCode, body: encoded));
+  }
+
+  /// Queue a DioException with a Response payload so the production code's
+  /// `on DioException` branches (e.g. 401 handling) can be exercised even
+  /// when the test's outer Dio is configured permissively.
+  void enqueueDioError({
+    int statusCode = 401,
+    Map<String, dynamic>? body,
+    DioExceptionType type = DioExceptionType.badResponse,
+  }) {
+    _queue.add(_FakeEntry.error(
+      statusCode: statusCode,
+      body: jsonEncode(body ?? {}),
+      type: type,
+    ));
   }
 
   /// Most recent request's body decoded as JSON. Throws if no requests.
@@ -48,7 +63,20 @@ class FakeDioAdapter implements HttpClientAdapter {
     }
     final canned = _queue.isNotEmpty
         ? _queue.removeAt(0)
-        : _FakeResponse(statusCode: 200, body: jsonEncode({'data': []}));
+        : _FakeEntry.response(statusCode: 200, body: jsonEncode({'data': []}));
+
+    if (canned.error != null) {
+      throw DioException(
+        requestOptions: options,
+        type: canned.error!,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: canned.statusCode,
+          data: canned.body.isEmpty ? null : jsonDecode(canned.body),
+        ),
+      );
+    }
+
     return ResponseBody.fromString(
       canned.body,
       canned.statusCode,
@@ -62,8 +90,16 @@ class FakeDioAdapter implements HttpClientAdapter {
   void close({bool force = false}) {}
 }
 
-class _FakeResponse {
-  _FakeResponse({required this.statusCode, required this.body});
+class _FakeEntry {
+  _FakeEntry.response({required this.statusCode, required this.body})
+      : error = null;
+  _FakeEntry.error({
+    required this.statusCode,
+    required this.body,
+    required DioExceptionType type,
+  }) : error = type;
+
   final int statusCode;
   final String body;
+  final DioExceptionType? error;
 }
