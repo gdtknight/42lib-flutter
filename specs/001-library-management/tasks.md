@@ -492,8 +492,8 @@
 - [ ] T234 [P] Create user manual for mobile app in docs/user-guide.md (Korean)
 - [ ] T235 [P] Create admin manual for web dashboard in docs/admin-guide.md (Korean)
 - [ ] T236 Validate quickstart.md setup instructions
-- [ ] T237 Create database backup and restore procedures
-- [ ] T238 Document 42 OAuth setup instructions
+- [X] T237 Create database backup and restore procedures — `docs/guides/database-backup-restore.md`
+- [X] T238 Document 42 OAuth setup instructions — `docs/guides/42-oauth-setup.md`
 - [ ] T239 Create CI/CD pipeline configuration in .github/workflows/ci.yml
 
 ---
