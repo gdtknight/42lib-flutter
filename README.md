@@ -92,12 +92,18 @@ cd 42lib-flutter
 #### 1단계: 환경 변수 설정
 
 ```bash
-# Backend 환경 변수 파일 확인 (이미 생성되어 있음)
-cat backend/.env
+# 템플릿 복사 (각 변수의 의미·기본값·필수 여부는 파일 안 주석 참고)
+cp backend/.env.example backend/.env
 
-# 필요한 경우 42 OAuth 정보 업데이트
-# FORTYTWO_CLIENT_ID, FORTYTWO_CLIENT_SECRET 설정
+# 학생 로그인을 동작시키려면 42 OAuth 정보 필수:
+# https://profile.intra.42.fr/oauth/applications 에서 앱 생성 후
+# FORTYTWO_CLIENT_ID, FORTYTWO_CLIENT_SECRET, FORTYTWO_REDIRECT_URI 채우기
+#
+# JWT_SECRET은 운영 배포 전 반드시 교체:
+# openssl rand -hex 32
 ```
+
+> Docker Compose는 `backend/.env`가 없어도 `docker-compose.yml`의 기본값으로 동작합니다 (개발 편의). 운영/스테이징은 반드시 `.env`로 명시 주입하세요.
 
 #### 2단계: Docker Compose로 전체 스택 실행
 
@@ -166,6 +172,8 @@ docker-compose exec redis-cache redis-cli ping
 **Backend API** (자동 실행됨):
 - 포트: `http://localhost:3000`
 - API 엔드포인트: `http://localhost:3000/api/v1`
+- API 문서 (Swagger UI): `http://localhost:3000/api/docs`
+- 원본 OpenAPI JSON: `http://localhost:3000/api/docs/openapi.json`
 - Health Check: `http://localhost:3000/health`
 
 **Flutter Web 개발 서버**:
@@ -401,39 +409,27 @@ CI/CD 전략 (Constitution XVI):
    http://localhost:8080
    ```
 
-### 현재 구현된 기능 (User Story 1)
+### 현재 출하 상태 (v0.5.0)
 
-- ✅ 도서 목록 화면 (Grid/List 레이아웃)
-- ✅ 도서 검색 바 (Debounce 지원)
-- ✅ 도서 카드 (표지, 정보, 대출 가능 여부)
-- ✅ 반응형 레이아웃
-- ✅ 23개 자동화 테스트 (100% 통과)
+학생 앱 (Flutter mobile/web):
+- ✅ US1 — 도서 검색·목록·상세 (반응형 Grid/List, 검색 debounce)
+- ✅ US2 — 대출 신청 + 예약 큐 (FIFO, 24h 만료)
+- ✅ US3 — 도서 추천 제출 + 활성 수집 기간 표시
 
-### 테스트 시나리오
+관리자 대시보드 (Flutter web):
+- ✅ US4 — 카탈로그 관리 (도서 CRUD, 재고 관리)
+- ✅ US5 — 대출 추적·승인·반납
+- ✅ US6 — 도서 추천 검토, 수집 기간 관리, 승인 추천 → 카탈로그 직행 (T196)
 
-**시나리오 1: 도서 목록 확인**
-- 브라우저에서 초기 화면 로드
-- Grid 레이아웃으로 도서 카드 표시 확인
-- 도서 정보 (제목, 저자, 대출 가능 여부) 표시 확인
+품질 / 인프라:
+- ✅ Phase 11 1차 하드닝 — Backend 73.4%, Flutter 67.1% 커버리지 (v0.5.0)
+- ✅ `reorderQueue` latent 버그 수정 (`@@unique([bookId, queuePosition])` 충돌)
+- ✅ Swagger UI / OpenAPI JSON 노출 (`/api/docs`)
 
-**시나리오 2: 검색 기능**
-- 검색 바에 텍스트 입력
-- Debounce 동작 확인 (0.5초 후 반영)
-- 클리어 버튼으로 입력 초기화
-
-**시나리오 3: 반응형 테스트**
-- 브라우저 창 크기 조절
-- 큰 화면: 4열 Grid
-- 중간 화면: 2열 Grid  
-- 작은 화면: 1열 List
-
-### 알려진 제약사항
-
-- **데이터**: 하드코딩된 샘플 데이터 (42 API 연동은 User Story 4)
-- **상세 화면**: 미구현 (User Story 2)
-- **상태 관리**: Riverpod 미적용 (User Story 3)
-
-자세한 내용은 `docs/web-test-guide.md` 참조
+다음 (deferred):
+- T196 (카탈로그 직행)을 제외한 T197 추천 통계
+- Phase 11 2차 — auth 흐름 (OAuth, secure storage) 커버리지
+- Phase 12 잔여 — 배포 가이드, ADR 정리
 
 
 ## 🚀 빠른 시작 (Quick Start)

@@ -486,8 +486,8 @@
 **Purpose**: Complete documentation and prepare for deployment
 
 - [X] T230 [P] Create API documentation with Swagger UI in backend/src/swagger.ts (mounts spec via docker volume; serves /api/docs and /api/docs/openapi.json)
-- [ ] T231 [P] Update README.md with final setup instructions (Korean)
-- [ ] T232 [P] Document environment variables in .env.example
+- [X] T231 [P] Update README.md with final setup instructions (Korean) — 환경 변수 단계 + Swagger URL + 현재 출하 상태(v0.5.0) 반영
+- [X] T232 [P] Document environment variables in .env.example — 섹션·필수 여부·기본값·OPENAPI_SPEC_PATH 추가
 - [ ] T233 [P] Create deployment guide in docs/deployment.md (Korean)
 - [ ] T234 [P] Create user manual for mobile app in docs/user-guide.md (Korean)
 - [ ] T235 [P] Create admin manual for web dashboard in docs/admin-guide.md (Korean)
