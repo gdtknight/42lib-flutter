@@ -12,6 +12,7 @@ import loanRoutes from './routes/loans';
 import adminRoutes from './routes/admin';
 import suggestionRoutes from './routes/suggestions';
 import collectionPeriodRoutes from './routes/collection_periods';
+import { buildSwaggerRouter } from './swagger';
 
 const app: Express = express();
 const prisma = new PrismaClient();
@@ -49,6 +50,10 @@ app.get('/api/v1', (req, res) => {
   res.json({ message: '42lib API v1', status: 'ready' });
 });
 
+// API documentation (Swagger UI + raw OpenAPI JSON). Mount before the
+// error handler so swagger-ui's HTML/JSON aren't intercepted.
+app.use('/api/docs', buildSwaggerRouter());
+
 // 에러 핸들링 미들웨어 (마지막에 추가)
 app.use(errorHandler);
 
@@ -59,6 +64,7 @@ if (process.env.NODE_ENV !== 'test') {
     logger.info(`📚 42lib Backend API v1`);
     logger.info(`🔗 Health: http://localhost:${PORT}/health`);
     logger.info(`🔗 API: http://localhost:${PORT}/api/v1`);
+    logger.info(`📖 Docs: http://localhost:${PORT}/api/docs`);
   });
 }
 
