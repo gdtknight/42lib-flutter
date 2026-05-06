@@ -128,5 +128,186 @@ void main() {
       act: (bloc) => bloc.add(const ClearLoanError()),
       expect: () => [isA<LoanInitial>()],
     );
+
+    // ── Phase 11 80% push: cover the remaining handlers/branches ────────────
+
+    blocTest<LoanBloc, LoanState>(
+      'CancelLoanRequest: emits Error when repository throws',
+      build: () {
+        loanRepo.error = Exception('network down');
+        return build();
+      },
+      act: (bloc) => bloc.add(const CancelLoanRequest(requestId: 'lr-1')),
+      expect: () => [
+        isA<LoanOperationInProgress>(),
+        isA<LoanError>().having(
+          (s) => s.message,
+          'message',
+          '대출 요청 취소 중 오류가 발생했습니다',
+        ),
+      ],
+    );
+
+    blocTest<LoanBloc, LoanState>(
+      'RefreshLoanRequests: emits Loaded WITHOUT a Loading frame',
+      build: () {
+        loanRepo.myLoanRequests = [makeLoanRequest(id: 'r1')];
+        rsvRepo.myReservations = [];
+        return build();
+      },
+      act: (bloc) => bloc.add(const RefreshLoanRequests()),
+      // Crucial difference vs Load: no Loading state on refresh.
+      expect: () => [
+        isA<LoanLoaded>().having((s) => s.loanRequests.length, 'count', 1),
+      ],
+    );
+
+    blocTest<LoanBloc, LoanState>(
+      'RefreshLoanRequests: emits Error on failure',
+      build: () {
+        loanRepo.error = Exception('boom');
+        return build();
+      },
+      act: (bloc) => bloc.add(const RefreshLoanRequests()),
+      expect: () => [
+        isA<LoanError>().having(
+          (s) => s.message,
+          'message',
+          '새로고침 중 오류가 발생했습니다',
+        ),
+      ],
+    );
+
+    blocTest<LoanBloc, LoanState>(
+      'LoadReservationQueue: returns myPosition when student is in queue',
+      build: () {
+        final mine = makeReservation(
+          id: 'r-mine',
+          bookId: 'book-X',
+          queuePosition: 2,
+        );
+        rsvRepo.queueByBookId = {
+          'book-X': [
+            makeReservation(id: 'first', queuePosition: 1),
+            mine,
+          ],
+        };
+        rsvRepo.myReservations = [mine];
+        return build();
+      },
+      act: (bloc) => bloc.add(const LoadReservationQueue(bookId: 'book-X')),
+      expect: () => [
+        isA<LoanLoading>(),
+        isA<ReservationQueueLoaded>()
+            .having((s) => s.queue.length, 'queue.length', 2)
+            .having((s) => s.myPosition, 'myPosition', 2),
+      ],
+    );
+
+    blocTest<LoanBloc, LoanState>(
+      'LoadReservationQueue: myPosition is null when student is NOT in queue',
+      build: () {
+        rsvRepo.queueByBookId = {
+          'book-X': [makeReservation(id: 'someone-else', queuePosition: 1)],
+        };
+        rsvRepo.myReservations = [];
+        return build();
+      },
+      act: (bloc) => bloc.add(const LoadReservationQueue(bookId: 'book-X')),
+      expect: () => [
+        isA<LoanLoading>(),
+        isA<ReservationQueueLoaded>()
+            .having((s) => s.myPosition, 'myPosition', isNull),
+      ],
+    );
+
+    blocTest<LoanBloc, LoanState>(
+      'LoadReservationQueue: emits Error on failure',
+      build: () {
+        rsvRepo.error = Exception('queue down');
+        return build();
+      },
+      act: (bloc) => bloc.add(const LoadReservationQueue(bookId: 'book-X')),
+      expect: () => [
+        isA<LoanLoading>(),
+        isA<LoanError>().having(
+          (s) => s.message,
+          'message',
+          '예약 대기열을 불러올 수 없습니다',
+        ),
+      ],
+    );
+
+    blocTest<LoanBloc, LoanState>(
+      'LoadMyReservations: emits [Loading, Loaded]',
+      build: () {
+        rsvRepo.myReservations = [makeReservation(id: 'r1')];
+        loanRepo.myLoanRequests = [];
+        return build();
+      },
+      act: (bloc) => bloc.add(const LoadMyReservations()),
+      expect: () => [
+        isA<LoanLoading>(),
+        isA<LoanLoaded>().having((s) => s.reservations.length, 'reservations', 1),
+      ],
+    );
+
+    blocTest<LoanBloc, LoanState>(
+      'LoadMyReservations: emits [Loading, Error] on failure',
+      build: () {
+        rsvRepo.error = Exception('fail');
+        return build();
+      },
+      act: (bloc) => bloc.add(const LoadMyReservations()),
+      expect: () => [
+        isA<LoanLoading>(),
+        isA<LoanError>().having(
+          (s) => s.message,
+          'message',
+          '예약 목록을 불러올 수 없습니다',
+        ),
+      ],
+    );
+
+    blocTest<LoanBloc, LoanState>(
+      'CancelReservation: success path triggers refresh',
+      build: () => build(),
+      act: (bloc) => bloc.add(const CancelReservation(reservationId: 'rsv-1')),
+      expect: () => [
+        isA<LoanOperationInProgress>().having(
+          (s) => s.operation,
+          'operation',
+          'cancel_reservation',
+        ),
+        isA<LoanOperationSuccess>().having(
+          (s) => s.message,
+          'message',
+          '예약이 취소되었습니다',
+        ),
+        isA<LoanLoading>(),
+        isA<LoanLoaded>(),
+      ],
+      verify: (_) {
+        expect(rsvRepo.cancelCalls, 1);
+        expect(rsvRepo.lastCancelledId, 'rsv-1');
+      },
+    );
+
+    blocTest<LoanBloc, LoanState>(
+      'CancelReservation: emits Error when repository throws',
+      build: () {
+        rsvRepo.error = Exception('cancel failed');
+        return build();
+      },
+      act: (bloc) => bloc.add(const CancelReservation(reservationId: 'rsv-1')),
+      expect: () => [
+        isA<LoanOperationInProgress>(),
+        isA<LoanError>().having(
+          (s) => s.message,
+          'message',
+          '예약 취소 중 오류가 발생했습니다',
+        ),
+      ],
+    );
   });
 }
