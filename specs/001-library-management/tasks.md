@@ -492,9 +492,9 @@
 - [ ] T234 [P] Create user manual for mobile app in docs/user-guide.md (Korean)
 - [ ] T235 [P] Create admin manual for web dashboard in docs/admin-guide.md (Korean)
 - [ ] T236 Validate quickstart.md setup instructions
-- [ ] T237 Create database backup and restore procedures
-- [ ] T238 Document 42 OAuth setup instructions
-- [ ] T239 Create CI/CD pipeline configuration in .github/workflows/ci.yml
+- [X] T237 Create database backup and restore procedures — `docs/guides/database-backup-restore.md`
+- [X] T238 Document 42 OAuth setup instructions — `docs/guides/42-oauth-setup.md`
+- [X] T239 Create CI/CD pipeline configuration in .github/workflows/ci.yml — workflow는 v0.1 시절부터 존재. 이번 PR은 동작/규칙/한계 문서화 (`docs/guides/ci-cd-pipeline.md`). 백엔드 테스트 CI 미실행 갭은 TODO로 명시.
 
 ---
 
