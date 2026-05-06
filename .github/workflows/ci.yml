@@ -43,24 +43,80 @@ jobs:
     needs: analyze
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Flutter 설정
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
           cache: true
-      
+
       - name: 의존성 설치
         run: flutter pub get
-      
+
       - name: 단위 테스트
         run: flutter test --coverage
-      
+
       - name: 커버리지 업로드
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage/lcov.info
+          flags: flutter
+
+  backend-test:
+    name: 백엔드 테스트
+    runs-on: ubuntu-latest
+    # Flutter analyze와 독립적이므로 needs 없이 병렬 실행.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: library_user
+          POSTGRES_PASSWORD: library_pass
+          POSTGRES_DB: library_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U library_user -d library_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://library_user:library_pass@localhost:5432/library_db?schema=public
+      NODE_ENV: test
+      JWT_SECRET: ci-only-jwt-secret-not-for-prod
+      # 42 OAuth는 lazy init이라 비워둬도 부팅됨. 학생 OAuth 흐름을 직접 호출하는
+      # 테스트는 jest.mock('axios')으로 분리되어 있어 실제 호출 안 함.
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Node 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: Prisma client 생성
+        run: npx prisma generate
+
+      - name: 마이그레이션 적용
+        run: npx prisma migrate deploy
+
+      - name: 단위 + 통합 테스트 (커버리지 포함)
+        run: npm run test:coverage
+
+      - name: 커버리지 업로드
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./backend/coverage/lcov.info
+          flags: backend
 
   # Android/iOS 빌드: v0.2.0 MVP 릴리스 후 활성화 (Constitution v1.10.0).
   # 태그 푸시 시에만 실행하여 PR/일반 푸시 피드백 시간을 보호.

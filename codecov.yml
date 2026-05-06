@@ -27,3 +27,15 @@ comment:
   layout: 'reach,diff,flags,files'
   behavior: default
   require_changes: false
+
+# Flag 분리 — Flutter (lib/) 와 백엔드 (backend/src/)를 독립적으로 추적.
+# 두 측이 같은 PR에서 동시에 떨어지지 않도록 게이트도 flag별로 평가됨.
+flags:
+  flutter:
+    paths:
+      - lib/
+    carryforward: true
+  backend:
+    paths:
+      - backend/src/
+    carryforward: true

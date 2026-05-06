@@ -25,9 +25,12 @@ analyze (Ubuntu, 항상)
                                         ├─▶ build-android (Ubuntu, 태그 푸시만)
                                         │
                                         └─▶ build-ios (macOS, 태그 푸시만)
+
+backend-test (Ubuntu, 항상; analyze와 병렬)
+   └─ services: postgres:16-alpine
 ```
 
-`needs:` 의존성으로 직렬화되어 있어 analyze 실패 시 그 이후가 모두 스킵됩니다.
+`analyze → test → build-*` 체인은 직렬, `backend-test`는 Flutter 체인과 독립적으로 병렬 실행됩니다.
 
 ## 각 Job의 검증 항목
 
@@ -52,6 +55,13 @@ analyze (Ubuntu, 항상)
 - Android: `flutter build apk --release` → `app-release.apk` 아티팩트.
 - iOS: `flutter build ios --release --no-codesign` (CI에서는 코드 사인 안 함).
 
+### `backend-test` — Node + Prisma 통합 테스트
+
+- `services: postgres:16-alpine` 컨테이너를 띄우고 `DATABASE_URL`을 `localhost:5432`로 주입.
+- `npm ci` → `npx prisma generate` → `npx prisma migrate deploy` → `npm run test:coverage`.
+- 커버리지를 Codecov에 `backend` flag로 업로드 (Flutter는 `flutter` flag).
+- `JWT_SECRET`은 CI 전용 더미 값. `FORTYTWO_*`는 비워둠 — `Auth42Service`는 lazy init이고, OAuth를 직접 호출하는 테스트는 `jest.mock('axios')`로 분리되어 있어 외부 호출 없음.
+
 ## 커버리지 게이트 (`codecov.yml`)
 
 | 체크 | 기준 |
@@ -61,14 +71,13 @@ analyze (Ubuntu, 항상)
 
 baseline은 Codecov가 머지된 main 기준으로 자동 갱신합니다. 점진 상향은 PR 단위로 spec MVP 정의 (Backend/Flutter 80%)를 목표.
 
+**Flag 분리**: `lib/`은 `flutter`, `backend/src/`은 `backend` flag로 분리되어 측마다 독립적으로 추적됩니다. 한쪽 코드만 바뀐 PR이 반대편 baseline에 영향을 주지 않도록 `carryforward: true`.
+
 ## 알려진 한계 / TODO
 
-- **백엔드 테스트가 CI에서 돌지 않습니다**. `backend/tests/`의 100건 이상이 로컬에서만 검증되는 상태. 추가 job 필요 (TODO):
-  - `services` 블록으로 Postgres 16 띄우기
-  - `npm ci && npm run migrate && npm test` 실행
-  - lcov 업로드 (Flutter와 별도 flag로)
 - 모바일 빌드는 태그 푸시에만 실행 → PR에서 모바일 회귀 발견 불가. 로컬 `./scripts/local-verify.sh --mvp-mode`로 보완 (Constitution XVI).
 - iOS는 `--no-codesign` 빌드만 — 실제 .ipa는 별도 릴리스 파이프라인 필요 (App Store / TestFlight 결정 시).
+- 백엔드 테스트는 PR마다 약 30~60초 추가 — 현재 빠른 편이지만 통합 테스트가 늘어나면 cache 최적화 검토 필요.
 
 ## 로컬에서 CI와 동일한 검사 돌리기
 
