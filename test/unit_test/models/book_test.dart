@@ -185,5 +185,81 @@ void main() {
       expect(availableBook.isAvailable, true);
       expect(unavailableBook.isAvailable, false);
     });
+
+    Book makeBook({
+      String id = 'book-1',
+      String title = 'T',
+      String author = 'A',
+      String category = 'C',
+      int quantity = 2,
+      int availableQuantity = 1,
+      int? publicationYear,
+    }) {
+      return Book(
+        id: id,
+        title: title,
+        author: author,
+        category: category,
+        quantity: quantity,
+        availableQuantity: availableQuantity,
+        publicationYear: publicationYear,
+        createdAt: DateTime(2024, 1, 1),
+        updatedAt: DateTime(2024, 1, 1),
+      );
+    }
+
+    // ── Phase 11 80% push: validation + helper coverage ─────────────────────
+
+    test('throws when publicationYear is below 1000', () {
+      expect(
+        () => makeBook(publicationYear: 999),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('throws when publicationYear is in the far future', () {
+      expect(
+        () => makeBook(publicationYear: DateTime.now().year + 5),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('throws when category is whitespace-only', () {
+      expect(
+        () => makeBook(category: '   '),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('copyWith preserves unmodified fields and overrides specified ones',
+        () {
+      final original = makeBook(title: 'Old', quantity: 5, availableQuantity: 5);
+      final updated = original.copyWith(title: 'New', availableQuantity: 3);
+
+      expect(updated.title, 'New');
+      expect(updated.availableQuantity, 3);
+      expect(updated.author, original.author);
+      expect(updated.quantity, original.quantity);
+      expect(updated.id, original.id);
+    });
+
+    test('equality is based on id', () {
+      final a = makeBook(id: 'same', title: 'X');
+      final b = makeBook(id: 'same', title: 'Y'); // different content, same id
+      final c = makeBook(id: 'other', title: 'X');
+
+      expect(a == b, isTrue);
+      expect(a.hashCode, b.hashCode);
+      expect(a == c, isFalse);
+      expect(identical(a, a), isTrue);
+    });
+
+    test('toString includes id, title, and availability', () {
+      final s = makeBook(id: 'b1', title: 'Hello', availableQuantity: 1, quantity: 3)
+          .toString();
+      expect(s, contains('b1'));
+      expect(s, contains('Hello'));
+      expect(s, contains('1/3'));
+    });
   });
 }

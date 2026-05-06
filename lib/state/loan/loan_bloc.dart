@@ -150,24 +150,23 @@ class LoanBloc extends Bloc<LoanEvent, LoanState> {
         bookId: event.bookId,
       );
 
-      // Find user's position in queue if they have a reservation
+      // Find user's position in queue if they have a reservation. Earlier
+      // versions used `firstWhere` with an `orElse` that returned a synthetic
+      // Reservation with empty IDs — but the model validates studentId so that
+      // path threw `ArgumentError`. Use a nullable iterator-based lookup.
       final myReservations = await reservationRepository.getMyReservations();
-      final myReservation = myReservations.firstWhere(
-        (r) =>
-            r.bookId == event.bookId && r.status == ReservationStatus.waiting,
-        orElse: () => Reservation(
-          id: '',
-          studentId: '',
-          bookId: '',
-          queuePosition: 0,
-          status: ReservationStatus.cancelled,
-          createdAt: DateTime.now(),
-        ),
-      );
+      final Reservation? myReservation =
+          myReservations.cast<Reservation?>().firstWhere(
+                (r) =>
+                    r != null &&
+                    r.bookId == event.bookId &&
+                    r.status == ReservationStatus.waiting,
+                orElse: () => null,
+              );
 
-      final myPosition = myReservation.id.isNotEmpty
-          ? queue.indexWhere((r) => r.id == myReservation.id) + 1
-          : null;
+      final myPosition = myReservation == null
+          ? null
+          : queue.indexWhere((r) => r.id == myReservation.id) + 1;
 
       emit(ReservationQueueLoaded(
         bookId: event.bookId,

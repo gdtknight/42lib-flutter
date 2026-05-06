@@ -11,6 +11,7 @@ class FakeLoanRequestRepository implements LoanRequestRepository {
   List<LoanRequest> myLoanRequests = [];
   Exception? error;
   int createCalls = 0;
+  String? lastCreatedBookId;
   int cancelCalls = 0;
   String? lastCancelledId;
 
@@ -20,6 +21,7 @@ class FakeLoanRequestRepository implements LoanRequestRepository {
     String? notes,
   }) async {
     createCalls++;
+    lastCreatedBookId = bookId;
     if (error != null) throw error!;
     if (createReturnValue is Exception) throw createReturnValue as Exception;
     return createReturnValue;
@@ -69,6 +71,7 @@ class FakeReservationRepository implements ReservationRepository {
   Map<String, List<Reservation>> queueByBookId = {};
   Exception? error;
   int cancelCalls = 0;
+  String? lastCancelledId;
 
   @override
   Future<List<Reservation>> getMyReservations() async {
@@ -85,6 +88,7 @@ class FakeReservationRepository implements ReservationRepository {
   @override
   Future<void> cancelReservation(String reservationId) async {
     cancelCalls++;
+    lastCancelledId = reservationId;
     if (error != null) throw error!;
   }
 
