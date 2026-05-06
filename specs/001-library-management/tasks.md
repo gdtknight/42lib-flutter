@@ -489,8 +489,8 @@
 - [X] T231 [P] Update README.md with final setup instructions (Korean) — 환경 변수 단계 + Swagger URL + 현재 출하 상태(v0.5.0) 반영
 - [X] T232 [P] Document environment variables in .env.example — 섹션·필수 여부·기본값·OPENAPI_SPEC_PATH 추가
 - [X] T233 [P] Create deployment guide in docs/deployment.md (Korean) — Docker self-host 기준 (`docs/guides/deployment.md`). 사전 결정 표 / 호스트 요구사항 / nginx+TLS / 업그레이드·롤백 / 운영 체크리스트. K8s는 ADR 후 별도.
-- [ ] T234 [P] Create user manual for mobile app in docs/user-guide.md (Korean)
-- [ ] T235 [P] Create admin manual for web dashboard in docs/admin-guide.md (Korean)
+- [X] T234 [P] Create user manual for mobile app in docs/user-guide.md (Korean) — 텍스트 가이드 (`docs/guides/user-guide.md`). 스크린샷은 별도 PR.
+- [X] T235 [P] Create admin manual for web dashboard in docs/admin-guide.md (Korean) — 텍스트 가이드 (`docs/guides/admin-guide.md`). 스크린샷은 별도 PR.
 - [ ] T236 Validate quickstart.md setup instructions
 - [X] T237 Create database backup and restore procedures — `docs/guides/database-backup-restore.md`
 - [X] T238 Document 42 OAuth setup instructions — `docs/guides/42-oauth-setup.md`

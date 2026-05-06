@@ -333,6 +333,10 @@ GitHub Actions를 통한 자동화:
 - [문서 디렉토리](docs/) - 모든 프로젝트 문서 (한글)
 - [GitHub Wiki](../../wiki) - 문서 검색 및 탐색
 
+### 사용자 가이드
+- [학생 사용 가이드](docs/guides/user-guide.md) - 도서 검색 / 대출 / 예약 / 추천 흐름 (모바일 + 웹)
+- [관리자 가이드](docs/guides/admin-guide.md) - 카탈로그 / 대출 / 추천 검토 / 수집 기간 관리
+
 ### 운영 가이드
 - [배포 가이드 (Docker self-host)](docs/guides/deployment.md) - 첫 배포 절차, nginx + TLS, 업그레이드/롤백, 운영 체크리스트
 - [42 OAuth 등록 가이드](docs/guides/42-oauth-setup.md) - 학생 로그인 활성화에 필요한 자격증명 발급 및 주입 절차
