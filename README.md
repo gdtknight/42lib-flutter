@@ -336,6 +336,7 @@ GitHub Actions를 통한 자동화:
 ### 운영 가이드
 - [42 OAuth 등록 가이드](docs/guides/42-oauth-setup.md) - 학생 로그인 활성화에 필요한 자격증명 발급 및 주입 절차
 - [데이터베이스 백업 / 복원](docs/guides/database-backup-restore.md) - 수동 백업 / 복원 / 자동화 / 마이그레이션과의 관계
+- [CI/CD 파이프라인](docs/guides/ci-cd-pipeline.md) - GitHub Actions 트리거·job 그래프·커버리지 게이트·알려진 한계
 
 ## 기여 방법
 
