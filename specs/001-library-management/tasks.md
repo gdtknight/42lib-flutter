@@ -491,7 +491,7 @@
 - [X] T233 [P] Create deployment guide in docs/deployment.md (Korean) — Docker self-host 기준 (`docs/guides/deployment.md`). 사전 결정 표 / 호스트 요구사항 / nginx+TLS / 업그레이드·롤백 / 운영 체크리스트. K8s는 ADR 후 별도.
 - [X] T234 [P] Create user manual for mobile app in docs/user-guide.md (Korean) — 텍스트 가이드 (`docs/guides/user-guide.md`). 스크린샷은 별도 PR.
 - [X] T235 [P] Create admin manual for web dashboard in docs/admin-guide.md (Korean) — 텍스트 가이드 (`docs/guides/admin-guide.md`). 스크린샷은 별도 PR.
-- [ ] T236 Validate quickstart.md setup instructions
+- [X] T236 Validate quickstart.md setup instructions — `docs/guides/quickstart-validation-report.md` (9건 발견, 정정 후 quickstart.md v2.0).
 - [X] T237 Create database backup and restore procedures — `docs/guides/database-backup-restore.md`
 - [X] T238 Document 42 OAuth setup instructions — `docs/guides/42-oauth-setup.md`
 - [X] T239 Create CI/CD pipeline configuration in .github/workflows/ci.yml — workflow + 동작/규칙 문서화 (`docs/guides/ci-cd-pipeline.md`). 백엔드 테스트 job 추가 + codecov flag 분리 (flutter / backend).
