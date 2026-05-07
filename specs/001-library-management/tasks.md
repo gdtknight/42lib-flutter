@@ -281,7 +281,7 @@
 ### Tests for User Story 5
 
 - [X] T132 [P] [US5] Create unit test for Loan model in test/features/admin_catalog/data/models/loan_test.dart
-- [ ] T133 [P] [US5] Create widget test for loan management screen in test/widget_test/screens/web/loans/loans_screen_test.dart
+- [X] T133 [P] [US5] Create widget test for loan management screen — `test/features/admin_catalog/presentation/screens/loans_management_screen_test.dart` (8 tests, 88% line coverage)
 - [ ] T134 [P] [US5] Create integration test for loan approval flow in test/integration_test/admin_loan_management_test.dart
 - [X] T135 [P] [US5] Create backend unit test for PUT /loan-requests/:id/approve in backend/tests/unit/loan_requests.test.ts
 - [X] T136 [P] [US5] Create backend unit test for PUT /loans/:id/return in backend/tests/unit/loans.test.ts
@@ -343,7 +343,7 @@
 
 - [X] T160 [P] [US3] Create unit test for BookSuggestion model in test/unit_test/models/book_suggestion_test.dart
 - [X] T161 [P] [US3] Create unit test for CollectionPeriod model in test/unit_test/models/collection_period_test.dart
-- [ ] T162 [P] [US3] Create widget test for suggestion form in test/widget_test/screens/mobile/suggestions/suggestion_form_test.dart
+- [X] T162 [P] [US3] Create widget test for suggestion form — `test/features/book_suggestions/presentation/screens/suggestion_form_screen_test.dart` (7 tests, 100% line coverage)
 - [X] T163 [P] [US3] Create backend unit test for POST /suggestions in backend/tests/unit/suggestions.test.ts
 - [X] T164 [P] [US3] Create backend unit test for collection period validation in backend/tests/unit/collection_periods.test.ts
 
