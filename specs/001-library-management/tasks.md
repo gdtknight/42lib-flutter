@@ -376,9 +376,9 @@
 
 **Integration & Polish**
 
-- [ ] T178 [US3] Add validation for active collection period before submission
-- [ ] T179 [US3] Add confirmation message after successful suggestion submission
-- [ ] T180 [US3] Display collection period status (active/closed) in suggestion screen
+- [X] T178 [US3] Add validation for active collection period before submission — 폼 비활성 + 경고 banner + ScaffoldMessenger 가드
+- [X] T179 [US3] Add confirmation message after successful suggestion submission — 이미 구현됨 (SuggestionBloc actionMessage + screen snackbar)
+- [X] T180 [US3] Display collection period status (active/closed) in suggestion screen — `_PeriodBanner` 위젯 (active=primary container with D-day, upcoming/closed=info, none=warning)
 
 **Checkpoint**: User Story 3 complete - students can submit suggestions independently
 
