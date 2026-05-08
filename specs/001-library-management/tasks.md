@@ -314,7 +314,7 @@
 
 - [X] T150 [P] [US5] Create LoanRequestCard widget in lib/widgets/admin/loan_request_card.dart *(LoansManagementScreen 내 _LoanRequestRow)*
 - [X] T151 [P] [US5] Create ActiveLoanCard widget in lib/widgets/admin/active_loan_card.dart *(LoansManagementScreen 내 _LoanRow)*
-- [ ] T152 [P] [US5] Create OverdueIndicator widget in lib/widgets/admin/overdue_indicator.dart
+- [X] T152 [P] [US5] Create OverdueIndicator widget — `lib/widgets/admin/overdue_indicator.dart` (3 변형: 연체/임박/정상). LoansManagementScreen에 통합.
 
 **Screens - Web Dashboard**
 
