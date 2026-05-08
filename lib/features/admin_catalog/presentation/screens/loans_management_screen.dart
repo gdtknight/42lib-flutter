@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/config.dart';
+import '../../../../widgets/admin/overdue_indicator.dart';
 import '../../data/models/loan.dart';
 import '../../data/repositories/admin_loan_repository_impl.dart';
 import '../../domain/repositories/admin_loan_repository.dart';
@@ -270,18 +271,20 @@ class _LoanRow extends StatelessWidget {
     final bookTitle = loan.book?.title ?? loan.bookId;
     final studentName =
         loan.student?.fullName ?? loan.student?.username ?? loan.studentId;
-    final daysLeft = loan.daysUntilDue(DateTime.now());
-    final overdue = loan.isOverdue || daysLeft < 0;
     return ListTile(
-      title: Text(bookTitle),
-      subtitle: Text(
-        '$studentName · 만기 ${_formatDate(loan.dueDate)} '
-        '(${overdue ? '연체 ${-daysLeft}일' : 'D-$daysLeft'})',
-        style: TextStyle(
-          color: overdue ? Theme.of(context).colorScheme.error : null,
-          fontWeight: overdue ? FontWeight.bold : null,
-        ),
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(bookTitle, overflow: TextOverflow.ellipsis),
+          ),
+          const SizedBox(width: 8),
+          OverdueIndicator(
+            dueDate: loan.dueDate,
+            isOverdue: loan.isOverdue,
+          ),
+        ],
       ),
+      subtitle: Text('$studentName · 만기 ${_formatDate(loan.dueDate)}'),
       trailing: IconButton(
         tooltip: '반납 처리',
         icon: const Icon(Icons.assignment_returned_outlined),

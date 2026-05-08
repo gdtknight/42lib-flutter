@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/models/collection_period.dart';
 import '../bloc/suggestion_bloc.dart';
 import '../bloc/suggestion_event.dart';
 import '../bloc/suggestion_state.dart';
@@ -56,7 +57,20 @@ class _SuggestionFormViewState extends State<_SuggestionFormView> {
     return null;
   }
 
-  void _submit() {
+  void _submit(BuildContext context) {
+    final loaded = context.read<SuggestionBloc>().state;
+    // T178: pre-flight guard — refuse to submit when there is no active
+    // collection period. Backend would 400 anyway, but inline message is
+    // gentler than a generic snackbar.
+    if (loaded is! SuggestionLoaded ||
+        !_isPeriodAcceptingSubmissions(loaded.activePeriod)) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(const SnackBar(
+          content: Text('현재 활성 수집 기간이 없어 추천을 제출할 수 없습니다.'),
+        ));
+      return;
+    }
     if (!_formKey.currentState!.validate()) return;
     context.read<SuggestionBloc>().add(SuggestionSubmitted(
           suggestedTitle: _title.text.trim(),
@@ -64,6 +78,9 @@ class _SuggestionFormViewState extends State<_SuggestionFormView> {
           reason: _reason.text.trim().isEmpty ? null : _reason.text.trim(),
         ));
   }
+
+  bool _isPeriodAcceptingSubmissions(CollectionPeriod? period) =>
+      period != null && period.status == PeriodStatus.active;
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +105,9 @@ class _SuggestionFormViewState extends State<_SuggestionFormView> {
         builder: (context, state) {
           final isInProgress = state is SuggestionLoaded &&
               state.actionStatus == SuggestionActionStatus.inProgress;
+          final period = state is SuggestionLoaded ? state.activePeriod : null;
+          final canSubmit =
+              !isInProgress && _isPeriodAcceptingSubmissions(period);
 
           return Padding(
             padding: const EdgeInsets.all(24),
@@ -97,16 +117,11 @@ class _SuggestionFormViewState extends State<_SuggestionFormView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (state is SuggestionLoaded && state.activePeriod != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: Text(
-                          '제출 대상 기간: ${state.activePeriod!.name}',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ),
+                    _PeriodBanner(period: period),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: _title,
+                      enabled: canSubmit,
                       decoration: const InputDecoration(
                         labelText: '제목 *',
                         helperText: '500자 이내',
@@ -117,6 +132,7 @@ class _SuggestionFormViewState extends State<_SuggestionFormView> {
                     const SizedBox(height: 12),
                     TextFormField(
                       controller: _author,
+                      enabled: canSubmit,
                       decoration: const InputDecoration(
                         labelText: '저자 *',
                         helperText: '200자 이내',
@@ -127,6 +143,7 @@ class _SuggestionFormViewState extends State<_SuggestionFormView> {
                     const SizedBox(height: 12),
                     TextFormField(
                       controller: _reason,
+                      enabled: canSubmit,
                       maxLines: 4,
                       decoration: const InputDecoration(
                         labelText: '추천 사유',
@@ -136,7 +153,7 @@ class _SuggestionFormViewState extends State<_SuggestionFormView> {
                     ),
                     const SizedBox(height: 24),
                     FilledButton(
-                      onPressed: isInProgress ? null : _submit,
+                      onPressed: canSubmit ? () => _submit(context) : null,
                       style: FilledButton.styleFrom(
                         minimumSize: const Size.fromHeight(48),
                       ),
@@ -157,4 +174,104 @@ class _SuggestionFormViewState extends State<_SuggestionFormView> {
       ),
     );
   }
+}
+
+/// Banner shown above the form. Three variants:
+///   • no period at all → 경고 (form 비활성)
+///   • upcoming/closed → 안내 (form 비활성)
+///   • active → 기간 이름 + 종료일 + 남은 일수
+class _PeriodBanner extends StatelessWidget {
+  const _PeriodBanner({required this.period});
+
+  final CollectionPeriod? period;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    if (period == null) {
+      return _banner(
+        context,
+        icon: Icons.warning_amber_outlined,
+        bg: theme.colorScheme.errorContainer,
+        fg: theme.colorScheme.onErrorContainer,
+        title: '활성 수집 기간이 없습니다',
+        body: '관리자가 새 기간을 활성화할 때까지 추천을 제출할 수 없습니다.',
+      );
+    }
+
+    if (period!.status != PeriodStatus.active) {
+      final label = period!.status == PeriodStatus.upcoming ? '예정' : '종료';
+      return _banner(
+        context,
+        icon: Icons.info_outline,
+        bg: theme.colorScheme.surfaceContainerHighest,
+        fg: theme.colorScheme.onSurface,
+        title: '"${period!.name}" — $label 상태',
+        body: '이 기간은 현재 추천을 받지 않습니다.',
+      );
+    }
+
+    final days = period!.daysRemaining(DateTime.now());
+    final endText = _formatDate(period!.endDate);
+    return _banner(
+      context,
+      icon: Icons.event_available,
+      bg: theme.colorScheme.primaryContainer,
+      fg: theme.colorScheme.onPrimaryContainer,
+      title: '제출 대상 기간: ${period!.name}',
+      body: days == 0
+          ? '오늘이 마지막 날입니다 (~$endText).'
+          : '종료까지 D-$days · ~$endText',
+    );
+  }
+
+  Widget _banner(
+    BuildContext context, {
+    required IconData icon,
+    required Color bg,
+    required Color fg,
+    required String title,
+    required String body,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: fg),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: fg,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  body,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: fg),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatDate(DateTime d) =>
+      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 }
