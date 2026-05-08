@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lib_42_flutter/features/book_suggestions/data/models/collection_period.dart';
 import 'package:lib_42_flutter/features/book_suggestions/presentation/bloc/suggestion_bloc.dart';
 import 'package:lib_42_flutter/features/book_suggestions/presentation/bloc/suggestion_state.dart';
 import 'package:lib_42_flutter/features/book_suggestions/presentation/screens/suggestion_form_screen.dart';
@@ -44,29 +45,102 @@ void main() {
       await _pump(tester, bloc: _bloc());
 
       expect(find.text('도서 추천'), findsOneWidget);
-      expect(find.widgetWithText(TextFormField, ''),
-          findsAtLeastNWidgets(3)); // 제목/저자/사유
+      expect(find.byType(TextFormField), findsNWidgets(3)); // 제목/저자/사유
       expect(find.widgetWithText(FilledButton, '제출'), findsOneWidget);
     });
 
-    testWidgets('shows active period name when SuggestionLoaded has one',
+    testWidgets('active period banner shows name + end date + countdown',
         (tester) async {
       await _pump(
         tester,
         bloc: _bloc(),
         seed: SuggestionLoaded(
-          activePeriod: makePeriod(name: '2024 Q3'),
+          activePeriod: makePeriod(
+            name: '2024 Q3',
+            status: PeriodStatus.active,
+          ),
           mySuggestions: const [],
         ),
       );
 
       expect(find.textContaining('2024 Q3'), findsOneWidget);
+      // 시드의 endDate=2024-03-31 → 오늘 기준 D-? or 종료. 어쨌든 banner body 존재.
+      expect(find.byIcon(Icons.event_available), findsOneWidget);
+    });
+
+    testWidgets(
+        'closed period shows info banner and disables form (T180)',
+        (tester) async {
+      await _pump(
+        tester,
+        bloc: _bloc(),
+        seed: SuggestionLoaded(
+          activePeriod: makePeriod(
+            name: '2024 Q1',
+            status: PeriodStatus.closed,
+          ),
+          mySuggestions: const [],
+        ),
+      );
+
+      expect(find.textContaining('2024 Q1'), findsOneWidget);
+      expect(find.textContaining('종료'), findsOneWidget);
+      // 폼이 비활성화되어 submit 버튼 onPressed가 null
+      final submit =
+          tester.widget<FilledButton>(find.widgetWithText(FilledButton, '제출'));
+      expect(submit.onPressed, isNull);
+    });
+
+    testWidgets(
+        'upcoming period shows info banner and disables form (T180)',
+        (tester) async {
+      await _pump(
+        tester,
+        bloc: _bloc(),
+        seed: SuggestionLoaded(
+          activePeriod: makePeriod(
+            name: '2024 Q4',
+            status: PeriodStatus.upcoming,
+          ),
+          mySuggestions: const [],
+        ),
+      );
+
+      expect(find.textContaining('예정'), findsOneWidget);
+      final submit =
+          tester.widget<FilledButton>(find.widgetWithText(FilledButton, '제출'));
+      expect(submit.onPressed, isNull);
+    });
+
+    testWidgets(
+        'no active period shows error banner and disables form (T178)',
+        (tester) async {
+      await _pump(
+        tester,
+        bloc: _bloc(),
+        seed: const SuggestionLoaded(
+          activePeriod: null,
+          mySuggestions: [],
+        ),
+      );
+
+      expect(find.text('활성 수집 기간이 없습니다'), findsOneWidget);
+      expect(find.byIcon(Icons.warning_amber_outlined), findsOneWidget);
+      final submit =
+          tester.widget<FilledButton>(find.widgetWithText(FilledButton, '제출'));
+      expect(submit.onPressed, isNull);
     });
 
     testWidgets('validation: empty title shows error message', (tester) async {
-      await _pump(tester, bloc: _bloc());
+      await _pump(
+        tester,
+        bloc: _bloc(),
+        seed: SuggestionLoaded(
+          activePeriod: makePeriod(),
+          mySuggestions: const [],
+        ),
+      );
 
-      // Tap submit without entering anything
       await tester.tap(find.widgetWithText(FilledButton, '제출'));
       await tester.pump();
 
@@ -75,7 +149,14 @@ void main() {
     });
 
     testWidgets('validation: title over 500 chars rejected', (tester) async {
-      await _pump(tester, bloc: _bloc());
+      await _pump(
+        tester,
+        bloc: _bloc(),
+        seed: SuggestionLoaded(
+          activePeriod: makePeriod(),
+          mySuggestions: const [],
+        ),
+      );
 
       final longText = 'a' * 501;
       await tester.enterText(find.byType(TextFormField).at(0), longText);
