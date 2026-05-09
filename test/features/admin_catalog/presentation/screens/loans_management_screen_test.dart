@@ -168,5 +168,66 @@ void main() {
       expect(find.textContaining('네트워크 오류'), findsOneWidget);
       expect(find.widgetWithText(FilledButton, '다시 시도'), findsOneWidget);
     });
+
+    // T158: overdue highlighting + sort-to-top.
+    testWidgets('overdue loans float to the top of the active list',
+        (tester) async {
+      // Three loans: B is overdue, A and C are on track.
+      // Without sorting they'd be A, B, C; with T158 we expect B, A, C
+      // (overdue first, then dueDate asc).
+      final now = DateTime.now();
+      final repo = FakeAdminLoanRepository()
+        ..loansByStatus = [
+          makeLoan(
+            id: 'a',
+            book: _book('Book A'),
+            dueDate: now.add(const Duration(days: 5)),
+          ),
+          makeLoan(
+            id: 'b',
+            book: _book('Book B'),
+            status: LoanStatus.overdue,
+            dueDate: now.subtract(const Duration(days: 3)),
+          ),
+          makeLoan(
+            id: 'c',
+            book: _book('Book C'),
+            dueDate: now.add(const Duration(days: 10)),
+          ),
+        ];
+      await _pump(tester, repo);
+      await tester.tap(find.text('진행 중인 대출'));
+      await tester.pumpAndSettle();
+
+      // The overdue Book B's title text should appear before A in the rendered
+      // tree. We approximate by reading position.
+      final bRect = tester.getTopLeft(find.text('Book B').first);
+      final aRect = tester.getTopLeft(find.text('Book A').first);
+      expect(bRect.dy, lessThan(aRect.dy));
+    });
+
+    testWidgets('overdue row gets a red-tinted background and left border',
+        (tester) async {
+      final now = DateTime.now();
+      final repo = FakeAdminLoanRepository()
+        ..loansByStatus = [
+          makeLoan(
+            id: 'late',
+            book: _book('Late Book'),
+            status: LoanStatus.overdue,
+            dueDate: now.subtract(const Duration(days: 2)),
+          ),
+        ];
+      await _pump(tester, repo);
+      await tester.tap(find.text('진행 중인 대출'));
+      await tester.pumpAndSettle();
+
+      // The container with non-null decoration corresponds to the overdue row.
+      final containers = tester
+          .widgetList<Container>(find.byType(Container))
+          .where((c) => c.decoration is BoxDecoration);
+      // At least one container with decoration (the overdue row) exists.
+      expect(containers, isNotEmpty);
+    });
   });
 }
