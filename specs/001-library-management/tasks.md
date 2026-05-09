@@ -210,7 +210,7 @@
 - [X] T095 [P] [US2] Create unit test for Student model in test/unit_test/models/student_test.dart
 - [X] T096 [P] [US2] Create unit test for LoanBloc in test/unit_test/state/loan/loan_bloc_test.dart
 - [X] T097 [P] [US2] Create widget test for loan request flow in test/widget_test/screens/mobile/loan/loan_request_test.dart
-- [ ] T098 [P] [US2] Create integration test for 42 OAuth flow in test/integration_test/auth_42_test.dart
+- [X] T098 [P] [US2] Create integration test for 42 OAuth flow — `test/integration_test/auth_42_test.dart` (LoginScreen + AuthBloc + FakeAuth42Client wire-up; CI에서 `flutter test`로 실행됨)
 - [X] T099 [P] [US2] Create backend unit test for 42 OAuth integration in backend/tests/unit/auth_42.test.ts
 - [X] T100 [P] [US2] Create backend unit test for POST /loan-requests in backend/tests/unit/loan_requests.test.ts
 - [X] T101 [P] [US2] Create backend unit test for reservation queue logic in backend/tests/unit/reservations.test.ts
