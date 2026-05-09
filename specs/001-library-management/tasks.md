@@ -448,7 +448,7 @@
 
 **Purpose**: Ensure system meets all performance success criteria (SC-001 through SC-012)
 
-- [ ] T207 [P] Add image caching for book covers with cached_network_image
+- [X] T207 [P] Add image caching for book covers with cached_network_image — `lib/widgets/book_cover_image.dart` 래퍼 + 3 호출 사이트 (legacy + feature-first BookCard + BookDetailScreen) 교체
 - [ ] T208 [P] Optimize sqflite queries with proper indexes
 - [ ] T209 [P] Implement virtual scrolling for 1000-book catalog
 - [ ] T210 [P] Add database query logging for performance monitoring

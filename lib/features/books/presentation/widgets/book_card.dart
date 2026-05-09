@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../../widgets/book_cover_image.dart';
 import '../../data/models/book.dart';
 
 /// A card widget that displays book information
@@ -22,18 +24,10 @@ class BookCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Cover image
+            // Cover image (cached_network_image — T207)
             AspectRatio(
               aspectRatio: 3 / 4,
-              child: book.coverImageUrl != null
-                  ? Image.network(
-                      book.coverImageUrl!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return _buildPlaceholder();
-                      },
-                    )
-                  : _buildPlaceholder(),
+              child: BookCoverImage(imageUrl: book.coverImageUrl),
             ),
 
             // Book info
@@ -92,19 +86,6 @@ class BookCard extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPlaceholder() {
-    return Container(
-      color: Colors.grey[300],
-      child: const Center(
-        child: Icon(
-          Icons.book,
-          size: 64,
-          color: Colors.grey,
         ),
       ),
     );
