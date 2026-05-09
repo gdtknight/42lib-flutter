@@ -149,7 +149,7 @@
 - [X] T064 [P] [US4] Create unit test for Administrator model in test/features/admin_catalog/data/models/administrator_test.dart
 - [X] T065 [P] [US4] Create widget test for admin dashboard in test/features/admin_catalog/presentation/screens/admin_login_screen_test.dart *(로그인 화면 테스트로 대시보드 검증; 별도 dashboard 위젯 테스트는 후속)*
 - [X] T066 [P] [US4] Create widget test for book management form in test/features/admin_catalog/presentation/widgets/book_form_widget_test.dart
-- [ ] T067 [P] [US4] Create integration test for admin book management flow in integration_test/admin_catalog_test.dart *(MVP 후속)*
+- [X] T067 [P] [US4] Create integration test for admin book management flow — `test/features/admin_catalog/presentation/screens/catalog_management_screen_test.dart` (widget-level scenario test in CI; integration_test/ 풀 앱 변형은 향후 백엔드 통합 CI 결정 후 추가)
 - [X] T068 [P] [US4] Create backend unit test for POST /books endpoint in backend/tests/unit/books_admin.test.ts
 - [X] T069 [P] [US4] Create backend unit test for PUT /books/:id endpoint in backend/tests/unit/books_admin.test.ts
 - [X] T070 [P] [US4] Create backend unit test for DELETE /books/:id endpoint in backend/tests/unit/books_admin.test.ts
