@@ -324,9 +324,9 @@
 
 **Integration & Polish**
 
-- [ ] T156 [US5] Implement loan approval with automatic book availability update
-- [ ] T157 [US5] Implement book return with automatic reservation queue notification
-- [ ] T158 [US5] Add overdue loan highlighting in loan list
+- [X] T156 [US5] Implement loan approval with automatic book availability update — 이미 `loan_service.approveLoanRequest` (트랜잭션, decrement). 단위 테스트로 가용 자동 차감 검증.
+- [X] T157 [US5] Implement book return with automatic reservation queue notification — 이미 `loan_service.returnLoan` (increment + `notifyNextInQueue`). 단위 테스트로 알림 자동 트리거 검증.
+- [X] T158 [US5] Add overdue loan highlighting in loan list — 행 배경 errorContainer 25% + 좌측 4px 빨간 border + 연체 행 sort-to-top (active 탭 한정)
 - [ ] T159 [US5] Add date range filters for loan history
 
 **Checkpoint**: User Story 5 complete - admins can manage loans, works with US2 and US4
@@ -448,7 +448,7 @@
 
 **Purpose**: Ensure system meets all performance success criteria (SC-001 through SC-012)
 
-- [ ] T207 [P] Add image caching for book covers with cached_network_image
+- [X] T207 [P] Add image caching for book covers with cached_network_image — `lib/widgets/book_cover_image.dart` 래퍼 + 3 호출 사이트 (legacy + feature-first BookCard + BookDetailScreen) 교체
 - [ ] T208 [P] Optimize sqflite queries with proper indexes
 - [ ] T209 [P] Implement virtual scrolling for 1000-book catalog
 - [ ] T210 [P] Add database query logging for performance monitoring

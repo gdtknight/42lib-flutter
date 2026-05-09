@@ -143,11 +143,20 @@ class _ActiveTab extends StatelessWidget {
     if (loans.isEmpty) {
       return const Center(child: Text('진행 중인 대출이 없습니다.'));
     }
+    // T158: sort so overdue loans float to the top. Within each group keep
+    // the original order (earliest dueDate first via dueDate ascending).
+    final now = DateTime.now();
+    final sorted = [...loans]..sort((a, b) {
+        final aOverdue = a.isOverdue || a.daysUntilDue(now) < 0;
+        final bOverdue = b.isOverdue || b.daysUntilDue(now) < 0;
+        if (aOverdue != bOverdue) return aOverdue ? -1 : 1;
+        return a.dueDate.compareTo(b.dueDate);
+      });
     return ListView.separated(
       padding: const EdgeInsets.all(16),
-      itemCount: loans.length,
+      itemCount: sorted.length,
       separatorBuilder: (_, __) => const Divider(height: 1),
-      itemBuilder: (context, i) => _LoanRow(loan: loans[i]),
+      itemBuilder: (context, i) => _LoanRow(loan: sorted[i]),
     );
   }
 }
@@ -271,24 +280,41 @@ class _LoanRow extends StatelessWidget {
     final bookTitle = loan.book?.title ?? loan.bookId;
     final studentName =
         loan.student?.fullName ?? loan.student?.username ?? loan.studentId;
-    return ListTile(
-      title: Row(
-        children: [
-          Expanded(
-            child: Text(bookTitle, overflow: TextOverflow.ellipsis),
-          ),
-          const SizedBox(width: 8),
-          OverdueIndicator(
-            dueDate: loan.dueDate,
-            isOverdue: loan.isOverdue,
-          ),
-        ],
-      ),
-      subtitle: Text('$studentName · 만기 ${_formatDate(loan.dueDate)}'),
-      trailing: IconButton(
-        tooltip: '반납 처리',
-        icon: const Icon(Icons.assignment_returned_outlined),
-        onPressed: () => _confirmReturn(context, loan),
+    final daysLeft = loan.daysUntilDue(DateTime.now());
+    final overdue = loan.isOverdue || daysLeft < 0;
+    final theme = Theme.of(context);
+
+    // T158: row-level highlighting for overdue loans. OverdueIndicator chip
+    // already calls out the cell, but a subtle tint + left border makes
+    // overdue rows scan-detectable even when many loans share the screen.
+    return Container(
+      decoration: overdue
+          ? BoxDecoration(
+              color: theme.colorScheme.errorContainer.withOpacity(0.25),
+              border: Border(
+                left: BorderSide(color: theme.colorScheme.error, width: 4),
+              ),
+            )
+          : null,
+      child: ListTile(
+        title: Row(
+          children: [
+            Expanded(
+              child: Text(bookTitle, overflow: TextOverflow.ellipsis),
+            ),
+            const SizedBox(width: 8),
+            OverdueIndicator(
+              dueDate: loan.dueDate,
+              isOverdue: loan.isOverdue,
+            ),
+          ],
+        ),
+        subtitle: Text('$studentName · 만기 ${_formatDate(loan.dueDate)}'),
+        trailing: IconButton(
+          tooltip: '반납 처리',
+          icon: const Icon(Icons.assignment_returned_outlined),
+          onPressed: () => _confirmReturn(context, loan),
+        ),
       ),
     );
   }
