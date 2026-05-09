@@ -17,16 +17,12 @@ jobs:
       - name: Flutter 설정
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.24.5'
           channel: 'stable'
           cache: true
       
       - name: 의존성 설치
-        # Workaround: Flutter 3.24.0의 bundled Dart SDK pub에 advisories
-        # null check 버그 (HostedSource._getAdvisories.readAdvisoriesFromCache).
-        # --verbosity=error로 pub의 advisory summary 코드 경로를 우회.
-        # Flutter SDK 3.27+ 업그레이드 시 이 옵션 제거 가능.
-        run: dart pub get --verbosity=error
+        run: flutter pub get
       
       - name: 코드 분석
         run: flutter analyze --no-fatal-infos
@@ -51,16 +47,12 @@ jobs:
       - name: Flutter 설정
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.24.5'
           channel: 'stable'
           cache: true
 
       - name: 의존성 설치
-        # Workaround: Flutter 3.24.0의 bundled Dart SDK pub에 advisories
-        # null check 버그 (HostedSource._getAdvisories.readAdvisoriesFromCache).
-        # --verbosity=error로 pub의 advisory summary 코드 경로를 우회.
-        # Flutter SDK 3.27+ 업그레이드 시 이 옵션 제거 가능.
-        run: dart pub get --verbosity=error
+        run: flutter pub get
 
       - name: 단위 테스트
         run: flutter test --coverage
@@ -140,16 +132,12 @@ jobs:
       - name: Flutter 설정
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.24.5'
           channel: 'stable'
           cache: true
 
       - name: 의존성 설치
-        # Workaround: Flutter 3.24.0의 bundled Dart SDK pub에 advisories
-        # null check 버그 (HostedSource._getAdvisories.readAdvisoriesFromCache).
-        # --verbosity=error로 pub의 advisory summary 코드 경로를 우회.
-        # Flutter SDK 3.27+ 업그레이드 시 이 옵션 제거 가능.
-        run: dart pub get --verbosity=error
+        run: flutter pub get
 
       - name: Android APK 빌드
         run: flutter build apk --release
@@ -171,16 +159,12 @@ jobs:
       - name: Flutter 설정
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.24.5'
           channel: 'stable'
           cache: true
 
       - name: 의존성 설치
-        # Workaround: Flutter 3.24.0의 bundled Dart SDK pub에 advisories
-        # null check 버그 (HostedSource._getAdvisories.readAdvisoriesFromCache).
-        # --verbosity=error로 pub의 advisory summary 코드 경로를 우회.
-        # Flutter SDK 3.27+ 업그레이드 시 이 옵션 제거 가능.
-        run: dart pub get --verbosity=error
+        run: flutter pub get
 
       - name: iOS 빌드 (서명 없이)
         run: flutter build ios --release --no-codesign
@@ -195,16 +179,12 @@ jobs:
       - name: Flutter 설정
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.24.5'
           channel: 'stable'
           cache: true
       
       - name: 의존성 설치
-        # Workaround: Flutter 3.24.0의 bundled Dart SDK pub에 advisories
-        # null check 버그 (HostedSource._getAdvisories.readAdvisoriesFromCache).
-        # --verbosity=error로 pub의 advisory summary 코드 경로를 우회.
-        # Flutter SDK 3.27+ 업그레이드 시 이 옵션 제거 가능.
-        run: dart pub get --verbosity=error
+        run: flutter pub get
       
       - name: Web 빌드
         run: flutter build web --release
