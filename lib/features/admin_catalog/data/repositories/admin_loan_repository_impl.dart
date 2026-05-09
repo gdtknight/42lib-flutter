@@ -70,6 +70,26 @@ class AdminLoanRepositoryImpl implements AdminLoanRepository {
   }
 
   @override
+  Future<List<Loan>> fetchHistory({DateTime? from, DateTime? to}) async {
+    final res = await _dio.get<dynamic>(
+      '/v1/loans/history',
+      queryParameters: {
+        if (from != null) 'from': from.toIso8601String(),
+        if (to != null) 'to': to.toIso8601String(),
+        'limit': 200,
+      },
+    );
+    if (res.statusCode != 200 || res.data is! Map) {
+      throw LoanOperationException(
+        'fetch_failed',
+        '대출 내역을 불러오지 못했습니다 (${res.statusCode}).',
+      );
+    }
+    final list = (res.data as Map<String, dynamic>)['data'] as List<dynamic>;
+    return list.map((j) => Loan.fromJson(j as Map<String, dynamic>)).toList();
+  }
+
+  @override
   Future<Loan> approveRequest(
     String requestId, {
     int? dueInDays,

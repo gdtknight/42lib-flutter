@@ -319,7 +319,7 @@
 **Screens - Web Dashboard**
 
 - [X] T153 [US5] Create LoanManagementScreen in lib/screens/web/loans/loans_screen.dart *(features/admin_catalog/presentation/screens/loans_management_screen.dart)*
-- [ ] T154 [US5] Create LoanHistoryScreen with filters in lib/screens/web/loans/loan_history_screen.dart
+- [X] T154 [US5] Create LoanHistoryScreen with filters — `lib/features/admin_catalog/presentation/screens/loan_history_screen.dart` (feature-first 경로). 날짜 필터 + OverdueIndicator + 상태 chip + sidebar 메뉴.
 - [X] T155 [US5] Add loan management routes to admin navigation *(/admin/loans + AdminSidebar 메뉴)*
 
 **Integration & Polish**
@@ -327,7 +327,7 @@
 - [X] T156 [US5] Implement loan approval with automatic book availability update — 이미 `loan_service.approveLoanRequest` (트랜잭션, decrement). 단위 테스트로 가용 자동 차감 검증.
 - [X] T157 [US5] Implement book return with automatic reservation queue notification — 이미 `loan_service.returnLoan` (increment + `notifyNextInQueue`). 단위 테스트로 알림 자동 트리거 검증.
 - [X] T158 [US5] Add overdue loan highlighting in loan list — 행 배경 errorContainer 25% + 좌측 4px 빨간 border + 연체 행 sort-to-top (active 탭 한정)
-- [ ] T159 [US5] Add date range filters for loan history
+- [X] T159 [US5] Add date range filters for loan history — backend `getHistory({from, to})` 이미 있음. AdminLoanRepository.fetchHistory 추가 + 화면에서 DatePicker로 선택.
 
 **Checkpoint**: User Story 5 complete - admins can manage loans, works with US2 and US4
 
@@ -422,7 +422,7 @@
 - [X] T194 [US6] Implement grouped suggestion display with duplicate count (statuses chips + 추천 N명 badge)
 - [X] T195 [US6] Add status update (approved/rejected/under review) functionality (per-item dialog with admin notes)
 - [X] T196 [US6] Add option to add approved suggestion directly to catalog — 승인된 추천 행에 "카탈로그에 등록" 액션 추가 (BookFormWidget prefill로 기존 POST /api/v1/books 재사용)
-- [ ] T197 [US6] Display suggestion statistics (most requested categories) (deferred — analytics out of MVP)
+- [X] T197 [US6] Display suggestion statistics (most requested categories) — `_StatsHeader` 위젯 (`suggestions_review_screen.dart`). 기존 grouped 데이터 기반 (백엔드 신규 endpoint 없음): 고유 도서/총 요청/상태 4종 분포 + 수요 Top 3.
 
 **Checkpoint**: User Story 6 complete - admins can review suggestions, all user stories functional
 

@@ -4,6 +4,7 @@ import 'package:lib_42_flutter/features/admin_catalog/domain/repositories/admin_
 class FakeAdminLoanRepository implements AdminLoanRepository {
   List<AdminLoanRequest> pendingRequests = [];
   List<Loan> loansByStatus = [];
+  List<Loan> historyLoans = [];
   Loan? approveResult;
   AdminLoanRequest? rejectResult;
   Loan? returnResult;
@@ -12,6 +13,9 @@ class FakeAdminLoanRepository implements AdminLoanRepository {
   int approveCalls = 0;
   int rejectCalls = 0;
   int returnCalls = 0;
+  int historyCalls = 0;
+  DateTime? lastHistoryFrom;
+  DateTime? lastHistoryTo;
 
   @override
   Future<List<AdminLoanRequest>> fetchPendingRequests() async {
@@ -23,6 +27,15 @@ class FakeAdminLoanRepository implements AdminLoanRepository {
   Future<List<Loan>> fetchLoans({String? status}) async {
     if (error != null) throw error!;
     return loansByStatus;
+  }
+
+  @override
+  Future<List<Loan>> fetchHistory({DateTime? from, DateTime? to}) async {
+    historyCalls++;
+    lastHistoryFrom = from;
+    lastHistoryTo = to;
+    if (error != null) throw error!;
+    return historyLoans;
   }
 
   @override
