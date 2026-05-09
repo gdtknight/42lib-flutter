@@ -5,6 +5,7 @@ import '../../features/admin_catalog/presentation/bloc/admin_auth_state.dart';
 import '../../features/admin_catalog/presentation/screens/admin_dashboard_screen.dart';
 import '../../features/admin_catalog/presentation/screens/admin_login_screen.dart';
 import '../../features/admin_catalog/presentation/screens/catalog_management_screen.dart';
+import '../../features/admin_catalog/presentation/screens/loan_history_screen.dart';
 import '../../features/admin_catalog/presentation/screens/loans_management_screen.dart';
 import '../../features/book_suggestions/presentation/screens/collection_periods_screen.dart';
 import '../../features/book_suggestions/presentation/screens/my_suggestions_screen.dart';
@@ -95,6 +96,10 @@ class AppRouter {
         GoRoute(
           path: '/admin/loans',
           builder: (context, state) => const LoansManagementScreen(),
+        ),
+        GoRoute(
+          path: '/admin/loans/history',
+          builder: (context, state) => const LoanHistoryScreen(),
         ),
         GoRoute(
           path: '/admin/suggestions',
