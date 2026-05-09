@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../../../models/book.dart';
+import '../../../widgets/book_cover_image.dart';
 import '../../../widgets/loan/loan_request_button.dart';
 
 class BookDetailScreen extends StatelessWidget {
@@ -112,28 +114,13 @@ class BookDetailScreen extends StatelessWidget {
   }
 
   Widget _buildCoverSection(BuildContext context) {
-    return Container(
+    // T207: cached_network_image via BookCoverImage. fit:contain + 고정 높이.
+    return SizedBox(
       width: double.infinity,
       height: 300,
-      color: Colors.grey[200],
-      child: book.coverImageUrl != null && book.coverImageUrl!.isNotEmpty
-          ? Image.network(
-              book.coverImageUrl!,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return _buildPlaceholderImage();
-              },
-            )
-          : _buildPlaceholderImage(),
-    );
-  }
-
-  Widget _buildPlaceholderImage() {
-    return const Center(
-      child: Icon(
-        Icons.book,
-        size: 100,
-        color: Colors.grey,
+      child: BookCoverImage(
+        imageUrl: book.coverImageUrl,
+        fit: BoxFit.contain,
       ),
     );
   }

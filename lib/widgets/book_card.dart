@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../models/book.dart';
+import 'book_cover_image.dart';
 
 class BookCard extends StatelessWidget {
   final Book book;
@@ -85,37 +87,12 @@ class BookCard extends StatelessWidget {
   }
 
   Widget _buildCoverImage() {
-    if (book.coverImageUrl != null && book.coverImageUrl!.isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.network(
-          book.coverImageUrl!,
-          width: 80,
-          height: 120,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return _buildPlaceholderImage();
-          },
-        ),
-      );
-    }
-
-    return _buildPlaceholderImage();
-  }
-
-  Widget _buildPlaceholderImage() {
-    return Container(
+    // T207: cached_network_image via BookCoverImage.
+    return BookCoverImage(
+      imageUrl: book.coverImageUrl,
       width: 80,
       height: 120,
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: const Icon(
-        Icons.book,
-        size: 40,
-        color: Colors.grey,
-      ),
+      borderRadius: BorderRadius.circular(8),
     );
   }
 

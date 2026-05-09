@@ -59,8 +59,13 @@ dev_dependencies:
 # But win32 5.10+ requires Dart 3.6+ language level (Flutter 3.24 = Dart 3.5).
 # Pin to range compatible with Dart 3.5: 5.5.x ~ 5.9.x.
 # See: https://github.com/gdtknight/42lib-flutter/issues/67
+#
+# Transitive dep override: web 1.0+ uses JSObject as supertype (needs
+# Dart 3.6+). Flutter 3.24 (Dart 3.5) only supports web 0.5.x. Pin until
+# we upgrade Flutter SDK in CI.
 dependency_overrides:
   win32: '>=5.5.0 <5.10.0'
+  web: '>=0.5.0 <1.0.0'
 
 flutter:
   uses-material-design: true
