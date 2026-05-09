@@ -422,7 +422,7 @@
 - [X] T194 [US6] Implement grouped suggestion display with duplicate count (statuses chips + 추천 N명 badge)
 - [X] T195 [US6] Add status update (approved/rejected/under review) functionality (per-item dialog with admin notes)
 - [X] T196 [US6] Add option to add approved suggestion directly to catalog — 승인된 추천 행에 "카탈로그에 등록" 액션 추가 (BookFormWidget prefill로 기존 POST /api/v1/books 재사용)
-- [ ] T197 [US6] Display suggestion statistics (most requested categories) (deferred — analytics out of MVP)
+- [X] T197 [US6] Display suggestion statistics (most requested categories) — `_StatsHeader` 위젯 (`suggestions_review_screen.dart`). 기존 grouped 데이터 기반 (백엔드 신규 endpoint 없음): 고유 도서/총 요청/상태 4종 분포 + 수요 Top 3.
 
 **Checkpoint**: User Story 6 complete - admins can review suggestions, all user stories functional
 

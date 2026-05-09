@@ -127,11 +127,17 @@ class _Body extends StatelessWidget {
               ),
             );
           }
+          // T197: header summary built on the existing grouped data — total
+          // unique books, total requests, top-3 by demand, status breakdown.
+          // No new backend endpoint required.
           return ListView.separated(
             padding: const EdgeInsets.all(16),
-            itemCount: loaded.groups.length,
+            itemCount: loaded.groups.length + 1,
             separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, i) => _GroupCard(group: loaded.groups[i]),
+            itemBuilder: (context, i) {
+              if (i == 0) return _StatsHeader(groups: loaded.groups);
+              return _GroupCard(group: loaded.groups[i - 1]);
+            },
           );
         },
       ),
@@ -425,11 +431,115 @@ class _ItemRow extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
+              ), // T197 stats header is appended below this _ItemRow class.
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+/// T197 — Summary header for the review screen built from the existing
+/// grouped data. No new backend endpoint required.
+class _StatsHeader extends StatelessWidget {
+  const _StatsHeader({required this.groups});
+
+  final List<GroupedSuggestion> groups;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final totalGroups = groups.length;
+    final totalRequests =
+        groups.fold<int>(0, (sum, g) => sum + g.requesterCount);
+    final statusTotals = <SuggestionStatus, int>{};
+    for (final g in groups) {
+      g.statuses.forEach((k, v) {
+        statusTotals[k] = (statusTotals[k] ?? 0) + v;
+      });
+    }
+
+    final topByDemand = [...groups]
+      ..sort((a, b) => b.requesterCount.compareTo(a.requesterCount));
+    final top3 = topByDemand.take(3).toList();
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '추천 통계',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.onPrimaryContainer,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 16,
+            runSpacing: 4,
+            children: [
+              _stat(theme, '고유 도서', '$totalGroups'),
+              _stat(theme, '총 요청', '$totalRequests'),
+              _stat(theme, '제출됨',
+                  '${statusTotals[SuggestionStatus.submitted] ?? 0}'),
+              _stat(theme, '검토중',
+                  '${statusTotals[SuggestionStatus.underReview] ?? 0}'),
+              _stat(theme, '승인',
+                  '${statusTotals[SuggestionStatus.approved] ?? 0}'),
+              _stat(theme, '반려',
+                  '${statusTotals[SuggestionStatus.rejected] ?? 0}'),
+            ],
+          ),
+          if (top3.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text(
+              '수요 Top ${top3.length}',
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
+            ),
+            const SizedBox(height: 4),
+            ...top3.asMap().entries.map((e) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Text(
+                    '${e.key + 1}. ${e.value.suggestedTitle} '
+                    '· ${e.value.suggestedAuthor} (${e.value.requesterCount}명)',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                )),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _stat(ThemeData theme, String label, String value) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          '$label: ',
+          style: theme.textTheme.bodySmall
+              ?.copyWith(color: theme.colorScheme.onPrimaryContainer),
+        ),
+        Text(
+          value,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: theme.colorScheme.onPrimaryContainer,
+          ),
+        ),
+      ],
     );
   }
 }
