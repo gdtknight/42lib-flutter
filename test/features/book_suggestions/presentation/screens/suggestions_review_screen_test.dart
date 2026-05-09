@@ -106,6 +106,52 @@ void main() {
       expect(bookRepo.createCalls, 1);
     });
 
+    // T197 — stats header
+    testWidgets('stats header shows totals + status breakdown + Top demand',
+        (tester) async {
+      final repo = FakeAdminSuggestionRepository()
+        ..grouped = [
+          makeGroup(
+            title: 'Most Wanted',
+            author: 'Author A',
+            requesterCount: 5,
+            statuses: const {
+              SuggestionStatus.submitted: 3,
+              SuggestionStatus.approved: 2,
+            },
+            items: [
+              makeSuggestion(id: 'a1', status: SuggestionStatus.submitted),
+              makeSuggestion(id: 'a2', status: SuggestionStatus.submitted),
+              makeSuggestion(id: 'a3', status: SuggestionStatus.submitted),
+              makeSuggestion(id: 'a4', status: SuggestionStatus.approved),
+              makeSuggestion(id: 'a5', status: SuggestionStatus.approved),
+            ],
+          ),
+          makeGroup(
+            title: 'Less Wanted',
+            author: 'Author B',
+            requesterCount: 2,
+            statuses: const {SuggestionStatus.rejected: 2},
+            items: [
+              makeSuggestion(id: 'b1', status: SuggestionStatus.rejected),
+              makeSuggestion(id: 'b2', status: SuggestionStatus.rejected),
+            ],
+          ),
+        ];
+      await _pump(tester, repo);
+
+      // Header title
+      expect(find.text('추천 통계'), findsOneWidget);
+      // Totals (2 unique books, 7 total requests)
+      expect(find.textContaining('고유 도서'), findsOneWidget);
+      expect(find.text('2'), findsAtLeastNWidgets(1));
+      expect(find.textContaining('총 요청'), findsOneWidget);
+      expect(find.text('7'), findsAtLeastNWidgets(1));
+      // Top demand list
+      expect(find.text('수요 Top 2'), findsOneWidget);
+      expect(find.textContaining('Most Wanted'), findsAtLeastNWidgets(1));
+    });
+
     testWidgets('approve action shows dialog with notes field', (tester) async {
       final repo = FakeAdminSuggestionRepository()
         ..grouped = [
