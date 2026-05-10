@@ -51,25 +51,38 @@ class OverdueIndicator extends StatelessWidget {
         ),
     };
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: fg),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: fg,
-              fontWeight: overdue ? FontWeight.w700 : FontWeight.w500,
+    // T247: 색상 기반 신호는 screen reader에 의미가 전달되지 않으므로
+    // Semantics 레이블로 상태를 명시.
+    final semanticLabel = switch (overdue) {
+      true => '연체된 대출, $label',
+      false when daysLeft <= dueSoonThresholdDays =>
+        '반납 임박 대출, $label',
+      false => '정상 대출, $label',
+    };
+    return Semantics(
+      label: semanticLabel,
+      // 시각 노드는 그대로 보여주되 자식의 텍스트/아이콘은 합쳐서 한 번만 읽힘.
+      excludeSemantics: true,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14, color: fg),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: fg,
+                fontWeight: overdue ? FontWeight.w700 : FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

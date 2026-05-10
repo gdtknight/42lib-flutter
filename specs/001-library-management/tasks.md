@@ -509,7 +509,7 @@
 - [ ] T244 Add loading animations with 42 brand identity
 - [ ] T245 Add error message translations (Korean)
 - [ ] T246 Implement app version checking
-- [ ] T247 Add accessibility features (screen reader support)
+- [X] T247 Add accessibility features (screen reader support) — 1차 audit: `OverdueIndicator` 3 상태 + `_StatusChip` (loan history) + `BookCoverImage` placeholder. 확장 후속 가능.
 - [ ] T248 Security audit - check for exposed secrets
 - [ ] T249 Review and optimize Docker container sizes
 - [ ] T250 Add Docker health checks for all services

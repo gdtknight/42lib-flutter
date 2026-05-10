@@ -59,15 +59,19 @@ class _Placeholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      color: Colors.grey.shade200,
-      alignment: Alignment.center,
-      child: Icon(
-        Icons.book,
-        size: width != null ? width! * 0.4 : 40,
-        color: Colors.grey,
+    // T247: placeholder가 책 표지를 대신하지만 정보 가치가 없는
+    // 장식이라 screen reader에서는 제외.
+    return ExcludeSemantics(
+      child: Container(
+        width: width,
+        height: height,
+        color: Colors.grey.shade200,
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.book,
+          size: width != null ? width! * 0.4 : 40,
+          color: Colors.grey,
+        ),
       ),
     );
   }
