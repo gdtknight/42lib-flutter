@@ -210,7 +210,7 @@
 - [X] T095 [P] [US2] Create unit test for Student model in test/unit_test/models/student_test.dart
 - [X] T096 [P] [US2] Create unit test for LoanBloc in test/unit_test/state/loan/loan_bloc_test.dart
 - [X] T097 [P] [US2] Create widget test for loan request flow in test/widget_test/screens/mobile/loan/loan_request_test.dart
-- [ ] T098 [P] [US2] Create integration test for 42 OAuth flow in test/integration_test/auth_42_test.dart
+- [X] T098 [P] [US2] Create integration test for 42 OAuth flow — `test/integration_test/auth_42_test.dart` (LoginScreen + AuthBloc + FakeAuth42Client wire-up; CI에서 `flutter test`로 실행됨)
 - [X] T099 [P] [US2] Create backend unit test for 42 OAuth integration in backend/tests/unit/auth_42.test.ts
 - [X] T100 [P] [US2] Create backend unit test for POST /loan-requests in backend/tests/unit/loan_requests.test.ts
 - [X] T101 [P] [US2] Create backend unit test for reservation queue logic in backend/tests/unit/reservations.test.ts
@@ -282,7 +282,7 @@
 
 - [X] T132 [P] [US5] Create unit test for Loan model in test/features/admin_catalog/data/models/loan_test.dart
 - [X] T133 [P] [US5] Create widget test for loan management screen — `test/features/admin_catalog/presentation/screens/loans_management_screen_test.dart` (8 tests, 88% line coverage)
-- [ ] T134 [P] [US5] Create integration test for loan approval flow in test/integration_test/admin_loan_management_test.dart
+- [X] T134 [P] [US5] Create integration test for loan approval flow — `test/integration_test/admin_loan_management_test.dart` (LoansManagementScreen + FakeAdminLoanRepository wire-up: 승인 dialog → approveRequest dispatch / 반납 dialog → returnLoan dispatch)
 - [X] T135 [P] [US5] Create backend unit test for PUT /loan-requests/:id/approve in backend/tests/unit/loan_requests.test.ts
 - [X] T136 [P] [US5] Create backend unit test for PUT /loans/:id/return in backend/tests/unit/loans.test.ts
 - [X] T137 [P] [US5] Create backend unit test for overdue detection in backend/tests/unit/loans.test.ts
