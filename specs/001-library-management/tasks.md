@@ -282,7 +282,7 @@
 
 - [X] T132 [P] [US5] Create unit test for Loan model in test/features/admin_catalog/data/models/loan_test.dart
 - [X] T133 [P] [US5] Create widget test for loan management screen — `test/features/admin_catalog/presentation/screens/loans_management_screen_test.dart` (8 tests, 88% line coverage)
-- [ ] T134 [P] [US5] Create integration test for loan approval flow in test/integration_test/admin_loan_management_test.dart
+- [X] T134 [P] [US5] Create integration test for loan approval flow — `test/integration_test/admin_loan_management_test.dart` (LoansManagementScreen + FakeAdminLoanRepository wire-up: 승인 dialog → approveRequest dispatch / 반납 dialog → returnLoan dispatch)
 - [X] T135 [P] [US5] Create backend unit test for PUT /loan-requests/:id/approve in backend/tests/unit/loan_requests.test.ts
 - [X] T136 [P] [US5] Create backend unit test for PUT /loans/:id/return in backend/tests/unit/loans.test.ts
 - [X] T137 [P] [US5] Create backend unit test for overdue detection in backend/tests/unit/loans.test.ts
