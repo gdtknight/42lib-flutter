@@ -510,7 +510,7 @@
 - [ ] T245 Add error message translations (Korean)
 - [ ] T246 Implement app version checking
 - [X] T247 Add accessibility features (screen reader support) — 1차 audit: `OverdueIndicator` 3 상태 + `_StatusChip` (loan history) + `BookCoverImage` placeholder. 확장 후속 가능.
-- [ ] T248 Security audit - check for exposed secrets
+- [X] T248 Security audit - check for exposed secrets — `scripts/audit-secrets.sh` (AWS / OpenAI / JWT_SECRET 리터럴 / 42 OAuth 실 ID / Bearer JWT / private key / .env 파일 7가지 패턴). 현재 HEAD clean. 운영 정기 점검에 등록 (deployment.md §6).
 - [ ] T249 Review and optimize Docker container sizes
 - [ ] T250 Add Docker health checks for all services
 - [ ] T251 Test hot reload functionality in Docker environment

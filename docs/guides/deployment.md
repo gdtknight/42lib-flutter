@@ -170,6 +170,7 @@ sudo systemctl status certbot.timer
 - [ ] 디스크 사용량 (DB volume + 로그) — `df -h`
 - [ ] JWT_SECRET 회전 정책 (운영 ADR에 따라)
 - [ ] 컨테이너 이미지 base 보안 업데이트 (`docker compose build --no-cache --pull` 후 재배포)
+- [ ] **월 1회 시크릿 audit** — `./scripts/audit-secrets.sh` (릴리스 직전에도 실행). `--history` 플래그로 전체 git 히스토리까지 스캔 가능.
 
 ## 7. 업그레이드 절차
 
