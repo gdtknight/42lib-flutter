@@ -1,8 +1,7 @@
-import { PrismaClient, Administrator } from '@prisma/client';
+import { Administrator } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { prisma } from '../db';
 import { generateAdminToken } from '../utils/jwt';
-
-const prisma = new PrismaClient();
 
 export interface AdminLoginResult {
   token: string;

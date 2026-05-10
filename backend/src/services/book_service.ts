@@ -1,6 +1,5 @@
-import { PrismaClient, Book, Prisma } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Book, Prisma } from '@prisma/client';
+import { prisma } from '../db';
 
 export interface BookFilters {
   title?: string;

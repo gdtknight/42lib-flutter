@@ -3,10 +3,8 @@
 // Reference: research.md Section 3 (42 API Integration)
 
 import axios from 'axios';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../db';
 import { logger } from '../utils/logger';
-
-const prisma = new PrismaClient();
 
 interface FortyTwoUser {
   id: number;

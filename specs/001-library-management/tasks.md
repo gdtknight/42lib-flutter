@@ -451,7 +451,7 @@
 - [X] T207 [P] Add image caching for book covers with cached_network_image — `lib/widgets/book_cover_image.dart` 래퍼 + 3 호출 사이트 (legacy + feature-first BookCard + BookDetailScreen) 교체
 - [ ] T208 [P] Optimize sqflite queries with proper indexes
 - [ ] T209 [P] Implement virtual scrolling for 1000-book catalog
-- [ ] T210 [P] Add database query logging for performance monitoring
+- [X] T210 [P] Add database query logging for performance monitoring — `backend/src/db.ts` 싱글톤 + Prisma event → winston forwarding (slow query ≥1s WARN). 9개 파일 공유 인스턴스 사용.
 - [ ] T211 Profile app performance with Flutter DevTools
 - [ ] T212 Validate <30s book discovery time (SC-001)
 - [ ] T213 Validate <1s search response time (SC-002)
