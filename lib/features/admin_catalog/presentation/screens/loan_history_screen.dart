@@ -259,13 +259,18 @@ class _StatusChip extends StatelessWidget {
           '반납',
         ),
     };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(8),
+    // T247: 색상으로만 구분되지 않도록 Semantics에 상태명 명시.
+    return Semantics(
+      label: '대출 상태: $label',
+      excludeSemantics: true,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(label, style: TextStyle(color: fg, fontSize: 12)),
       ),
-      child: Text(label, style: TextStyle(color: fg, fontSize: 12)),
     );
   }
 }

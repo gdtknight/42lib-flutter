@@ -80,6 +80,31 @@ void main() {
       expect(find.byIcon(Icons.schedule), findsOneWidget);
     });
 
+    // T247 — Screen reader semantics
+    testWidgets('overdue → "연체된 대출" semantic label', (tester) async {
+      await _pump(
+        tester,
+        OverdueIndicator(dueDate: DateTime(2024, 6, 10), now: now),
+      );
+      expect(find.bySemanticsLabel(RegExp('^연체된 대출')), findsOneWidget);
+    });
+
+    testWidgets('due-soon → "반납 임박 대출" semantic label', (tester) async {
+      await _pump(
+        tester,
+        OverdueIndicator(dueDate: DateTime(2024, 6, 17), now: now),
+      );
+      expect(find.bySemanticsLabel(RegExp('^반납 임박 대출')), findsOneWidget);
+    });
+
+    testWidgets('on-track → "정상 대출" semantic label', (tester) async {
+      await _pump(
+        tester,
+        OverdueIndicator(dueDate: DateTime(2024, 6, 25), now: now),
+      );
+      expect(find.bySemanticsLabel(RegExp('^정상 대출')), findsOneWidget);
+    });
+
     testWidgets('overdue label is bold; on-track label is medium-weight',
         (tester) async {
       // overdue
