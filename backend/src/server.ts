@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from './db';
 import { logger } from './utils/logger';
 import { errorHandler } from './middleware/error_handler';
 import bookRoutes from './routes/books';
@@ -15,7 +15,6 @@ import collectionPeriodRoutes from './routes/collection_periods';
 import { buildSwaggerRouter } from './swagger';
 
 const app: Express = express();
-const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3000;
 
 // 미들웨어 설정

@@ -2,15 +2,13 @@
 // Reference: data-model.md Entity 5 (Loan)
 
 import {
-  PrismaClient,
   LoanRequestStatus,
   LoanStatus,
   ReservationStatus,
 } from '@prisma/client';
+import { prisma } from '../db';
 import { logger } from '../utils/logger';
 import { reservationService } from './reservation_service';
-
-const prisma = new PrismaClient();
 
 export class LoanError extends Error {
   constructor(

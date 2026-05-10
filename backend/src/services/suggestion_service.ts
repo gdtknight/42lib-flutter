@@ -2,14 +2,9 @@
 // scoped to an active collection period.
 // Reference: data-model.md Entity 6 (BookSuggestion), Entity 7 (CollectionPeriod)
 
-import {
-  PrismaClient,
-  PeriodStatus,
-  SuggestionStatus,
-} from '@prisma/client';
+import { PeriodStatus, SuggestionStatus } from '@prisma/client';
+import { prisma } from '../db';
 import { logger } from '../utils/logger';
-
-const prisma = new PrismaClient();
 
 export class SuggestionError extends Error {
   constructor(

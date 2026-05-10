@@ -2,10 +2,9 @@
 // Handles loan request creation, validation, and reservation queue management
 // Reference: data-model.md Entity 3 (LoanRequest) and Entity 4 (Reservation)
 
-import { PrismaClient, LoanRequestStatus, ReservationStatus } from '@prisma/client';
+import { LoanRequestStatus, ReservationStatus } from '@prisma/client';
+import { prisma } from '../db';
 import { logger } from '../utils/logger';
-
-const prisma = new PrismaClient();
 
 export class LoanRequestService {
   /**
