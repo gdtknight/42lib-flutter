@@ -1,10 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../db';
 import { bookService } from '../services/book_service';
 import { validateBookQuery, validateBookId } from '../middleware/validation/book_validation';
 import { authenticateAdmin } from '../middleware/auth';
-
-const prisma = new PrismaClient();
 
 const router = Router();
 

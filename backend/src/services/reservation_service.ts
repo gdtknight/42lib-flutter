@@ -2,10 +2,9 @@
 // Manages FIFO reservation queue with notifications and expirations
 // Reference: data-model.md Entity 4 (Reservation)
 
-import { PrismaClient, ReservationStatus } from '@prisma/client';
+import { ReservationStatus } from '@prisma/client';
+import { prisma } from '../db';
 import { logger } from '../utils/logger';
-
-const prisma = new PrismaClient();
 
 export class ReservationService {
   /**
